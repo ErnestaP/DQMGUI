@@ -1,14 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { MuiThemeProvider } from '@material-ui/core/styles/';
+
 import { createStore, applyMiddleware } from "redux";
-import { Provider } from "react-redux";
 import thunk from "redux-thunk";
+import flat from 'core-js-pure/features/array/';
+import theme from './theme'
+import './styles.scss';
+import Header from '../components/header'
 
 
 const App = () => {
-    return (<div>
-        TEST1s
-    </div>)
+  return (
+    <MuiThemeProvider theme={theme}>
+      <div >
+        <Header />
+      </div>
+    </MuiThemeProvider>)
 }
 
 

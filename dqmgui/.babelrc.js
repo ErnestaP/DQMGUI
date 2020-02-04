@@ -1,5 +1,5 @@
 const isDevelop = process.env.BABEL_ENV === "development";
-// TODO: add env variable for react development tools
+
 module.exports = {
   presets: [
     [
@@ -20,7 +20,9 @@ module.exports = {
   ],
   env: {
     test: {
-      plugins: ["transform-es2015-modules-commonjs"]
+      plugins: ["transform-es2015-modules-commonjs",
+        "@babel/plugin-transform-runtime"
+      ]
     }
   },
   plugins: [
@@ -32,24 +34,24 @@ module.exports = {
     "@babel/plugin-syntax-dynamic-import",
     "react-hot-loader/babel",
     "@babel/plugin-proposal-object-rest-spread",
-    // ["transform-imports", {
-    //   "@material-ui/core": {
-    //     preventFullImport: true,
-    //     transform: function importFromMaterialCore(importName) {
-    //       if (importName === 'withStyles') return `@material-ui/core/styles/withStyles`;
+    ["transform-imports", {
+      "@material-ui/core": {
+        preventFullImport: true,
+        transform: function importFromMaterialCore(importName) {
+          if (importName === 'withStyles') return `@material-ui/core/styles/withStyles`;
 
-    //       return `@material-ui/core/${importName}`;
-    //     },
-    //   },
-    //   "@material-ui/icons": {
-    //     preventFullImport: true,
-    //     transform: function importFromMaterialIcons(importName) {
-    //       return `@material-ui/icons/${importName}`;
-    //     },
-    //   },
-    //   "material-ui-pickers": {
-    //     preventFullImport: true,
-    //   },
-    // }]
+          return `@material-ui/core/${importName}`;
+        },
+      },
+      "@material-ui/icons": {
+        preventFullImport: true,
+        transform: function importFromMaterialIcons(importName) {
+          return `@material-ui/icons/${importName}`;
+        },
+      },
+      "material-ui-pickers": {
+        preventFullImport: true,
+      },
+    }]
   ]
 }
