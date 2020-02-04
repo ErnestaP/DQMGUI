@@ -13,7 +13,7 @@ import Header from '../components/header'
 const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
-      <div >
+      <div className="Main">
         <Header />
       </div>
     </MuiThemeProvider>)
