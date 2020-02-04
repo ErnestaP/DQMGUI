@@ -31,16 +31,16 @@ const createTheme = () => {
     palette: {
       primary: {
         // ...blue,
-        main: '#20A4F1',
-        light: '#21AEFF',
-        dark: '#0F4E73',
+        main: '#42a5f5',
+        light: '#80d6ff',
+        dark: '#0077c2',
         contrastText: '#FFF',
       },
       secondary: {
-        // ...blueGrey,
-        main: '#2D3033',
-        light: '#646A70',
-        dark: '#202224',
+        // ...amber,
+        main: '#fcd734',
+        light: '#ffff6b',
+        dark: '#c5a600',
         contrastText: '#9DA6B0',
       },
       text: {
