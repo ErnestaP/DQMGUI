@@ -86,6 +86,19 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "../images/CMSlogo_color_nolabel_1024_May2014.png":
+/*!********************************************************!*\
+  !*** ../images/CMSlogo_color_nolabel_1024_May2014.png ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (__webpack_require__.p + "492dc041aac292ad3eadc16013db9a65.png");
+
+/***/ }),
+
 /***/ "../node_modules/@babel/runtime/helpers/defineProperty.js":
 /*!****************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/defineProperty.js ***!
@@ -8416,7 +8429,7 @@ for (var collections = getKeys(DOMIterables), i = 0; i < collections.length; i++
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "html,\nbody,\n#root {\n  height: 100%;\n  margin: 0;\n  background-color: #fafafa;\n  font-family: \"Open Sans\", sans-serif; }\n", ""]);
+exports.push([module.i, "html,\nbody,\n#root {\n  height: 100%;\n  margin: 0;\n  background-color: #fafafa;\n  font-family: \"Open Sans\", sans-serif; }\n\n.Main {\n  padding: 8px; }\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -45458,7 +45471,9 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
 var App = function App() {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_styles___WEBPACK_IMPORTED_MODULE_2__["MuiThemeProvider"], {
     theme: _theme__WEBPACK_IMPORTED_MODULE_3__["default"]
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_header__WEBPACK_IMPORTED_MODULE_5__["default"], null)));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "Main"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_header__WEBPACK_IMPORTED_MODULE_5__["default"], null)));
 };
 
 react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('root'));
@@ -45548,16 +45563,16 @@ var createTheme = function createTheme() {
     palette: {
       primary: {
         // ...blue,
-        main: '#20A4F1',
-        light: '#21AEFF',
-        dark: '#0F4E73',
+        main: '#42a5f5',
+        light: '#80d6ff',
+        dark: '#0077c2',
         contrastText: '#FFF'
       },
       secondary: {
-        // ...blueGrey,
-        main: '#2D3033',
-        light: '#646A70',
-        dark: '#202224',
+        // ...amber,
+        main: '#fcd734',
+        light: '#ffff6b',
+        dark: '#c5a600',
         contrastText: '#9DA6B0'
       },
       text: {
@@ -45573,20 +45588,12 @@ var createTheme = function createTheme() {
         fullBlack: _material_ui_core_colors_blueGrey__WEBPACK_IMPORTED_MODULE_2___default.a[500],
         white: '#FFF'
       },
-      statusColors: {
-        0: '#4CAF50',
-        1: '#f44336',
-        5: '#3e50b4',
-        6: '#fec006',
-        7: '#feea3a',
-        8: '#9e9e9e',
-        9: '#607d8b'
-      },
       background: {
         lightBlue: '#e3f2fd'
       }
     }
   });
+  return theme;
 };
 
 var _default = createTheme();
@@ -45639,6 +45646,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/Grid */ "../node_modules/@material-ui/core/esm/Grid/index.js");
 /* harmony import */ var _material_ui_core_styles_withStyles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/styles/withStyles */ "../node_modules/@material-ui/core/styles/withStyles.js");
 /* harmony import */ var _material_ui_core_styles_withStyles__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles_withStyles__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _images_CMSlogo_color_nolabel_1024_May2014_png__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../images/CMSlogo_color_nolabel_1024_May2014.png */ "../images/CMSlogo_color_nolabel_1024_May2014.png");
 
 
 
@@ -45662,10 +45670,15 @@ var __signature__ = typeof reactHotLoaderGlobal !== 'undefined' ? reactHotLoader
 
 
 
+
 var styles = function styles(theme) {
   return {
     header: {
       background: theme.palette.primary.main
+    },
+    logo: {
+      width: '30px',
+      height: '30px'
     }
   };
 };
@@ -45675,8 +45688,14 @@ var Header = function Header(_ref) {
       props = _objectWithoutProperties(_ref, ["classes"]);
 
   return react__WEBPACK_IMPORTED_MODULE_5__["createElement"](_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    container: true,
     className: classes.header
-  }, "GRID");
+  }, react__WEBPACK_IMPORTED_MODULE_5__["createElement"](_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    xs: 2
+  }, react__WEBPACK_IMPORTED_MODULE_5__["createElement"]("img", {
+    src: _images_CMSlogo_color_nolabel_1024_May2014_png__WEBPACK_IMPORTED_MODULE_8__["default"],
+    className: classes.logo
+  })));
 };
 
 var _default = _material_ui_core_styles_withStyles__WEBPACK_IMPORTED_MODULE_7___default()(styles)(Header);

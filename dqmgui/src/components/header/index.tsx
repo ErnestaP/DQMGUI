@@ -4,7 +4,9 @@ import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 
 const styles = (theme: any) => ({
   header: {
-    background: theme.palette.primary.main
+    background: theme.palette.primary.main,
+    margin: '-8px',
+    width: '100vw'
   },
   logo: {
     width: '30px',
@@ -25,7 +27,7 @@ interface HeaderInterface {
 const Header = ({ classes, ...props }: HeaderInterface) => {
   return (
     <Grid container className={classes.header}>
-      <Grid xs={2}>
+      <Grid item xs={2}>
         <img src={Logo} className={classes.logo}></img>
       </Grid>
     </Grid>

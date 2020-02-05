@@ -42,6 +42,7 @@ const createTheme = () => {
         light: '#ffff6b',
         dark: '#c5a600',
         contrastText: '#9DA6B0',
+        [400]: '#ffca28'
       },
       text: {
         primary: '#22282D',
