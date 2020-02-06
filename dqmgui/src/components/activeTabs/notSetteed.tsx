@@ -14,10 +14,10 @@ const NotSetted = ({ setMenuContent, ...props }: RunsProps) => {
   const options = [SERVICES, WORKPLACES, RUN ]
 
   return (
-    <Grid item container spacing={8}>
+    <Grid item container direction="row">
       {options.map((option: any) =>
-        <Grid item>
-          <Button variant="outlined" key={option} color="primary" onClick={() => setMenuContent(option)} >
+        <Grid item xs={12}>
+          <Button variant="outlined" style={{width: '100%'}} key={option} color="primary" onClick={() => setMenuContent(option)} >
             {option}
           </Button>
         </Grid>
