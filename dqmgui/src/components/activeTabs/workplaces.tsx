@@ -10,6 +10,10 @@ const styles = (theme: any) => ({
     color: theme.palette.primary.main,
     display: 'flex',
     alignItems: 'center',
+  },
+  wrapper: {
+    padding: '0px !important',
+    width: '100% !important'
   }
 })
 
@@ -21,7 +25,7 @@ interface ServicesInterface {
 const Services = ({ classes, ...props }: ServicesInterface) => {
 
   return (
-    <Grid item style={{ opacity: 1 }}>
+    <Grid item className={classes.wrapper}>
       <AccordionComponent label="Services"
         name="services"
         component={AccordionComponent}

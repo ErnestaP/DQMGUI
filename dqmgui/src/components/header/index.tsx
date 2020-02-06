@@ -7,7 +7,7 @@ import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
 import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
 import { Time } from './time'
-import { SERVICES, WORKPLACES, RUN } from '../sideNav/constants'
+import { SERVICES, WORKPLACES, RUN } from '../constants'
 
 const styles = (theme: any) => ({
 

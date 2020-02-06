@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Grid, withStyles, Icon, IconButton, Button } from '@material-ui/core'
-import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.jpg';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { Form, reduxForm } from 'redux-form'
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
 
@@ -29,8 +27,6 @@ const styles = (theme: any) => ({
     opacity: 0.6,
     color: theme.palette.primary.main,
     display: 'flex',
-    paddingLeft: '8px',
-    paddingTop: '8px'
   },
   userLogo: {
     color: theme.palette.primary.main,
@@ -77,48 +73,25 @@ interface SideNavProps {
   content: string;
 }
 
-class SideNav extends React.Component<SideNavProps> {
-  state = ({
-    open: false
-  })
+const SideNav = ({ classes, isOpened, content }: SideNavProps) => {
+  return (
+    <React.Fragment>
+      {isOpened &&
+        <Grid item container className={classes.header} direction="row" spacing={8} >
+          <MenuContentSwitcher type={content} />
+        </Grid>
+      }
+    </React.Fragment>
+  );
 
-  toggleMenu = () => (
-    this.setState({
-      open: !this.state.open
-    })
-  )
-
-  render() {
-    const { classes, isOpened, content } = this.props
-    const closeOrOpen = this.state.open ? classes.open : classes.open
-    const hidden = this.state.open ? classes.buttonDisplayNone : classes.buttonDisplayNone
-
-    return (
-      <React.Fragment>
-        {isOpened &&
-          <Grid item container className={classes.header} direction="row" spacing={8} >
-            <Form onSubmit={() => { }}>
-              {/* <Workplaces /> */}
-              <MenuContentSwitcher type={content} />
-            </Form>
-          </Grid>
-        }
-      </React.Fragment>
-    );
-
-  }
 }
 
-export default compose<any, any, any, any>(
+export default compose<any, any, any>(
   connect(
     (state: any) => ({
       isOpened: getMenuStatus(state),
       content: getMenuContent(state)
     })
   ),
-  reduxForm({
-    form: "NAVIGATION_FORM",
-    enableReinitialize: true,
-  }),
   withStyles(styles))
   (SideNav)
