@@ -1,40 +1,24 @@
-import * as React from 'react';
-import { Grid, withStyles, Typography, Button } from '@material-ui/core'
-import { Field, Form } from 'redux-form'
-import AccordionComponent from '../common/accordion';
+import * as React from 'react'
+import { Grid, Typography } from '@material-ui/core'
 
-import { pseudoServices, workPlace } from '../pseudoFields'
+import { pseudoServices } from '../pseudoFields'
+import { ServicesProps } from '../ducks/header/interfaces'
 
-const styles = (theme: any) => ({
-  header: {
-    color: theme.palette.primary.main,
-    display: 'flex',
-    alignItems: 'center',
-  }
-})
-
-interface ServicesInterface {
-  services?: string[]
-  classes?: any;
+interface InformationProps {
+  service: ServicesProps[];
 }
 
-const Services = ({ classes, ...props }: ServicesInterface) => {
-
+const Services = () => {
+  const servicesValues = Object.values(pseudoServices)
   return (
-    <Grid item container className={classes.header} direction="row" spacing={8}>
-      <Grid item>
-        <Field
-          label="Services"
-          name="services"
-          component={AccordionComponent}
-          pannels={workPlace}
-          getOptionValue={(option: any) => option}
-          getOptionLabel={(option: any) => option}
-        />
-      </Grid>
+    <Grid>
+      {servicesValues.map((service: ServicesProps) =>
+        <Grid>
+          {service.title}
+        </Grid>
+      )}
     </Grid>
   );
-
 }
 
-export default withStyles(styles)(Services)
+export default Services

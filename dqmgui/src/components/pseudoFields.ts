@@ -1,12 +1,33 @@
 
 export const pseudoServices = {
-    Online: "Online",
-    Offline: "Offline",
-    OnlineTest: "Online test",
-    OnlinePlayback: "Online playback",
-    OfflineTest: "Online test",
-    RelVal: "RelVal",
-    RelValTest: 'RelValTest'
+    Online: {
+        title: "Online",
+        href: 'www'
+    },
+    Offline: {
+        title: "Offline",
+        href: 'www'
+    },
+    OnlineTest: {
+        title: "OnlineTest",
+        href: 'www'
+    },
+    OnlinePlayback: {
+        title: "OnlinePlayback",
+        href: 'www'
+    },
+    OfflineTest: {
+        title: "OfflineTest",
+        href: 'www'
+    },
+    RelVal: {
+        title: "RelVal",
+        href: 'www'
+    },
+    RelValTest: {
+        title: "RelValTest",
+        href: 'www'
+    }
 }
 export const pseudoSummaries = {
     Summary: "Summary",
@@ -58,13 +79,13 @@ export const pseudoPOG = {
     Tau: "Tau"
 }
 
-export const workPlace ={
-pseudoSummaries: pseudoSummaries,
-pseudoTriggers: pseudoTriggers,
-pseudoTracker:pseudoTracker,
-pseudoCalorimeters: pseudoCalorimeters,
-pseudoMouns: pseudoMouns,
-pseudoCTTPS: pseudoCTTPS,
-pseudoPOG: pseudoPOG
+export const workPlace = {
+    pseudoSummaries: pseudoSummaries,
+    pseudoTriggers: pseudoTriggers,
+    pseudoTracker: pseudoTracker,
+    pseudoCalorimeters: pseudoCalorimeters,
+    pseudoMouns: pseudoMouns,
+    pseudoCTTPS: pseudoCTTPS,
+    pseudoPOG: pseudoPOG
 }
 

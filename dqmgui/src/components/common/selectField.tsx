@@ -25,7 +25,7 @@ const SelectField = ({ label, onChange, input, error, options, getOptionLabel, g
         onChange={input.onChange(input.value)}
       >
         {optionValues.map((option: any) => (
-          <option value={getOptionValue(option)}>
+          <option key={option} value={getOptionValue(option)}>
             {getOptionLabel(option)}
           </option>
         ))}

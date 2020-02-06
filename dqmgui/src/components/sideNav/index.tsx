@@ -1,19 +1,25 @@
 import * as React from 'react';
 import { Grid, withStyles, Icon, IconButton, Button } from '@material-ui/core'
-import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
+import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.jpg';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Form, reduxForm } from 'redux-form'
 import { compose } from 'ramda'
+import { connect } from 'react-redux'
 
-import Services from './services'
+import { MenuContentSwitcher } from './contentSwitcher'
+import { getMenuStatus, getMenuContent } from '../ducks/sideNav/setMenuStatus'
 
 const styles = (theme: any) => ({
   header: {
     background: theme.palette.secondary.main,
     margin: '-8px',
-    height: '100vh',
-    width: '13vw',
-    opacity: 0.5,
+    height: '94vh',
+    width: 'fit-content',
+    opacity: 0.6,
+    color: theme.palette.primary.main,
+    display: 'flex',
+    paddingLeft: '8px',
+    paddingTop: '8px'
   },
   userLogo: {
     color: theme.palette.primary.main,
@@ -48,7 +54,7 @@ const styles = (theme: any) => ({
   }
 })
 
-interface HeaderInterface {
+interface SideNavProps {
   services: any;
   worskpace: any;
   run: number;
@@ -56,39 +62,52 @@ interface HeaderInterface {
   event: string;
   date: Date;
   classes: any;
+  isOpened: boolean;
+  content: string;
 }
 
-class Header extends React.Component<HeaderInterface> {
+class SideNav extends React.Component<SideNavProps> {
   state = ({
     open: false
   })
+
   toggleMenu = () => (
     this.setState({
       open: !this.state.open
     })
   )
+
   render() {
-    const { classes } = this.props
+    const { classes, isOpened, content } = this.props
     const closeOrOpen = this.state.open ? classes.open : classes.open
     const hidden = this.state.open ? classes.buttonDisplayNone : classes.buttonDisplayNone
 
     return (
-      <Grid item container className={`${classes.header} 
-        ${closeOrOpen} 'closebtn'`}
-        direction="row">
-        <Form onSubmit={() => { }}>
-          <Services />
-        </Form>
-      </Grid>
+      <React.Fragment>
+        {isOpened &&
+          <Grid item container className={classes.header} direction="row" spacing={8} >
+            <Form onSubmit={() => { }}>
+              {/* <Workplaces /> */}
+              <MenuContentSwitcher type={content} />
+            </Form>
+          </Grid>
+        }
+      </React.Fragment>
     );
 
   }
 }
 
-export default compose<any, any, any>(
+export default compose<any, any, any, any>(
+  connect(
+    (state: any) => ({
+      isOpened: getMenuStatus(state),
+      content: getMenuContent(state)
+    })
+  ),
   reduxForm({
     form: "NAVIGATION_FORM",
     enableReinitialize: true,
   }),
   withStyles(styles))
-  (Header)
+  (SideNav)
