@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
-import { getService, getWorkplace } from '../ducks/header/setActiveTabs'
+import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
 import { Time } from './time'
-import { SERVICES, WORKPLACES } from '../sideNav/constants'
+import { SERVICES, WORKPLACES, RUN } from '../sideNav/constants'
 
 const styles = (theme: any) => ({
 
@@ -76,7 +76,16 @@ interface HeaderInterface {
   workplace: string;
 }
 
-const Header = ({ classes, setMenuState, menuState, service, setMenuContent, workplace, ...props }: HeaderInterface) => {
+const Header = ({
+  classes,
+  setMenuState,
+  menuState,
+  service,
+  setMenuContent,
+  workplace,
+  run,
+  ...props }: HeaderInterface) => {
+
   return (
     <Grid container className={classes.header}>
       <Grid item xs={2}>
@@ -88,6 +97,9 @@ const Header = ({ classes, setMenuState, menuState, service, setMenuContent, wor
         </Button>
         <Button onClick={() => setMenuContent(WORKPLACES)}>
           {workplace}
+        </Button>
+        <Button onClick={() => setMenuContent(RUN)}>
+          {run}
         </Button>
       </Grid>
       <Grid item xs={3}>
@@ -104,6 +116,7 @@ export default compose<any, any, any>(
       menuState: getMenuStatus(state),
       service: getService(state),
       workplace: getWorkplace(state),
+      run: getRun(state),
     }),
     ((dispatch: any, props: any) => ({
       setMenuState(state: boolean) {

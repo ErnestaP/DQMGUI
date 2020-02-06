@@ -89,3 +89,11 @@ export const workPlace = {
     pseudoPOG: pseudoPOG
 }
 
+export const pseudoRuns =
+{
+    111: '11',
+    112: '12',
+    113: '13',
+    114: '14',
+    115: '15',
+}

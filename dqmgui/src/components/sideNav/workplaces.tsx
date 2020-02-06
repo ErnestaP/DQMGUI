@@ -21,16 +21,14 @@ interface ServicesInterface {
 const Services = ({ classes, ...props }: ServicesInterface) => {
 
   return (
-      <Grid item style={{opacity : 1}}>
-        <Field
-          label="Services"
-          name="services"
-          component={AccordionComponent}
-          pannels={workPlace}
-          getOptionValue={(option: any) => option}
-          getOptionLabel={(option: any) => option}
-        />
-      </Grid>
+    <Grid item style={{ opacity: 1 }}>
+      <AccordionComponent label="Services"
+        name="services"
+        component={AccordionComponent}
+        pannels={workPlace}
+        getOptionValue={(option: any) => option}
+        getOptionLabel={(option: any) => option} />
+    </Grid>
   );
 
 }

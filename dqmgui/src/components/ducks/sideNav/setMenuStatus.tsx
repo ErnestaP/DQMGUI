@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
 import { path } from 'ramda';
+import {SERVICES} from '../../sideNav/constants'
 
 interface DefaultState {
   isOpen: boolean,
@@ -8,7 +9,7 @@ interface DefaultState {
 
 const defaultState: DefaultState = {
   isOpen: false,
-  content: ''
+  content: SERVICES
 }
 
 const SET_MENU_STATE = "SET_MENU_STATE"

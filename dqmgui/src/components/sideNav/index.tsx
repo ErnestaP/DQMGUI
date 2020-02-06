@@ -14,7 +14,18 @@ const styles = (theme: any) => ({
     background: theme.palette.secondary.main,
     margin: '-8px',
     height: '94vh',
-    width: 'fit-content',
+    [theme.breakpoints.up('xl')]: {
+      width: '12vw',
+    },
+    [theme.breakpoints.down('lg')]: {
+      width: '14vw',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '16vw',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '30vw',
+    },
     opacity: 0.6,
     color: theme.palette.primary.main,
     display: 'flex',
