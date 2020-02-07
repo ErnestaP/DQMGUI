@@ -38,10 +38,16 @@ const createTheme = () => {
       },
       secondary: {
         // ...amber,
-        main: '#fcd734',
-        light: '#ffff6b',
-        dark: '#c5a600',
+           main: '#004d40',
+        light: '#757575',
+        dark: '#212121',
         contrastText: '#9DA6B0',
+        [400]: '#ffca28'
+        // main: '#fcd734',
+        // light: '#ffff6b',
+        // dark: '#c5a600',
+        // contrastText: '#9DA6B0',
+        // [400]: '#ffca28'
       },
       text: {
         primary: '#22282D',
