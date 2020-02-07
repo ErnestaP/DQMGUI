@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid, withStyles, Icon, IconButton, Button } from '@material-ui/core'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
 
@@ -77,7 +77,7 @@ const SideNav = ({ classes, isOpened, content }: SideNavProps) => {
   return (
     <React.Fragment>
       {isOpened &&
-        <Grid item container className={classes.header} direction="row" spacing={8} >
+        <Grid item container className={classes.header} direction="row" spacing={8}>
           <MenuContentSwitcher type={content} />
         </Grid>
       }

@@ -1,8 +1,11 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Grid, withStyles } from '@material-ui/core';
-import { path } from 'ramda';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Grid, withStyles, Icon, IconButton, Button, Typography } from '@material-ui/core'
+import { path, compose } from 'ramda';
+import { connect } from 'react-redux'
+
+import { setMenuContent } from '../ducks/sideNav/setMenuStatus'
 
 interface AccordionComponent {
   optionsAmount: number;
@@ -45,10 +48,10 @@ const styles = (theme: any) => ({
     },
     paddingLeft: '16px',
   },
-  wrapper:{
+  wrapper: {
     padding: '0px !important',
     width: '100% !important'
-   }
+  }
 })
 
 class AccordionComponent extends React.Component<AccordionComponent>{
@@ -85,11 +88,18 @@ class AccordionComponent extends React.Component<AccordionComponent>{
   }
 
   render() {
-    const { pannels, classes } = this.props
+    const { pannels, classes, setMenuContent } = this.props
     const pannelsNames = Object.keys(pannels)
 
     return (
-      <React.Fragment>
+      <Grid item container>
+        <Grid item>
+          <IconButton onClick={() => setMenuContent('')}>
+            <Icon>
+              <ArrowBackIcon color="primary" />
+            </Icon>
+          </IconButton>
+        </Grid>
         {
           pannelsNames.map((pannelsName: string) => {
             const subSections = Object.values(path([pannelsName], pannels))
@@ -125,9 +135,19 @@ class AccordionComponent extends React.Component<AccordionComponent>{
             )
           })
         }
-      </React.Fragment>
+      </Grid>
     );
   }
 }
 
-export default withStyles(styles)(AccordionComponent)
+export default compose(
+  connect(
+    undefined,
+    (dispatch: any) => ({
+      setMenuContent(type: string) {
+        dispatch(setMenuContent(type))
+      }
+    })
+  ),
+  withStyles(styles)
+)(AccordionComponent)
