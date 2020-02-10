@@ -2,12 +2,15 @@ import * as React from 'react';
 import { Grid, withStyles, StyleRulesCallback, StyledComponentProps, Button } from '@material-ui/core'
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
+import { Form, Field, reduxForm } from 'redux-form'
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
 import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
 import { Time } from './time'
-import { SERVICES, WORKPLACES, RUN } from '../constants'
+import { SERVICES, WORKPLACES, RUN, errors } from '../constants'
+import SelectFeild from '../common/selectField'
+import TextField from '../common/textField'
 
 const styles = (theme: any) => ({
 
@@ -59,6 +62,10 @@ const styles = (theme: any) => ({
     [theme.breakpoints.up('xl')]: {
       fontSize: '1.425rem',
     },
+  },
+  searchBar: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 })
 
@@ -87,30 +94,51 @@ const Header = ({
   ...props }: HeaderInterface) => {
 
   return (
-    <Grid container className={classes.header}>
-      <Grid item xs={2}>
-        <img src={Logo} className={classes.logo} onClick={() => setMenuState(!menuState)}></img>
+    <Form >
+      <Grid container className={classes.header}>
+        <Grid item xs={2}>
+          <img src={Logo} className={classes.logo} onClick={() => setMenuState(!menuState)}></img>
+        </Grid>
+        <Grid item xs={3} >
+          <Button onClick={() => setMenuContent(SERVICES)}>
+            {service}
+          </Button>
+          <Button onClick={() => setMenuContent(WORKPLACES)}>
+            {workplace}
+          </Button>
+          <Button onClick={() => setMenuContent(RUN)}>
+            {run}
+          </Button>
+        </Grid>
+        <Grid item xs={3}>
+          <Time classes={classes.time} />
+        </Grid>
+        <Grid item xs={12} style={{ background: "#81d4fa" }} className={classes.searchBar}>
+          <Grid item xs={4}>
+            <Field
+              name="errorsForSearch"
+              component={SelectFeild}
+              options={errors}
+              getOptionLabel={(option: any) => option}
+              getOptionValue={(option: any) => option} />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="searchField"
+              placeholder="Search"
+              component={TextField}/>
+          </Grid>
+        </Grid>
       </Grid>
-      <Grid item xs={3}>
-        <Button onClick={() => setMenuContent(SERVICES)}>
-          {service}
-        </Button>
-        <Button onClick={() => setMenuContent(WORKPLACES)}>
-          {workplace}
-        </Button>
-        <Button onClick={() => setMenuContent(RUN)}>
-          {run}
-        </Button>
-      </Grid>
-      <Grid item xs={3}>
-        <Time classes={classes.time} />
-      </Grid>
-    </Grid>
+    </Form>
   );
 
 }
 
 export default compose<any, any, any>(
+  reduxForm({
+    form: "MAIN_FORM",
+  }),
   connect(
     (state: any) => ({
       menuState: getMenuStatus(state),

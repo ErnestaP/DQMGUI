@@ -22,7 +22,7 @@ const SelectField = ({ label, onChange, input, error, options, getOptionLabel, g
         inputProps={{
           name: 'selectField',
         }}
-        onChange={input.onChange(input.value)}
+        onChange={(e) => input.onChange(e.target.value)}
       >
         {optionValues.map((option: any) => (
           <option key={option} value={getOptionValue(option)}>
