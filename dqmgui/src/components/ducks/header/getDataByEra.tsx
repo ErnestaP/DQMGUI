@@ -39,8 +39,8 @@ export function fetchSamplesAction() {
     });
     
     return request.then(
-      response => dispatch(setSample(response.data)),
-      // err => dispatch(fetchOffersError(err))
+      response => dispatch(setSample(path(['data', 'samples'], response))),
+      error => {console.log(error)}
     );
   }
 }
