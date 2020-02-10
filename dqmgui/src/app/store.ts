@@ -6,5 +6,5 @@ import ReduxPromise from 'redux-promise';
 import createReducer from './redux'
 
 export const store = createStore(createReducer(), composeWithDevTools(
-   applyMiddleware(ReduxPromise),
+   applyMiddleware(thunk),
 ));

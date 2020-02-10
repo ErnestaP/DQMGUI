@@ -27,6 +27,7 @@ const styles = (theme: any) => ({
     opacity: 0.6,
     color: theme.palette.primary.main,
     display: 'flex',
+    position: 'fixed',
   },
   userLogo: {
     color: theme.palette.primary.main,

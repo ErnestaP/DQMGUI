@@ -4,16 +4,14 @@ import { Grid } from '@material-ui/core';
 import '../../app/styles.scss';
 import SideNavigation from '../../components/sideNav'
 import Header from '../../components/header'
-import {getSamples} from '../ducks/header/getDataByEra'
-const Application = () => {
 
-  console.log(getSamples())
+const Application = () => {
   return (
     <Grid container className="Main" direction="column">
-      <Grid item >
+      <Grid item container>
         <Header />
       </Grid>
-      <Grid item>
+      <Grid item  container >
         <SideNavigation />
       </Grid>
     </Grid>

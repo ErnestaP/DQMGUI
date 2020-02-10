@@ -12,6 +12,7 @@ export default ({
     helperText={meta.touched ? meta.error : undefined}
     error={meta.error && meta.touched}
     inputProps={restInput}
+    fullWidth={rest.fullWidth}
     onChange={(e) => onChange(e.target.value)}
   />
 )
