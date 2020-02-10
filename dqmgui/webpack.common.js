@@ -46,7 +46,7 @@ module.exports = {
   devServer: {
     port: 8084,
     proxy: [{
-      context: ['/online-dev', '/api'],
+      context: ['/online-dev'],
       target: 'http://localhost:8070/dqm',
     }],
   }
