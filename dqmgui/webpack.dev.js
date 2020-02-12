@@ -6,6 +6,11 @@ module.exports = merge(common, {
     mode: 'development',
     devtool: 'inline-source-map',
     devServer: {
-        contentBase: path.resolve(__dirname, 'assets'),
-    }
+        // contentBase: path.resolve(__dirname, 'assets'),
+        port: 8084,
+        proxy: [{
+          context: ['/online-dev'],
+          target: 'http://localhost:8070/dqm',
+        }],
+      }
 });

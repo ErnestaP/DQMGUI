@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackConfig = require('html-webpack-plugin');
 const webpack = require('webpack');
-const proxy = require("http-proxy-middleware")
 
 module.exports = {
   // mode: 'development',
@@ -43,11 +42,5 @@ module.exports = {
       template: 'index.ejs',
     }),
   ],
-  devServer: {
-    port: 8084,
-    proxy: [{
-      context: ['/online-dev'],
-      target: 'http://localhost:8070/dqm',
-    }],
-  }
+
 };

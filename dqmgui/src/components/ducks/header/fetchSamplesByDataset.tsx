@@ -12,7 +12,7 @@ interface DefaultState {
 }
 
 const defaultState: DefaultState = {
-  samplesList: {},
+  samplesList: [],
   fetching: false,
 }
 

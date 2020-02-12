@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import '../../app/styles.scss';
 import SideNavigation from '../../components/sideNav'
 import Header from '../../components/header'
-import Table from '../dataSetsTable/table'
+import Table from '../dataSetsTable/'
 
 const Application = () => {
   return (

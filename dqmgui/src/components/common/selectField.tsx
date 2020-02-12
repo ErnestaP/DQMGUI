@@ -14,7 +14,6 @@ interface SelectFieldProps {
 
 const SelectField = ({ label, onChange, input, error, options, getOptionLabel, getOptionValue, ...props }: SelectFieldProps) => {
   const optionValues = Object.values(options)
-  console.log(input)
   return (
     <FormControl>
       <InputLabel>{label}</InputLabel>
