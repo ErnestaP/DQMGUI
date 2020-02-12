@@ -8,8 +8,8 @@ import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
 import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
 import { Time } from './time'
-import { SERVICES, WORKPLACES, RUN, errors } from '../constants'
-import { fetchSamplesAction } from '../ducks/header/getDataByEra'
+import { SERVICES, WORKPLACES, RUN } from '../constants'
+import { fetchSamplesByDataSetAction } from '../ducks/header/fetchSamplesByDataset'
 import TextField from '../common/textField'
 
 const styles = (theme: any) => ({
@@ -85,12 +85,10 @@ interface HeaderInterface {
   setMenuContent(type: string): void;
   menuState: boolean;
   workplace: string;
+  fetchSamples(): string[];
 }
 
 class Header extends React.Component<HeaderInterface>{
-  componentDidMount() {
-    this.props.fetctSamples()
-  }
 
   render() {
     const
@@ -101,11 +99,11 @@ class Header extends React.Component<HeaderInterface>{
         setMenuContent,
         workplace,
         run,
-        fetctSamples,
+        fetchSamples,
         ...props } = this.props
 
     return (
-      <Form >
+      <Form onSubmit={(event) => { event.preventDefault(); fetchSamples() }}>
         <Grid item container>
           <Grid item container className={classes.header}>
             <Grid item xs={2}>
@@ -160,8 +158,8 @@ export default compose<any, any, any, any>(
         dispatch(setMenuContent(type));
         dispatch(setMenuState(!props.menuState));
       },
-      fetctSamples() {
-        dispatch(fetchSamplesAction())
+      fetchSamples() {
+        dispatch(fetchSamplesByDataSetAction())
       }
     })
     )

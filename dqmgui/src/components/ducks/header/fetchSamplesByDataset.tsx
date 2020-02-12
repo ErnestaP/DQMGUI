@@ -1,11 +1,10 @@
 
-import * as qs from 'qs';
-import axios, { AxiosInstance } from "axios";
+import axios from "axios";
 import { AnyAction } from 'redux';
 import { path, reduce, assoc, pathOr, uniq, unnest, groupBy } from 'ramda';
 
 import { searchFieldValue } from '../../selectors'
-import { SamplesInterface } from './interfaces';
+import { SampleDataInerface } from './interfaces';
 
 interface DefaultState {
   samplesList: Object,
@@ -20,44 +19,22 @@ const defaultState: DefaultState = {
 const SET_SAMPLES = "SET_SAMPLES"
 const IS_FETCHING = "IS_FETCHING"
 
-const formatSamples = (samplesItems: SamplesInterface[]) => reduce(
-  (acc, { type, run, dataset, version, importVersion }) => ({ ...acc, [run]: { type, dataset, version, importVersion } }),
-  {},
-  samplesItems)
 
- const formatDataSet=  (sampleList: any[]) => {
-  const results = []
+const formatDataSet = (sampleList: any[]) => {
+  const results: any = []
 
-  sampleList.map((sample : SamplesInterface) =>{
-    results.push({items: {}, type: sample.type})
-    sample.items.map(item => {
-      if(results[0].items[item.dataset] === undefined){
-        results[0].items[item.dataset] = {runs:[]}
-      } 
-      results[0].items[item.dataset].runs.push(item.run)
+  sampleList.map((sample: SampleDataInerface, index: number) => {
+    results.push({ items: {}, type: sample.type })
+    sample.items.map((item: any) => {
+      if (results[index].items[item.dataset] === undefined) {
+        results[index].items[item.dataset] = { runs: {} }
+      }
+      results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
     })
   })
-  console.log(results)
- } 
 
-const formatData = (items: any) => {
-  const ob = {}
-  const itemsFromAnrrArray = items.map((item: any) => item.items)
-  const dataSetNames = itemsFromAnrrArray.map((set: SamplesInterface[]) => {
-    const itemObject: any[] = set.map((setOne: SamplesInterface) => {
-      const dataSet = pathOr('', ['dataset'], setOne)
-      return (dataSet)
-    })
-    return assoc(uniq(itemObject), formatSamples(set), ob)
-  })
-  return dataSetNames
+  return (results)
 }
-
-export const formatType = (arr: Array<any>): any => reduce(
-  (acc, elem) => assoc(elem.type, elem, acc),
-  {},
-  arr,
-);
 
 export default function samplesSetReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
@@ -95,12 +72,10 @@ export function fetchSamplesByDataSetAction() {
     return request.then(
       response => {
         const samples = pathOr([], ['data', 'samples'], response)
-        const formatSamples = formatData(samples)
 
-       formatDataSet(samples)
-
+        formatDataSet(samples)
         dispatch(setFetching(false))
-        dispatch(setSample(path(['data', 'samples'], response)))
+        dispatch(setSample(formatDataSet(samples)))
       },
       error => {
         dispatch(setFetching(false))
