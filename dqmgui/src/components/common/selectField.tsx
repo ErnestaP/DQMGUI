@@ -14,7 +14,6 @@ interface SelectFieldProps {
 
 const SelectField = ({ label, onChange, input, error, options, getOptionLabel, getOptionValue, ...props }: SelectFieldProps) => {
   const optionValues = Object.values(options)
-  console.log(input)
   return (
     <FormControl>
       <InputLabel>{label}</InputLabel>
@@ -22,7 +21,7 @@ const SelectField = ({ label, onChange, input, error, options, getOptionLabel, g
         inputProps={{
           name: 'selectField',
         }}
-        onChange={input.onChange(input.value)}
+        onChange={(e) => input.onChange(e.target.value)}
       >
         {optionValues.map((option: any) => (
           <option key={option} value={getOptionValue(option)}>

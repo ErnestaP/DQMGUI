@@ -23,9 +23,7 @@
     "noEmit": true
   },
   "include": [
-    "types/global.d.ts",
     "src/**/*",
-    "e2e/**/*"
   ],
   "exclude": [
     "node_modules"

@@ -2,12 +2,15 @@ import * as React from 'react';
 import { Grid, withStyles, StyleRulesCallback, StyledComponentProps, Button } from '@material-ui/core'
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
+import { Form, Field, reduxForm } from 'redux-form'
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
 import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
 import { Time } from './time'
 import { SERVICES, WORKPLACES, RUN } from '../constants'
+import { fetchSamplesByDataSetAction } from '../ducks/header/fetchSamplesByDataset'
+import TextField from '../common/textField'
 
 const styles = (theme: any) => ({
 
@@ -15,11 +18,11 @@ const styles = (theme: any) => ({
     background: theme.palette.primary.main,
     margin: '-8px',
     width: '100vw',
-    marginBottom: '8px',
     height: '6vh',
     display: "flex",
     alignItems: 'center',
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
+    marginBottom: '8px',
   },
 
   logo: {
@@ -59,6 +62,14 @@ const styles = (theme: any) => ({
     [theme.breakpoints.up('xl')]: {
       fontSize: '1.425rem',
     },
+  },
+  searchBar: {
+    display: 'flex',
+    justifyContent: 'center',
+    background: theme.palette.primary.light,
+    margin: '-8px',
+    width: '100vw',
+    marginBottom: '8px',
   }
 })
 
@@ -74,43 +85,64 @@ interface HeaderInterface {
   setMenuContent(type: string): void;
   menuState: boolean;
   workplace: string;
+  fetchSamples(): string[];
 }
 
-const Header = ({
-  classes,
-  setMenuState,
-  menuState,
-  service,
-  setMenuContent,
-  workplace,
-  run,
-  ...props }: HeaderInterface) => {
+class Header extends React.Component<HeaderInterface>{
 
-  return (
-    <Grid container className={classes.header}>
-      <Grid item xs={2}>
-        <img src={Logo} className={classes.logo} onClick={() => setMenuState(!menuState)}></img>
-      </Grid>
-      <Grid item xs={3}>
-        <Button onClick={() => setMenuContent(SERVICES)}>
-          {service}
-        </Button>
-        <Button onClick={() => setMenuContent(WORKPLACES)}>
-          {workplace}
-        </Button>
-        <Button onClick={() => setMenuContent(RUN)}>
-          {run}
-        </Button>
-      </Grid>
-      <Grid item xs={3}>
-        <Time classes={classes.time} />
-      </Grid>
-    </Grid>
-  );
+  render() {
+    const
+      { classes,
+        setMenuState,
+        menuState,
+        service,
+        setMenuContent,
+        workplace,
+        run,
+        fetchSamples,
+        ...props } = this.props
 
+    return (
+      <Form onSubmit={(event) => { event.preventDefault(); fetchSamples() }}>
+        <Grid item container>
+          <Grid item container className={classes.header}>
+            <Grid item xs={2}>
+              <img src={Logo} className={classes.logo} onClick={() => setMenuState(!menuState)}></img>
+            </Grid>
+            <Grid item xs={3} >
+              <Button onClick={() => setMenuContent(SERVICES)}>
+                {service}
+              </Button>
+              <Button onClick={() => setMenuContent(WORKPLACES)}>
+                {workplace}
+              </Button>
+              <Button onClick={() => setMenuContent(RUN)}>
+                {run}
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Time classes={classes.time} />
+            </Grid>
+          </Grid>
+          <Grid item container className={classes.searchBar}>
+            <Grid item xs={4} >
+              <Field
+                name="searchField"
+                placeholder="Search"
+                fullWidth={true}
+                component={TextField} />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Form>
+    );
+  }
 }
 
-export default compose<any, any, any>(
+export default compose<any, any, any, any>(
+  reduxForm({
+    form: "MAIN_FORM",
+  }),
   connect(
     (state: any) => ({
       menuState: getMenuStatus(state),
@@ -126,6 +158,9 @@ export default compose<any, any, any>(
         dispatch(setMenuContent(type));
         dispatch(setMenuState(!props.menuState));
       },
+      fetchSamples() {
+        dispatch(fetchSamplesByDataSetAction())
+      }
     })
     )
   ),
