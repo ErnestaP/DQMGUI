@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Table, TableHead, TableCell, TableRow } from '@material-ui/core'
+import { Table, TableHead, TableCell, TableRow, withStyles } from '@material-ui/core'
 
 import SearchResultTableBody from './body'
 import { datasetParts } from '../constants'
@@ -8,12 +8,19 @@ import { typesTranlsation } from '../../translation/typesTranslation'
 
 interface SearchResultTableProps {
   samplesGroup: SampleDataInerface;
+  classes: any;
 }
 
-const SearchResultTable = ({ samplesGroup }: SearchResultTableProps) => {
-  return (<Table>
+const styles = (theme) => ({
+  header: {
+    background: theme.palette.secondary.light
+  },
+})
+
+const SearchResultTable = ({ samplesGroup, classes }: SearchResultTableProps) => {
+  return (<Table className={classes.table}>
     <TableHead>
-      <TableRow style={{ background: 'green' }}>
+      <TableRow className={classes.header}>
         <TableCell>
           {typesTranlsation(samplesGroup.type)}
         </TableCell>
@@ -30,4 +37,4 @@ const SearchResultTable = ({ samplesGroup }: SearchResultTableProps) => {
   )
 }
 
-export default SearchResultTable
+export default withStyles(styles)(SearchResultTable)

@@ -70,6 +70,7 @@ const styles = (theme: any) => ({
     margin: '-8px',
     width: '100vw',
     marginBottom: '8px',
+    paddingBottom: '8px',
   }
 })
 
@@ -125,7 +126,7 @@ class Header extends React.Component<HeaderInterface>{
             </Grid>
           </Grid>
           <Grid item container className={classes.searchBar}>
-            <Grid item xs={4} >
+            <Grid item xs={4}>
               <Field
                 name="searchField"
                 placeholder="Search"

@@ -86,3 +86,4 @@ export function fetchSamplesByDataSetAction() {
 }
 
 export const getSamples = (state: any) => path(['SAMPLES', 'samplesList'], state);
+export const isFetching = (state: any) => path(['SAMPLES', 'fetching'], state);

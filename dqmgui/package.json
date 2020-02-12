@@ -36,7 +36,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build": "webpack --config webpack.build.js",
-    "dev": "webpack-dev-server --hot --inline --history-api-fallback --host 0.0.0.0 --config webpack.dev.js --env.BABEL_ENV=development "
+    "dev": "webpack-dev-server --hot --inline --history-api-fallback --config webpack.dev.js --env.BABEL_ENV=development "
   },
   "eslintConfig": {
     "extends": "react-app"

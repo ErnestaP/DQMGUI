@@ -2,10 +2,11 @@ import * as React from 'react'
 import { TableBody, TableRow, TableCell, Button } from '@material-ui/core'
 
 import { getSamples } from '../ducks/header/fetchSamplesByDataset'
-import { compose } from 'ramda'
+import { compose, pathOr } from 'ramda'
 import { connect } from 'react-redux'
+import { setDialogContent, setDialogState } from '../ducks/dialog/openClose'
 
-const SearchResultTableBody = ({ samplesGroup, ...props }) => {
+const SearchResultTableBody = ({ samplesGroup, isOpen, setDialogContent, toggleDialog, ...props }) => {
   const dataSetNames = Object.keys(samplesGroup.items)
   return (
     <TableBody>
@@ -16,9 +17,12 @@ const SearchResultTableBody = ({ samplesGroup, ...props }) => {
               {name}
             </TableCell>
             <TableCell>
-              <Button variant="outlined">
-                Runs
-              </Button>
+              <Button onClick={() => {
+                setDialogContent(
+                  Object.keys(pathOr([], ['items', name, 'runs',], samplesGroup))
+                )
+                toggleDialog(true)
+              }}>runs</Button>
             </TableCell>
           </TableRow>
         )
@@ -30,8 +34,15 @@ const SearchResultTableBody = ({ samplesGroup, ...props }) => {
 export default compose(
   connect(
     (state: any) => ({
-      samples: getSamples(state)
+      samples: getSamples(state),
     }),
-    undefined
+    (dispatch: any) => ({
+      setDialogContent(content: string) {
+        dispatch(setDialogContent(content))
+      },
+      toggleDialog(isOpen: boolean) {
+        dispatch(setDialogState(isOpen))
+      }
+    })
   )
 )(SearchResultTableBody)
