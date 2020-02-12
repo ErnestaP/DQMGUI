@@ -25,6 +25,21 @@ const formatSamples = (samplesItems: SamplesInterface[]) => reduce(
   {},
   samplesItems)
 
+ const formatDataSet=  (sampleList: any[]) => {
+  const results = []
+
+  sampleList.map((sample : SamplesInterface) =>{
+    results.push({items: {}, type: sample.type})
+    sample.items.map(item => {
+      if(results[0].items[item.dataset] === undefined){
+        results[0].items[item.dataset] = {runs:[]}
+      } 
+      results[0].items[item.dataset].runs.push(item.run)
+    })
+  })
+  console.log(results)
+ } 
+
 const formatData = (items: any) => {
   const ob = {}
   const itemsFromAnrrArray = items.map((item: any) => item.items)
@@ -82,7 +97,7 @@ export function fetchSamplesByDataSetAction() {
         const samples = pathOr([], ['data', 'samples'], response)
         const formatSamples = formatData(samples)
 
-        console.log(formatSamples)
+       formatDataSet(samples)
 
         dispatch(setFetching(false))
         dispatch(setSample(path(['data', 'samples'], response)))
