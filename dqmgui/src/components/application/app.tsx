@@ -15,7 +15,7 @@ const Application = () => {
       <Grid item container >
         <SideNavigation />
       </Grid>
-      <Grid item>
+      <Grid item style={{ display: 'flex', justifyContent: "center"}}>
         <Table />
       </Grid>
     </Grid>

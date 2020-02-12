@@ -24,7 +24,7 @@ const styles = (theme: any) => ({
     [theme.breakpoints.down('xs')]: {
       width: '30vw',
     },
-    opacity: 0.6,
+    opacity: 1,
     color: theme.palette.primary.main,
     display: 'flex',
     position: 'fixed',

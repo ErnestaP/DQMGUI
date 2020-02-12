@@ -9,6 +9,7 @@ import { getisOpenDialog, getDialogContent } from '../ducks/dialog/openClose'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import Dialog from './dialog'
 import Loader from '../common/loading'
+import NotFound from '../common/notFound'
 
 interface TablesProps {
   samplesGroups: SampleDataInerface[];
@@ -18,18 +19,19 @@ interface TablesProps {
 
 const Tables = ({ samplesGroups, isOpen, content, isFetching }: TablesProps) => {
   return (
-    <Grid container spacing={8} style={{ width: '100%', display: 'flex', justifyContent: "center" }}>
+    <Grid container spacing={8} style={{ width: '80%' }}>
       <Dialog open={isOpen} runsList={content} />
       {
-        isFetching ? <Loader isFetching={isFetching} />
-          :
-          samplesGroups.map((samplesGroup: any) =>
-            <Grid item xs={12}>
-              <Paper>
-                <ContentTable samplesGroup={samplesGroup} />
-              </Paper>
-            </Grid>
-          )
+        isFetching && <Loader isFetching={isFetching} />
+      }
+      {
+        samplesGroups.map((samplesGroup: any) =>
+          <Grid item xs={12}>
+            <Paper>
+              <ContentTable samplesGroup={samplesGroup} />
+            </Paper>
+          </Grid>
+        )
       }
     </Grid>
   )

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Table, TableHead, TableCell, TableRow, withStyles } from '@material-ui/core'
+import { Table, TableHead, TableCell, TableRow, withStyles, Typography } from '@material-ui/core'
 
 import SearchResultTableBody from './body'
 import { datasetParts } from '../constants'
@@ -21,12 +21,14 @@ const SearchResultTable = ({ samplesGroup, classes }: SearchResultTableProps) =>
   return (<Table className={classes.table}>
     <TableHead>
       <TableRow className={classes.header}>
-        <TableCell>
+        <TableCell >
+          <Typography style={{fontWeight: 'bold'}}>
           {typesTranlsation(samplesGroup.type)}
+          </Typography>
         </TableCell>
         <TableCell />
       </TableRow>
-      <TableRow>
+      <TableRow hover={true}>
         {datasetParts.map((part: string) =>
           <TableCell key={part}> {part}</TableCell>
         )}

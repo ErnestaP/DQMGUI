@@ -12,12 +12,12 @@ const SearchResultTableBody = ({ samplesGroup, isOpen, setDialogContent, toggleD
     <TableBody>
       {
         dataSetNames.map((name: string) =>
-          <TableRow key={name}>
+          <TableRow key={name} hover={true}>
             <TableCell>
               {name}
             </TableCell>
             <TableCell>
-              <Button onClick={() => {
+              <Button variant="outlined" onClick={() => {
                 setDialogContent(
                   Object.keys(pathOr([], ['items', name, 'runs',], samplesGroup))
                 )
