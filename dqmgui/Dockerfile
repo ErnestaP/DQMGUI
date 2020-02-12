@@ -5,6 +5,7 @@ COPY package.json ./
 RUN npm install
 COPY . ./
 RUN npm run build
+EXPOSE 8084
 CMD ["npm", "run", "dev"]
 
 # Stage 2 - the production environment
