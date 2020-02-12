@@ -8,7 +8,7 @@ import { getSamples, isFetching } from '../ducks/header/fetchSamplesByDataset'
 import { getisOpenDialog, getDialogContent } from '../ducks/dialog/openClose'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import Dialog from './dialog'
-import Loader from '../common/loading'
+import Loader from '../common/loader'
 import NotFound from '../common/notFound'
 
 interface TablesProps {
