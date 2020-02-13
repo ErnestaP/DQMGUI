@@ -8,8 +8,6 @@ import { getSamples, isFetching } from '../ducks/header/fetchSamplesByDataset'
 import { getisOpenDialog, getDialogContent } from '../ducks/dialog/openClose'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import Dialog from './dialog'
-import Loader from '../common/loader'
-import NotFound from '../common/notFound'
 
 interface TablesProps {
   samplesGroups: SampleDataInerface[];
@@ -21,9 +19,6 @@ const Tables = ({ samplesGroups, isOpen, content, isFetching }: TablesProps) => 
   return (
     <Grid container spacing={8} style={{ width: '80%' }}>
       <Dialog open={isOpen} runsList={content} />
-      {
-        isFetching && <Loader isFetching={isFetching} />
-      }
       {
         samplesGroups.map((samplesGroup: any) =>
           <Grid item xs={12}>
@@ -43,7 +38,6 @@ export default compose(
       samplesGroups: getSamples(state),
       isOpen: getisOpenDialog(state),
       content: getDialogContent(state),
-      isFetching: isFetching(state),
     }),
     undefined
   )

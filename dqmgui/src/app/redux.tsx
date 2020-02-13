@@ -6,6 +6,7 @@ import SideMenuReducer from '../components/ducks/sideNav/setMenuStatus'
 import ServicesReducer from '../components/ducks/header/setActiveTabs'
 import GetSamplesReducer from '../components/ducks/header/fetchSamplesByDataset'
 import DialogReducer from '../components/ducks/dialog/openClose'
+import LaoderReducer from '../components/ducks/loader/loaderActions';
 
 const appReducer = combineReducers({
     'form': formReducer,
@@ -13,6 +14,7 @@ const appReducer = combineReducers({
     'ACTIVE_TABS': ServicesReducer,
     'SAMPLES': GetSamplesReducer,
     'DIALOG': DialogReducer,
+    'LOADER': LaoderReducer,
 })
 
 export default function createReducer() {
