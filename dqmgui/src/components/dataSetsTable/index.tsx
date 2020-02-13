@@ -5,9 +5,8 @@ import { Grid, Paper } from '@material-ui/core'
 
 import ContentTable from './table'
 import { getSamples, isFetching } from '../ducks/header/fetchSamplesByDataset'
-import { getisOpenDialog, getDialogContent } from '../ducks/dialog/openClose'
 import { SampleDataInerface } from '../ducks/header/interfaces'
-import Dialog from './dialog'
+import { pathOr } from 'ramda'
 
 interface TablesProps {
   samplesGroups: SampleDataInerface[];
@@ -15,13 +14,12 @@ interface TablesProps {
   content: string[];
 }
 
-const Tables = ({ samplesGroups, isOpen, content, isFetching }: TablesProps) => {
+const Tables = ({ isOpen, content, ...props }: TablesProps) => {
   return (
-    <Grid container spacing={8} style={{ width: '80%' }}>
-      <Dialog open={isOpen} runsList={content} />
+    <Grid container spacing={8} style={{ width: '100%' }}>
       {
-        samplesGroups.map((samplesGroup: any) =>
-          <Grid item xs={12}>
+        pathOr([], ['samplesGroups'], props).map((samplesGroup: SampleDataInerface) =>
+          <Grid item xs={12} key={samplesGroup.type}>
             <Paper>
               <ContentTable samplesGroup={samplesGroup} />
             </Paper>
@@ -36,8 +34,6 @@ export default compose(
   connect(
     (state: any) => ({
       samplesGroups: getSamples(state),
-      isOpen: getisOpenDialog(state),
-      content: getDialogContent(state),
     }),
     undefined
   )

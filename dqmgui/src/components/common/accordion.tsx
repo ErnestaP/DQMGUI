@@ -2,7 +2,7 @@ import React from 'react';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Grid, withStyles, Icon, IconButton, Button, Typography } from '@material-ui/core'
-import { path, compose } from 'ramda';
+import { compose, pathOr } from 'ramda';
 import { connect } from 'react-redux'
 
 import { setMenuContent } from '../ducks/sideNav/setMenuStatus'
@@ -102,7 +102,7 @@ class AccordionComponent extends React.Component<AccordionComponent>{
         </Grid>
         {
           pannelsNames.map((pannelsName: string) => {
-            const subSections = Object.values(path([pannelsName], pannels))
+            const subSections = Object.values(pathOr([], [pannelsName], pannels))
             const clicked = pannelsName === this.state.expanded;
 
             return (
@@ -140,7 +140,7 @@ class AccordionComponent extends React.Component<AccordionComponent>{
   }
 }
 
-export default compose(
+export default compose<any, any, any>(
   connect(
     undefined,
     (dispatch: any) => ({

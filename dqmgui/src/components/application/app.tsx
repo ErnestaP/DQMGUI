@@ -20,7 +20,7 @@ const Application = ({ isFetching }) => {
       <Grid item container >
         <SideNavigation />
       </Grid>
-      <Grid item style={{ display: 'flex', justifyContent: "center" }}>
+      <Grid item style={{ display: 'flex', justifyContent: "center", paddingTop: 16}}>
         <Table />
       </Grid>
     </Grid>

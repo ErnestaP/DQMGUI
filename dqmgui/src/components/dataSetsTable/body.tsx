@@ -1,34 +1,105 @@
 import * as React from 'react'
-import { TableBody, TableRow, TableCell, Button } from '@material-ui/core'
+import { TableBody, TableRow, TableCell, Button, Chip, Grid, Tooltip, Fab, withStyles } from '@material-ui/core'
 
 import { getSamples } from '../ducks/header/fetchSamplesByDataset'
 import { compose, pathOr } from 'ramda'
 import { connect } from 'react-redux'
-import { setDialogContent, setDialogState } from '../ducks/dialog/openClose'
+import { SampleDataInerface } from '../ducks/header/interfaces'
 
-const SearchResultTableBody = ({ samplesGroup, isOpen, setDialogContent, toggleDialog, ...props }) => {
-  const dataSetNames = Object.keys(samplesGroup.items)
-  return (
-    <TableBody>
-      {
-        dataSetNames.map((name: string) =>
-          <TableRow key={name} hover={true}>
-            <TableCell>
-              {name}
-            </TableCell>
-            <TableCell>
-              <Button variant="outlined" onClick={() => {
-                setDialogContent(
-                  Object.keys(pathOr([], ['items', name, 'runs',], samplesGroup))
-                )
-                toggleDialog(true)
-              }}>runs</Button>
-            </TableCell>
-          </TableRow>
-        )
-      }
-    </TableBody>
+interface SearchResultTableProps {
+  samplesGroup: SampleDataInerface,
+  isOpen: boolean,
+  toggleDialog(value: boolean): void;
+}
+
+const styles = (theme) => ({
+  chip: {
+    cursor: 'pointer',
+    '&:hover': {
+      background: theme.palette.grey[500],
+      color: theme.palette.common.white
+    }
+  },
+  buttons: {
+    background: theme.palette.secondary.light,
+    '&:hover': {
+      background: theme.palette.secondary.dark,
+      color: theme.palette.common.white
+    }
+  },
+  clicked: {
+    fontWeight: 'bold'
+  }
+})
+
+class SearchResultTableBody extends React.Component<SearchResultTableProps>{
+  state = ({
+    clickedDataSet: null
+  })
+
+  setClickedDataSet = (name: string) => (
+    this.setState({
+      clickedDataSet: name
+    })
   )
+
+  render() {
+    const { samplesGroup, isOpen, setDialogContent, toggleDialog, classes } = this.props
+    const dataSetNames = Object.keys(samplesGroup)
+
+    return (
+      <TableBody>
+        {
+          dataSetNames.map((name: string) => {
+            const runs = samplesGroup && Object.keys(pathOr([], [name, 'runs',], samplesGroup))
+            const runsObject = samplesGroup && (pathOr([], [name, 'runs',], samplesGroup))
+            return (
+              <React.Fragment key={name}>
+                <TableRow >
+                  <TableCell style={{width: '100%', borderRight: '1px solid lightgrey'}}>
+                    <Grid
+                      style={{ paddingBottom: 4 }}
+                      className={this.state.clickedDataSet === name && classes.clicked}
+                      item>
+                      {name}
+                    </Grid>
+                    {this.state.clickedDataSet === name &&
+                      <Grid container item xs={12}>
+                        {
+                          runs.map(run => (
+                            <Grid style={{ padding: 4 }} item key={run}>
+                              <Tooltip title={'Import version: ' + pathOr('', [run, 'importversion'], runsObject)} aria-label="add">
+                                <Chip
+                                  key={run}
+                                  label={run}
+                                  className={classes.chip}
+                                />
+                              </Tooltip>
+                            </Grid>
+                          ))
+                        }
+                      </Grid>}
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="outlined"
+                      className={classes.buttons}
+                      onClick={() => {
+                        this.state.clickedDataSet === name ?
+                          this.setClickedDataSet(null) :
+                          this.setClickedDataSet(name)
+                      }}>
+                      {runs.length}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </React.Fragment>
+            )
+          }
+          )
+        }
+      </TableBody>
+    )
+  }
 }
 
 export default compose(
@@ -36,13 +107,7 @@ export default compose(
     (state: any) => ({
       samples: getSamples(state),
     }),
-    (dispatch: any) => ({
-      setDialogContent(content: string) {
-        dispatch(setDialogContent(content))
-      },
-      toggleDialog(isOpen: boolean) {
-        dispatch(setDialogState(isOpen))
-      }
-    })
-  )
+    undefined,
+  ),
+  withStyles(styles)
 )(SearchResultTableBody)

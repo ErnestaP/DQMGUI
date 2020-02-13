@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Table, TableHead, TableCell, TableRow, withStyles, Typography } from '@material-ui/core'
+import { pathOr } from 'ramda'
 
 import SearchResultTableBody from './body'
 import { datasetParts } from '../constants'
@@ -11,30 +12,32 @@ interface SearchResultTableProps {
   classes: any;
 }
 
-const styles = (theme) => ({
+const styles = (theme: any) => ({
   header: {
     background: theme.palette.secondary.light
   },
 })
 
-const SearchResultTable = ({ samplesGroup, classes }: SearchResultTableProps) => {
+const SearchResultTable = ({ classes, ...props }: SearchResultTableProps) => {
   return (<Table className={classes.table}>
     <TableHead>
       <TableRow className={classes.header}>
         <TableCell >
-          <Typography style={{fontWeight: 'bold'}}>
-          {typesTranlsation(samplesGroup.type)}
+          <Typography style={{ fontWeight: 'bold' }}>
+            {typesTranlsation(pathOr('', ['samplesGroup', 'type'], props))}
           </Typography>
         </TableCell>
         <TableCell />
       </TableRow>
       <TableRow hover={true}>
         {datasetParts.map((part: string) =>
-          <TableCell key={part}> {part}</TableCell>
+          <TableCell key={part} style={{ width: '100%', borderLeft: '1px solid lightgrey' }}> {part}</TableCell>
         )}
       </TableRow>
     </TableHead>
-    <SearchResultTableBody samplesGroup={samplesGroup} />
+    <SearchResultTableBody
+      samplesGroup={pathOr([], ['samplesGroup', 'items'], props)}
+    />
   </Table>
   )
 }

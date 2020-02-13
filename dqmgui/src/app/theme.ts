@@ -38,7 +38,7 @@ const createTheme = () => {
       },
       secondary: {
         // ...amber,
-           main: '#ffc107',
+        main: '#ffc107',
         light: '#ffe082',
         dark: '#ffa000',
         contrastText: '#9DA6B0',
@@ -64,11 +64,16 @@ const createTheme = () => {
       },
       background: {
         lightBlue: '#e3f2fd'
+      },
+      grey: {
+        [100]: '#f5f5f5',
+        [300]: '#e0e0e0',
+        [500]: '#9e9e9e',
       }
 
     },
   })
-return theme
+  return theme
 };
 
 export default createTheme();

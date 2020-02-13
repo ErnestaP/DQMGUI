@@ -8,7 +8,7 @@ interface TimeProps{
 
 export class Time extends React.Component<TimeProps> {
   state = ({
-    time: moment().format('MMMM Do YYYY, HH:mm:ss')
+    time: moment.utc().format('MMMM Do YYYY, HH:mm:ss')
   })
 
   componentDidMount() {
@@ -24,7 +24,7 @@ export class Time extends React.Component<TimeProps> {
 
   tick() {
     this.setState({
-      time: moment().format('MMMM Do YYYY, HH:mm:ss')
+      time: moment.utc().format('MMMM Do YYYY, HH:mm:ss')
     });
   }
 

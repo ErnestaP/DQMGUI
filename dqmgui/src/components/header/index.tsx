@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Grid, withStyles, StyleRulesCallback, StyledComponentProps, Button } from '@material-ui/core'
+import { Grid, withStyles, Icon, StyledComponentProps, Button, Paper } from '@material-ui/core'
+import Search from '@material-ui/icons/Search';
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
 import { Form, Field, reduxForm } from 'redux-form'
@@ -11,6 +12,7 @@ import { Time } from './time'
 import { SERVICES, WORKPLACES, RUN } from '../constants'
 import { fetchSamplesByDataSetAction } from '../ducks/header/fetchSamplesByDataset'
 import TextField from '../common/textField'
+import User from '../userInfo'
 
 const styles = (theme: any) => ({
 
@@ -19,10 +21,11 @@ const styles = (theme: any) => ({
     margin: '-8px',
     width: '100vw',
     height: '6vh',
-    display: "flex",
     alignItems: 'center',
     color: theme.palette.common.white,
     marginBottom: '8px',
+    display: 'flex',
+    justifyContent: 'space-between'
   },
 
   logo: {
@@ -47,30 +50,25 @@ const styles = (theme: any) => ({
   },
 
   time: {
-    [theme.breakpoints.down('xs')]: {
-      fontSize: '1.025rem',
-    },
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '1.125rem',
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: '1.225rem',
-    },
-    [theme.breakpoints.up('lg')]: {
-      fontSize: '1.325rem',
-    },
-    [theme.breakpoints.up('xl')]: {
-      fontSize: '1.425rem',
-    },
+    fontSize: '0.725rem',
+  },
+  timeWrapper: {
+    paddingRight: 16,
   },
   searchBar: {
     display: 'flex',
-    justifyContent: 'center',
-    background: theme.palette.primary.light,
+    justifyContent: 'flex-end',
+    // background: theme.palette.primary.light,
+    borderBottom: `1px solid ${theme.palette.primary.main}`,
     margin: '-8px',
     width: '100vw',
     marginBottom: '8px',
     paddingBottom: '8px',
+  },
+  searchFields: {
+    padding: '0px !important',
+    paddingBottom: '8px  !important',
+    paddingRight: '8px !important'
   }
 })
 
@@ -105,12 +103,12 @@ class Header extends React.Component<HeaderInterface>{
 
     return (
       <Form onSubmit={(event) => { event.preventDefault(); fetchSamples() }}>
-        <Grid item container>
-          <Grid item container className={classes.header}>
-            <Grid item xs={2}>
+        <Grid item container className={classes.header}>
+          <Grid container item xs={4}>
+            <Grid item xs={4}>
               <img src={Logo} className={classes.logo} onClick={() => setMenuState(!menuState)}></img>
             </Grid>
-            <Grid item xs={3} >
+            <Grid item xs={8} >
               <Button onClick={() => setMenuContent(SERVICES)}>
                 {service}
               </Button>
@@ -121,20 +119,42 @@ class Header extends React.Component<HeaderInterface>{
                 {run}
               </Button>
             </Grid>
-            <Grid item xs={3}>
-              <Time classes={classes.time} />
-            </Grid>
           </Grid>
-          <Grid item container className={classes.searchBar}>
-            <Grid item xs={4}>
-              <Field
-                name="searchField"
-                placeholder="Search"
-                fullWidth={true}
-                component={TextField} />
+          <Grid container item xs={2} justify="flex-end">
+            <Grid item xs={12} >
+              <User />
             </Grid>
+            {/* <Grid item className={classes.timeWrapper} xs={12}>
+              <Time classes={classes.time} />
+            </Grid> */}
           </Grid>
         </Grid>
+        <Paper style={{ width: '100vw', margin: -8 }}>
+          <Grid container item xs={12} justify="flex-end" style={{ width: '100vw', justifyContent: 'felx-end', display: 'flex', margin: '-8px', paddingLeft: -16 }}>
+            <Grid item xs={2} className={classes.searchFields}>
+              <Field
+                name="searchField"
+                placeholder="Search by Data set"
+                fullWidth={true}
+                component={TextField}
+              />
+            </Grid>
+            <Grid item xs={2} className={classes.searchFields}>
+              <Field
+                name="searchFieldByRun"
+                placeholder="Search by Run"
+                fullWidth={true}
+                component={TextField}
+              />
+            </Grid>
+            <Grid item style={{ paddingRight: 32, paddingTop: 4, paddingBottom: 4 }}>
+              <Button type="submit" style={{ background: 'aliceblue' }}>
+                {/* <Search /> */}
+                Search 
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
       </Form>
     );
   }
