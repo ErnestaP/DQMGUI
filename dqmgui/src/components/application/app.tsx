@@ -14,7 +14,7 @@ const Application = ({ isFetching }) => {
   return (
     <Grid container className="Main" direction="column">
       <Loader isFetching={isFetching} />
-      <Grid item container>
+      <Grid item>
         <Header />
       </Grid>
       <Grid item container >

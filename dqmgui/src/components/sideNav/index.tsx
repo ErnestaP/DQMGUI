@@ -10,7 +10,6 @@ import { getMenuStatus, getMenuContent } from '../ducks/sideNav/setMenuStatus'
 const styles = (theme: any) => ({
   header: {
     background: theme.palette.secondary.main,
-    margin: '-8px',
     height: '94vh',
     [theme.breakpoints.up('xl')]: {
       width: '12vw',

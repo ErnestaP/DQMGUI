@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { TableBody, TableRow, TableCell, Button, Chip, Grid, Tooltip, Fab, withStyles } from '@material-ui/core'
+import { TableBody, TableRow, TableCell, Button, Chip, Grid, Tooltip, props, withStyles } from '@material-ui/core'
 
 import { getSamples } from '../ducks/header/fetchSamplesByDataset'
 import { compose, pathOr } from 'ramda'
@@ -8,11 +8,11 @@ import { SampleDataInerface } from '../ducks/header/interfaces'
 
 interface SearchResultTableProps {
   samplesGroup: SampleDataInerface,
-  isOpen: boolean,
+  classes: any,
   toggleDialog(value: boolean): void;
 }
 
-const styles = (theme) => ({
+const styles: any = (theme) => ({
   chip: {
     cursor: 'pointer',
     '&:hover': {
@@ -21,7 +21,8 @@ const styles = (theme) => ({
     }
   },
   buttons: {
-    background: theme.palette.secondary.light,
+    fontSize: '0.725rem',
+    height: 'fit-content',
     '&:hover': {
       background: theme.palette.secondary.dark,
       color: theme.palette.common.white
@@ -29,6 +30,19 @@ const styles = (theme) => ({
   },
   clicked: {
     fontWeight: 'bold'
+  },
+  dataSetCell: {
+    width: '100%',
+    fontFamily: 'Raleway, sans-serif',
+    fontSize: '0.725rem',
+    height: 'fit-content',
+    padding: '8px !important'
+  },
+  cellWrapper: {
+    paddingBottom: 4
+  },
+  chipSeparator: {
+    padding: 4,
   }
 })
 
@@ -37,14 +51,14 @@ class SearchResultTableBody extends React.Component<SearchResultTableProps>{
     clickedDataSet: null
   })
 
-  setClickedDataSet = (name: string) => (
+  setClickedDataSet = (name: string | null) => (
     this.setState({
       clickedDataSet: name
     })
   )
 
   render() {
-    const { samplesGroup, isOpen, setDialogContent, toggleDialog, classes } = this.props
+    const { samplesGroup, classes } = this.props
     const dataSetNames = Object.keys(samplesGroup)
 
     return (
@@ -56,10 +70,9 @@ class SearchResultTableBody extends React.Component<SearchResultTableProps>{
             return (
               <React.Fragment key={name}>
                 <TableRow >
-                  <TableCell style={{width: '100%', borderRight: '1px solid lightgrey'}}>
+                  <TableCell className={classes.dataSetCell}>
                     <Grid
-                      style={{ paddingBottom: 4 }}
-                      className={this.state.clickedDataSet === name && classes.clicked}
+                      className={`${this.state.clickedDataSet === name && classes.clicked}${classes.cellWrapper}`}
                       item>
                       {name}
                     </Grid>
@@ -67,8 +80,10 @@ class SearchResultTableBody extends React.Component<SearchResultTableProps>{
                       <Grid container item xs={12}>
                         {
                           runs.map(run => (
-                            <Grid style={{ padding: 4 }} item key={run}>
-                              <Tooltip title={'Import version: ' + pathOr('', [run, 'importversion'], runsObject)} aria-label="add">
+                            <Grid className={classes.chipSeparator} item key={run}>
+                              <Tooltip
+                                title={'Import version: ' + pathOr('', [run, 'importversion'], runsObject)}
+                                aria-label="Import version">
                                 <Chip
                                   key={run}
                                   label={run}
@@ -97,12 +112,12 @@ class SearchResultTableBody extends React.Component<SearchResultTableProps>{
           }
           )
         }
-      </TableBody>
+      </TableBody >
     )
   }
 }
 
-export default compose(
+export default compose<any, any, any>(
   connect(
     (state: any) => ({
       samples: getSamples(state),

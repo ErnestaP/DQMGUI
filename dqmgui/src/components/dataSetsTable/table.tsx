@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Table, TableHead, TableCell, TableRow, withStyles, Typography } from '@material-ui/core'
+import { Table, TableHead, TableCell, TableRow, withStyles, Typography, Theme } from '@material-ui/core'
 import { pathOr } from 'ramda'
 
 import SearchResultTableBody from './body'
@@ -12,18 +12,27 @@ interface SearchResultTableProps {
   classes: any;
 }
 
-const styles = (theme: any) => ({
+const styles: any = (theme: Theme) => ({
   header: {
-    background: theme.palette.secondary.light
+    background: theme.palette.secondary.light,
+    padding: '8px !important'
+  },
+  dataSetPartsWrapper: {
+    width: '100%',
+    fontFamily: 'Raleway, sans-serif'
+  },
+  type: {
+    fontWeight: 'bold',
+    fontSize: '0.725rem',
   },
 })
 
 const SearchResultTable = ({ classes, ...props }: SearchResultTableProps) => {
-  return (<Table className={classes.table}>
+  return (<Table>
     <TableHead>
       <TableRow className={classes.header}>
         <TableCell >
-          <Typography style={{ fontWeight: 'bold' }}>
+          <Typography className={classes.type}>
             {typesTranlsation(pathOr('', ['samplesGroup', 'type'], props))}
           </Typography>
         </TableCell>
@@ -31,7 +40,11 @@ const SearchResultTable = ({ classes, ...props }: SearchResultTableProps) => {
       </TableRow>
       <TableRow hover={true}>
         {datasetParts.map((part: string) =>
-          <TableCell key={part} style={{ width: '100%', borderLeft: '1px solid lightgrey' }}> {part}</TableCell>
+          <TableCell
+            key={part}
+            className={classes.dataSetPartsWrapper}>
+            {part}
+          </TableCell>
         )}
       </TableRow>
     </TableHead>
