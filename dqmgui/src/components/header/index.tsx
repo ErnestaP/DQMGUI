@@ -13,6 +13,7 @@ import { SERVICES, WORKPLACES, RUN } from '../constants'
 import { fetchSamplesByDataSetAction } from '../ducks/header/fetchSamplesByDataset'
 import TextField from '../common/textField'
 import User from '../userInfo'
+import { fetchSamplesByRunAction } from '../ducks/header/fetchSamplesByRun';
 
 const styles = (theme: any) => ({
   header: {
@@ -216,6 +217,7 @@ export default compose<any, any, any, any>(
       },
       fetchSamples() {
         dispatch(fetchSamplesByDataSetAction())
+        dispatch(fetchSamplesByRunAction())
       }
     })
     )

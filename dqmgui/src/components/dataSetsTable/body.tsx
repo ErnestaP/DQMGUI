@@ -76,6 +76,7 @@ class SearchResultTableBody extends React.Component<SearchResultTableProps>{
                       item>
                       {name}
                     </Grid>
+                    hello world
                     {this.state.clickedDataSet === name &&
                       <Grid container item xs={12}>
                         {
