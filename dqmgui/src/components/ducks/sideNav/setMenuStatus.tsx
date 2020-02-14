@@ -30,6 +30,7 @@ export const setMenuState = (data: any) => ({
   payload: data,
 })
 
+
 export const setMenuContent = (data: any) => ({
   type: SET_MENU_CONTENT,
   payload: data,

@@ -1,23 +1,38 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { Grid } from '@material-ui/core'
+import { Grid, Paper, withStyles, StyledComponentProps } from '@material-ui/core'
+import { pathOr } from 'ramda'
 
 import ContentTable from './table'
-import { getSamples } from '../ducks/header/fetchSamplesByDataset'
+import { getSamples, isFetching } from '../ducks/header/fetchSamplesByDataset'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 
-interface TablesProps {
-  samplesGroups: SampleDataInerface[]
+interface TablesProps extends StyledComponentProps {
+  samplesGroups: SampleDataInerface[];
+  isOpen: boolean;
+  content: string[];
 }
 
-const Tables = ({ samplesGroups }: TablesProps) => {
+const styles = (theme: any) => ({
+  samplesGroupsWrapper: {
+    width: '100%'
+  },
+  paper: {
+    margin: '8px',
+    width: 'calc(100% - 16px)'
+  }
+})
+
+const Tables = ({ isOpen, content, classes, ...props }: TablesProps) => {
   return (
-    <Grid container spacing={8}>
+    <Grid container className={pathOr('', ['samplesGroupsWrapper'], classes)}>
       {
-        samplesGroups.map((samplesGroup: any) =>
-          <Grid item xs={12}>
-            <ContentTable samplesGroup={samplesGroup} />
+        pathOr([], ['samplesGroups'], props).map((samplesGroup: SampleDataInerface) =>
+          <Grid item xs={12} key={samplesGroup.type}>
+            <Paper className={classes.paper}>
+              <ContentTable samplesGroup={samplesGroup} />
+            </Paper>
           </Grid>
         )
       }
@@ -28,8 +43,8 @@ const Tables = ({ samplesGroups }: TablesProps) => {
 export default compose(
   connect(
     (state: any) => ({
-      samplesGroups: getSamples(state)
+      samplesGroups: getSamples(state),
     }),
     undefined
-  )
+  ), withStyles(styles)
 )(Tables)

@@ -31,18 +31,18 @@ const createTheme = () => {
     palette: {
       primary: {
         // ...blue,
-        main: '#42a5f5',
-        light: '#80d6ff',
-        dark: '#0077c2',
+        main: '#039be5',
+        light: '#29b6f6',
+        dark: '#.277bd',
         contrastText: '#FFF',
       },
       secondary: {
         // ...amber,
-           main: '#004d40',
-        light: '#757575',
-        dark: '#212121',
+        main: '#00acc1',
+        light: '#A0D3F9',
+        dark: '#00838f',
         contrastText: '#9DA6B0',
-        [400]: '#ffca28'
+        [400]: '#000'
         // main: '#fcd734',
         // light: '#ffff6b',
         // dark: '#c5a600',
@@ -64,11 +64,16 @@ const createTheme = () => {
       },
       background: {
         lightBlue: '#e3f2fd'
+      },
+      grey: {
+        [100]: '#f5f5f5',
+        [300]: '#e0e0e0',
+        [500]: '#9e9e9e',
       }
 
     },
   })
-return theme
+  return theme
 };
 
 export default createTheme();

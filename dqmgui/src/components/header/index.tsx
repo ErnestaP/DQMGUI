@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Grid, withStyles, StyleRulesCallback, StyledComponentProps, Button } from '@material-ui/core'
+import { Grid, withStyles, Icon, StyledComponentProps, Button, Paper } from '@material-ui/core'
+import Search from '@material-ui/icons/Search';
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
 import { Form, Field, reduxForm } from 'redux-form'
@@ -11,18 +12,16 @@ import { Time } from './time'
 import { SERVICES, WORKPLACES, RUN } from '../constants'
 import { fetchSamplesByDataSetAction } from '../ducks/header/fetchSamplesByDataset'
 import TextField from '../common/textField'
+import User from '../userInfo'
 
 const styles = (theme: any) => ({
-
   header: {
-    background: theme.palette.primary.main,
-    margin: '-8px',
-    width: '100vw',
+    background: 'linear-gradient(to right, #0d47a1, #00acc1)',
     height: '6vh',
-    display: "flex",
     alignItems: 'center',
     color: theme.palette.common.white,
-    marginBottom: '8px',
+    display: 'flex',
+    justifyContent: 'space-between'
   },
 
   logo: {
@@ -47,29 +46,60 @@ const styles = (theme: any) => ({
   },
 
   time: {
-    [theme.breakpoints.down('xs')]: {
-      fontSize: '1.025rem',
-    },
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '1.125rem',
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: '1.225rem',
-    },
-    [theme.breakpoints.up('lg')]: {
-      fontSize: '1.325rem',
-    },
-    [theme.breakpoints.up('xl')]: {
-      fontSize: '1.425rem',
-    },
+    fontSize: '0.725rem',
+  },
+  timeWrapper: {
+    paddingRight: 16,
   },
   searchBar: {
     display: 'flex',
-    justifyContent: 'center',
-    background: theme.palette.primary.light,
-    margin: '-8px',
-    width: '100vw',
+    justifyContent: 'flex-end',
+    borderBottom: `1px solid ${theme.palette.primary.main}`,
     marginBottom: '8px',
+    paddingBottom: '8px',
+  },
+  searchFields: {
+    padding: '0px !important',
+    paddingRight: '8px !important'
+  },
+  cms: {
+    fontSize: '1.5rem',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  services: {
+    height: "fit-content"
+  },
+  service: {
+    background: '#00acc1'
+  },
+  searchContainer: {
+    justifyContent: 'felx-end',
+    display: 'flex',
+  },
+  pathContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: 8,
+  },
+  submitButtonWrapper: {
+    paddingRight: 32,
+    paddingTop: 4,
+    paddingBottom: 4,
+  },
+  sumbitButton: {
+    background: theme.palette.secondary.main,
+    color: theme.palette.common.white,
+    '&:hover': {
+      background: theme.palette.secondary.dark,
+    }
+  },
+  paper: {
+    width: '100vw',
+    display: 'flex'
+  },
+  wrapper: {
+    width: 'fit-content'
   }
 })
 
@@ -104,34 +134,60 @@ class Header extends React.Component<HeaderInterface>{
 
     return (
       <Form onSubmit={(event) => { event.preventDefault(); fetchSamples() }}>
-        <Grid item container>
-          <Grid item container className={classes.header}>
-            <Grid item xs={2}>
-              <img src={Logo} className={classes.logo} onClick={() => setMenuState(!menuState)}></img>
+        <Grid item container className={classes.wrapper}>
+          <Grid item container xs={12} className={classes.header}>
+            <Grid container xs={6} item >
+              <Grid item xs={2}>
+                <img src={Logo} className={classes.logo} 
+                // onClick={() => setMenuState(!menuState)}
+                ></img>
+              </Grid>
+              {/* <Grid item xs={8} container spacing={4} justify="flex-start" className={classes.services}>
+                <Grid item onClick={() => setMenuContent(SERVICES)} className={classes.service}>
+                  {service}
+                </Grid>
+                <Grid item onClick={() => setMenuContent(WORKPLACES)} className={classes.service}>
+                  {workplace}
+                </Grid>
+                <Grid item onClick={() => setMenuContent(RUN)} className={classes.service}>
+                  {run}
+                </Grid>
+              </Grid> */}
             </Grid>
-            <Grid item xs={3} >
-              <Button onClick={() => setMenuContent(SERVICES)}>
-                {service}
-              </Button>
-              <Button onClick={() => setMenuContent(WORKPLACES)}>
-                {workplace}
-              </Button>
-              <Button onClick={() => setMenuContent(RUN)}>
-                {run}
-              </Button>
-            </Grid>
-            <Grid item xs={3}>
+            <Grid item className={classes.timeWrapper}>
               <Time classes={classes.time} />
             </Grid>
           </Grid>
-          <Grid item container className={classes.searchBar}>
-            <Grid item xs={4} >
-              <Field
-                name="searchField"
-                placeholder="Search"
-                fullWidth={true}
-                component={TextField} />
+          <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
+            <Paper className={classes.paper}>
+              <Grid item xs={6} className={classes.pathContainer}>
+                path/path/path/path/path/path
             </Grid>
+              <Grid container item justify="flex-end">
+                <Grid item xs={4} className={classes.searchFields}>
+                  <Field
+                    name="searchField"
+                    placeholder="Search by Data set"
+                    fullWidth={true}
+                    component={TextField}
+                  />
+                </Grid>
+                <Grid item xs={4} className={classes.searchFields}>
+                  <Field
+                    name="searchFieldByRun"
+                    placeholder="Search by Run"
+                    fullWidth={true}
+                    component={TextField}
+                  />
+                </Grid>
+                <Grid item className={classes.submitButtonWrapper}>
+                  <Button type="submit" className={classes.sumbitButton}>
+                    <Search />
+                    Search
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
           </Grid>
         </Grid>
       </Form>

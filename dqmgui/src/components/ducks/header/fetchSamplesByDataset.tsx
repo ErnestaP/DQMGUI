@@ -5,6 +5,7 @@ import { path, reduce, assoc, pathOr, uniq, unnest, groupBy } from 'ramda';
 
 import { searchFieldValue } from '../../selectors'
 import { SampleDataInerface } from './interfaces';
+import { setLoader } from '../loader/loaderActions'
 
 interface DefaultState {
   samplesList: Object,
@@ -62,6 +63,7 @@ export function fetchSamplesByDataSetAction() {
   return function action(dispatch, setState) {
     const searchField: string = searchFieldValue(setState())
     dispatch(setFetching(true))
+    dispatch(setLoader(true))
 
     const request = axios({
       method: 'GET',
@@ -75,10 +77,12 @@ export function fetchSamplesByDataSetAction() {
 
         formatDataSet(samples)
         dispatch(setFetching(false))
+        dispatch(setLoader(false))
         dispatch(setSample(formatDataSet(samples)))
       },
       error => {
         dispatch(setFetching(false))
+        dispatch(setLoader(false))
         console.log(error)
       }
     );
@@ -86,3 +90,4 @@ export function fetchSamplesByDataSetAction() {
 }
 
 export const getSamples = (state: any) => path(['SAMPLES', 'samplesList'], state);
+export const isFetching = (state: any) => path(['SAMPLES', 'fetching'], state);

@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Table, TableHead, TableCell, TableRow } from '@material-ui/core'
+import { Table, TableHead, TableCell, TableRow, withStyles, Typography, Theme } from '@material-ui/core'
+import { pathOr } from 'ramda'
 
 import SearchResultTableBody from './body'
 import { datasetParts } from '../constants'
@@ -8,26 +9,50 @@ import { typesTranlsation } from '../../translation/typesTranslation'
 
 interface SearchResultTableProps {
   samplesGroup: SampleDataInerface;
+  classes: any;
 }
 
-const SearchResultTable = ({ samplesGroup }: SearchResultTableProps) => {
+const styles: any = (theme: Theme) => ({
+  header: {
+    background: theme.palette.secondary.light,
+    padding: '8px !important'
+  },
+  dataSetPartsWrapper: {
+    width: '100%',
+    fontFamily: 'Raleway, sans-serif'
+  },
+  type: {
+    fontWeight: 'bold',
+    fontSize: '0.725rem',
+  },
+})
+
+const SearchResultTable = ({ classes, ...props }: SearchResultTableProps) => {
   return (<Table>
     <TableHead>
-      <TableRow style={{ background: 'green' }}>
-        <TableCell>
-          {typesTranlsation(samplesGroup.type)}
+      <TableRow className={classes.header}>
+        <TableCell >
+          <Typography className={classes.type}>
+            {typesTranlsation(pathOr('', ['samplesGroup', 'type'], props))}
+          </Typography>
         </TableCell>
         <TableCell />
       </TableRow>
-      <TableRow>
+      <TableRow hover={true}>
         {datasetParts.map((part: string) =>
-          <TableCell key={part}> {part}</TableCell>
+          <TableCell
+            key={part}
+            className={classes.dataSetPartsWrapper}>
+            {part}
+          </TableCell>
         )}
       </TableRow>
     </TableHead>
-    <SearchResultTableBody samplesGroup={samplesGroup} />
+    <SearchResultTableBody
+      samplesGroup={pathOr([], ['samplesGroup', 'items'], props)}
+    />
   </Table>
   )
 }
 
-export default SearchResultTable
+export default withStyles(styles)(SearchResultTable)
