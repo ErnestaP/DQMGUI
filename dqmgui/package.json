@@ -16,6 +16,7 @@
     "axios": "^0.19.2",
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.6.11",
+    "http-server": "^0.12.1",
     "moment": "^2.24.0",
     "qs": "^6.9.1",
     "ramda": "^0.27.0",
@@ -32,6 +33,7 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
+    "serve": "http-server -a 0.0.0.0 -p 8084 dist",
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
