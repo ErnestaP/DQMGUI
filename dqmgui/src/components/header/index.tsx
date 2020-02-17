@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Grid, withStyles, Icon, StyledComponentProps, Button, Paper } from '@material-ui/core'
+import { Grid, withStyles, Icon, Button, Paper } from '@material-ui/core'
 import Search from '@material-ui/icons/Search';
 import { compose } from 'ramda'
 import { connect } from 'react-redux'
 import { Form, Field, reduxForm } from 'redux-form'
+// import * as Yup from 'yup'
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
@@ -14,6 +15,7 @@ import { fetchSamplesByDataSetAction } from '../ducks/header/fetchSamplesByDatas
 import TextField from '../common/textField'
 import User from '../userInfo'
 import { fetchSamplesByRunAction } from '../ducks/header/fetchSamplesByRun';
+import { moreThan } from '../common/validation'
 
 const styles = (theme: any) => ({
   header: {
@@ -131,7 +133,7 @@ class Header extends React.Component<HeaderInterface>{
         workplace,
         run,
         fetchSamples,
-        ...props } = this.props
+        ...props } = this.props;
 
     return (
       <Form onSubmit={(event) => { event.preventDefault(); fetchSamples() }}>
@@ -139,7 +141,7 @@ class Header extends React.Component<HeaderInterface>{
           <Grid item container xs={12} className={classes.header}>
             <Grid container xs={6} item >
               <Grid item xs={2}>
-                <img src={Logo} className={classes.logo} 
+                <img src={Logo} className={classes.logo}
                 // onClick={() => setMenuState(!menuState)}
                 ></img>
               </Grid>
@@ -195,6 +197,13 @@ class Header extends React.Component<HeaderInterface>{
     );
   }
 }
+
+// const schema = Yup.object().shape({
+//   email: Yup
+//     .string()
+//     .email('Invalid email address')
+//     .required('Email address is required')
+// })
 
 export default compose<any, any, any, any>(
   reduxForm({
