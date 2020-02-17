@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { TableBody, TableRow, TableCell, Button, Chip, Grid, Tooltip, props, withStyles } from '@material-ui/core'
 
-import { getSamples } from '../ducks/header/fetchSamplesByDataset'
+import { getSamplesByDataSet } from '../ducks/header/fetchSamplesByDataset'
 import { compose, pathOr } from 'ramda'
 import { connect } from 'react-redux'
 import { SampleDataInerface } from '../ducks/header/interfaces'
@@ -76,7 +76,6 @@ class SearchResultTableBody extends React.Component<SearchResultTableProps>{
                       item>
                       {name}
                     </Grid>
-                    hello world
                     {this.state.clickedDataSet === name &&
                       <Grid container item xs={12}>
                         {
@@ -121,7 +120,7 @@ class SearchResultTableBody extends React.Component<SearchResultTableProps>{
 export default compose<any, any, any>(
   connect(
     (state: any) => ({
-      samples: getSamples(state),
+      samples: getSamplesByDataSet(state),
     }),
     undefined,
   ),

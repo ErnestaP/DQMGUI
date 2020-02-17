@@ -1,25 +1,24 @@
 
 import axios from "axios";
 import { AnyAction } from 'redux';
-import { path, reduce, assoc, pathOr, uniq, unnest, groupBy } from 'ramda';
+import { path, pathOr } from 'ramda';
 
-import { searchFieldByRunValue } from '../../selectors'
 import { SampleDataInerface } from './interfaces';
 import { setLoader } from '../loader/loaderActions'
 
 interface DefaultState {
-  samplesByDataSetList: Object,
+  samplesList: Object,
   fetching: boolean,
 }
 
 const defaultState: DefaultState = {
-  samplesByDataSetList: [],
+  samplesList: [],
   fetching: false,
 }
 
 const SET_SAMPLES_BY_RUNS = "SET_SAMPLES_BY_RUNS"
 const IS_FETCHING_BY_RUNS = "IS_FETCHING_BY_RUNS"
-
+const CLEAR_SAMPLES_BY_RUN = "CLEAR_SAMPLES_BY_RUN"
 
 const formatDataSet = (sampleList: any[]) => {
   const results: any = []
@@ -40,7 +39,7 @@ const formatDataSet = (sampleList: any[]) => {
 export default function samplesByRunReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
     case SET_SAMPLES_BY_RUNS:
-      return { ...state, samplesByDataSetList: payload };
+      return { ...state, samplesList: payload };
     case IS_FETCHING_BY_RUNS:
       return { ...state, fetching: payload };
     default:
@@ -53,28 +52,30 @@ export const setSample = (data: any) => ({
   payload: data,
 })
 
+export const clearSamples = (data: any) => ({
+  type: CLEAR_SAMPLES_BY_RUN,
+  payload: data,
+})
+
 export const setFetching = (data: any) => ({
   type: IS_FETCHING_BY_RUNS,
   payload: data,
 })
 
 
-export function fetchSamplesByRunAction() {
+export function fetchSamplesByRunAction(formValues: any) {
   return function action(dispatch, setState) {
-    const searchField: string = searchFieldByRunValue(setState())
     dispatch(setFetching(true))
     dispatch(setLoader(true))
-
     const request = axios({
       method: 'GET',
-      url: `/online-dev/data/json/samples?run=${searchField}`,
+      url: `/online-dev/data/json/samples?run=${formValues}`,
       headers: []
     });
 
     return request.then(
       response => {
         const samples = pathOr([], ['data', 'samples'], response)
-
         formatDataSet(samples)
         dispatch(setFetching(false))
         dispatch(setLoader(false))
@@ -89,5 +90,5 @@ export function fetchSamplesByRunAction() {
   }
 }
 
-export const getSamplesByRuns = (state: any) => path(['SAMPLES', 'searchFieldByRun'], state);
-export const isFetchingByRuns = (state: any) => path(['SAMPLES', 'fetching'], state);
+export const getSamplesByRuns = (state: any) => path(['SAMPLES', 'SAMPLES_BY_RUN', 'samplesList'], state);
+export const isFetchingByRuns = (state: any) => path(['SAMPLES', 'SAMPLES_BY_RUN', 'fetching'], state);
