@@ -2,6 +2,7 @@
 import axios from "axios";
 import { AnyAction } from 'redux';
 import { path, reduce, assoc, pathOr, uniq, unnest, groupBy } from 'ramda';
+import qs from 'qs'
 
 import { SampleDataInerface } from './interfaces';
 import { setLoader } from '../loader/loaderActions'
@@ -76,7 +77,7 @@ export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldB
 
     const request = axios({
       method: 'GET',
-      url: `/online-dev/data/json/samples?match=${serachFieldValues}`,
+      url: `/online-dev/data/json/samples?match=${qs.stringify(serachFieldValues)}`,
       headers: []
     });
 
@@ -104,7 +105,7 @@ export function fetchSamplesByRunAction(formValues: any) {
     
     const request = axios({
       method: 'GET',
-      url: `/online-dev/data/json/samples?run=${formValues}`,
+      url: `/online-dev/data/json/samples?run=${qs.stringify(formValues)}`,
       headers: []
     });
 
