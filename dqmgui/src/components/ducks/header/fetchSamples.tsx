@@ -32,7 +32,7 @@ const formatDataSet = (sampleList: any[], searchFieldByRun?: number) => {
         results[index].items[item.dataset] = { runs: {} }
       }
       if (searchFieldByRun && item.run.includes(searchFieldByRun)) {
-        results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
+        results[index].items[item.dataset].runs[item.run] = { importversion: item.importversion, version: item.version }
       }
       else if (searchFieldByRun && !item.run.includes(searchFieldByRun)) {
         delete results[index].items[item.dataset]
@@ -77,7 +77,7 @@ export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldB
 
     const request = axios({
       method: 'GET',
-      url: `/online-dev/data/json/samples?match=${qs.stringify(serachFieldValues)}`,
+      url: `/offline/data/json/samples?match=${serachFieldValues}`,
       headers: []
     });
 
@@ -105,7 +105,7 @@ export function fetchSamplesByRunAction(formValues: any) {
     
     const request = axios({
       method: 'GET',
-      url: `/online-dev/data/json/samples?run=${qs.stringify(formValues)}`,
+      url: `/offline/data/json/samples?run=${formValues}`,
       headers: []
     });
 

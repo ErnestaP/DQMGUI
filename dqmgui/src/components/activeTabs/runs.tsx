@@ -4,7 +4,7 @@ import { compose } from 'ramda';
 import { connect } from 'react-redux'
 
 import { pseudoRuns } from '../pseudoFields'
-import { setRun } from '../ducks/header/setActiveTabs'
+import { setRun } from '../ducks/header/setPaths'
 
 interface RunsProps {
   setRun(type: string): void;

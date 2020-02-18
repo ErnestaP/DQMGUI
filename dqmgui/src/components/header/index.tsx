@@ -8,7 +8,7 @@ import cleanDeep from 'clean-deep';
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
-import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
+import { getSelectedPath } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
@@ -103,7 +103,7 @@ const Header = ({
   service,
   setMenuContent,
   workplace,
-  run,
+  path,
   fetchSamples
 }: HeaderInterface) => {
 
@@ -135,7 +135,7 @@ const Header = ({
             <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
               <Paper className={classes.paper}>
                 <Grid item xs={6} className={classes.pathContainer}>
-                  {/* path/path/path/path/path/path */}
+                  {path}
                 </Grid>
                 <Grid container item justify="flex-end">
                   <SearchByDatasetField />
@@ -158,9 +158,7 @@ export default compose<any, any, any>(
   connect(
     (state: any) => ({
       menuState: getMenuStatus(state),
-      service: getService(state),
-      workplace: getWorkplace(state),
-      run: getRun(state),
+      path: getSelectedPath(state)
     }),
     ((dispatch: any, props: any) => ({
       setMenuState(state: boolean) {

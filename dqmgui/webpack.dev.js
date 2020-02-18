@@ -9,8 +9,8 @@ module.exports = merge(common, {
     // contentBase: path.resolve(__dirname, 'assets'),
     port: 8084,
     proxy: [{
-      context: ['/online-dev'],
-      target: 'http://localhost:8070/dqm',
+      context: ['/offline'],
+      target: 'http://localhost:8081/dqm/',
     },
     {
       context: ['offline/data/json/archive'],

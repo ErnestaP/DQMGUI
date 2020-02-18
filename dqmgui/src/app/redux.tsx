@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import SideMenuReducer from '../components/ducks/sideNav/setMenuStatus'
-import ServicesReducer from '../components/ducks/header/setActiveTabs'
+import ServicesReducer from '../components/ducks/header/setPaths'
 import GetSamplesReducer from '../components/ducks/header/fetchSamples'
 import LaoderReducer from '../components/ducks/loader/loaderActions';
 import TablesExpandedLineReducer from '../components/ducks/table/selectedDataSet';

@@ -3,7 +3,6 @@ import { Field } from 'react-final-form'
 import { Grid, withStyles } from '@material-ui/core';
 
 import TextField from '../common/textField'
-import { mustBeMoreThan } from '../common/validation';
 
 const styles = (theme: any) => ({
   searchFields: {
@@ -24,7 +23,6 @@ const SearchByRun = ({ classes }: SearchByRunProps) => {
         placeholder="Search by Run"
         fullWidth
         component={TextField}
-        validate={mustBeMoreThan(3)}
       />
     </Grid>
   )

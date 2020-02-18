@@ -5,7 +5,7 @@ import { compose } from 'ramda';
 import { connect } from 'react-redux'
 
 import { pseudoServices } from '../pseudoFields'
-import { setService, getService} from '../ducks/header/setActiveTabs'
+import { setService, getService} from '../ducks/header/setPaths'
 import { setMenuContent} from '../ducks/sideNav/setMenuStatus'
 
 
