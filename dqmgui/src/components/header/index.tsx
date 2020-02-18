@@ -10,8 +10,6 @@ import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
 import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
 import { Time } from './time'
-import { fetchSamplesByDataSetAction } from '../ducks/header/fetchSamplesByDataset'
-import { fetchSamplesByRunAction } from '../ducks/header/fetchSamplesByRun';
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
 import { combineGetSamplesByDataSetAndRun } from '../ducks/header/combineSamplesByDataSetAndRun';

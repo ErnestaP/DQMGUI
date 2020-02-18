@@ -5,10 +5,8 @@ import { Grid, Paper, withStyles, StyledComponentProps } from '@material-ui/core
 import { pathOr } from 'ramda'
 
 import ContentTable from './table'
-import { getSamplesByDataSet, isFetching } from '../ducks/header/fetchSamplesByDataset'
+import { getSamplesByDataSet } from '../ducks/header/fetchSamples'
 import { SampleDataInerface } from '../ducks/header/interfaces'
-import { getSamplesByRuns } from '../ducks/header/fetchSamplesByRun'
-import { getAllSamples } from '../selectors'
 
 interface TablesProps extends StyledComponentProps {
   samplesGroups: SampleDataInerface[];
@@ -26,7 +24,7 @@ const styles = (theme: any) => ({
   }
 })
 
-const Tables = ({ isOpen, content, classes, runs,...props }: TablesProps) => {
+const Tables = ({ isOpen, content, classes, runs, ...props }: TablesProps) => {
   return (
     <Grid container className={pathOr('', ['samplesGroupsWrapper'], classes)}>
       {
@@ -46,7 +44,6 @@ export default compose(
   connect(
     (state: any) => ({
       samplesGroups: getSamplesByDataSet(state),
-      runs: getSamplesByRuns(state),
     }),
     undefined
   ), withStyles(styles)

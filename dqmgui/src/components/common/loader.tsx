@@ -14,6 +14,7 @@ const styles = () => ({
 })
 
 const Loader = ({ isFetching, classes, ...props }: LoaderProps) => {
+  console.log(isFetching)
   return (
     <Dialog open={isFetching}
       PaperProps={{

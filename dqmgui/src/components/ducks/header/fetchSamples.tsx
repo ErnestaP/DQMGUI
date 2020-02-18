@@ -69,7 +69,7 @@ export const setFetching = (data: any) => ({
 })
 
 
-export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldByRun?: number) {
+export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldByRun?: string) {
   return function action(dispatch, setState) {
     dispatch(setFetching(true))
     dispatch(setLoader(true))
@@ -97,5 +97,33 @@ export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldB
   }
 }
 
-export const getSamplesByDataSet = (state: any) => path(['SAMPLES', 'SAMPLES_BY_DATASET', 'samplesList'], state);
-export const isFetching = (state: any) => path(['SAMPLES', 'SAMPLES_BY_DATASET', 'fetching'], state);
+export function fetchSamplesByRunAction(formValues: any) {
+  return function action(dispatch, setState) {
+    dispatch(setFetching(true))
+    dispatch(setLoader(true))
+    
+    const request = axios({
+      method: 'GET',
+      url: `/online-dev/data/json/samples?run=${formValues}`,
+      headers: []
+    });
+
+    return request.then(
+      response => {
+        const samples = pathOr([], ['data', 'samples'], response)
+        formatDataSet(samples)
+        dispatch(setFetching(false))
+        dispatch(setLoader(false))
+        dispatch(setSample(formatDataSet(samples)))
+      },
+      error => {
+        dispatch(setFetching(false))
+        dispatch(setLoader(false))
+        console.log(error)
+      }
+    );
+  }
+}
+
+export const getSamplesByDataSet = (state: any) => path(['SAMPLES', 'SAMPLES_LIST', 'samplesList'], state);
+export const isFetching = (state: any) => path(['SAMPLES', 'SAMPLES_LIST', 'fetching'], state);
