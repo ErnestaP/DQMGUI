@@ -5,6 +5,7 @@ import { path, reduce, assoc, pathOr, uniq, unnest, groupBy } from 'ramda';
 
 import { SampleDataInerface } from './interfaces';
 import { setLoader } from '../loader/loaderActions'
+import cleanDeep from "clean-deep";
 
 interface DefaultState {
   samplesList: Object,
@@ -38,13 +39,11 @@ const formatDataSet = (sampleList: any[], searchFieldByRun?: number) => {
       else if (!searchFieldByRun) {
         results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
       }
-      if (!results[index].items) {
-        console.log(results[index].items)/// what kodel neiseina istrinti tusciu indexu????
-      } 
     })
+    if (!path(['items'], cleanDeep(results[index]))) {
+      delete results[index]
+    }
   })
-
-  console.log(results)
   return (results)
 }
 
@@ -85,7 +84,6 @@ export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldB
       response => {
         const samples = pathOr([], ['data', 'samples'], response)
 
-        formatDataSet(samples)
         dispatch(setFetching(false))
         dispatch(setLoader(false))
         dispatch(setSample(formatDataSet(samples, searchFieldByRun)))
