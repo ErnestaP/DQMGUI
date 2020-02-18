@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Grid, withStyles, Icon, Button, Paper } from '@material-ui/core'
 import Search from '@material-ui/icons/Search';
-import { compose } from 'ramda'
+import { compose, path } from 'ramda'
 import { connect } from 'react-redux'
 import { Form, Field } from 'react-final-form'
 import cleanDeep from 'clean-deep';
@@ -96,60 +96,61 @@ interface HeaderInterface {
   fetchSamples(formValues: any[]): string[];
 }
 
-class Header extends React.Component<HeaderInterface>{
+const Header = ({
+  classes,
+  setMenuState,
+  menuState,
+  service,
+  setMenuContent,
+  workplace,
+  run,
+  fetchSamples
+}: HeaderInterface) => {
 
-  render() {
-    const
-      { classes,
-        setMenuState,
-        menuState,
-        service,
-        setMenuContent,
-        workplace,
-        run,
-        fetchSamples,
-        ...props } = this.props;
-
-    return (
-      <Form
-        onSubmit={(formValues: any) => {
-          fetchSamples(formValues)
-        }}
-        render={({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <Grid item container className={classes.wrapper}>
-              <Grid item container xs={12} className={classes.header}>
-                <Grid container xs={6} item >
-                  <Grid item xs={2}>
-                    <img src={Logo} className={classes.logo}
-                    ></img>
-                  </Grid>
-                </Grid>
-                <Grid item className={classes.timeWrapper}>
-                  <Time classes={classes.time} />
+  return (
+    <Form
+      onSubmit={(formValues: any) => {
+        fetchSamples(formValues)
+        localStorage.setItem("searchFields", JSON.stringify(formValues))
+      }}
+      initialValues={{
+        searchField: path(['searchField'], JSON.parse(localStorage.getItem('searchFields') as string)),
+        searchFieldByRun: path(['searchFieldByRun'], JSON.parse(localStorage.getItem('searchFields') as string))
+      }}
+      render={({ handleSubmit }) => (
+        <form onSubmit={handleSubmit}>
+          <Grid item container className={classes.wrapper}>
+            <Grid item container xs={12} className={classes.header}>
+              <Grid container xs={6} item >
+                <Grid item xs={2}>
+                  <img src={Logo} className={classes.logo}
+                  ></img>
                 </Grid>
               </Grid>
-              <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
-                <Paper className={classes.paper}>
-                  <Grid item xs={6} className={classes.pathContainer}>
-                    {/* path/path/path/path/path/path */}
-                 </Grid>
-                  <Grid container item justify="flex-end">
-                    <SearchByDatasetField />
-                    <SearchByRunField />
-                    <Grid item className={classes.submitButtonWrapper}>
-                      <Button type="submit" className={classes.sumbitButton}>
-                        <Search />
-                        Search
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Paper>
+              <Grid item className={classes.timeWrapper}>
+                <Time classes={classes.time} />
               </Grid>
             </Grid>
-          </form>
-        )} />);
-  }
+            <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
+              <Paper className={classes.paper}>
+                <Grid item xs={6} className={classes.pathContainer}>
+                  {/* path/path/path/path/path/path */}
+                </Grid>
+                <Grid container item justify="flex-end">
+                  <SearchByDatasetField />
+                  <SearchByRunField />
+                  <Grid item className={classes.submitButtonWrapper}>
+                    <Button type="submit" className={classes.sumbitButton}>
+                      <Search />
+                      Search
+                      </Button>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+          </Grid>
+        </form>
+      )} />);
 }
 
 export default compose<any, any, any>(
