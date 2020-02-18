@@ -1,19 +1,18 @@
 import * as React from 'react';
-import { Grid, withStyles, Icon, StyledComponentProps, Button, Paper } from '@material-ui/core'
+import { Grid, withStyles, Icon, Button, Paper } from '@material-ui/core'
 import Search from '@material-ui/icons/Search';
-import { compose } from 'ramda'
+import { compose, path } from 'ramda'
 import { connect } from 'react-redux'
-import { Form, Field, reduxForm } from 'redux-form'
+import { Form, Field } from 'react-final-form'
+import cleanDeep from 'clean-deep';
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
 import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
 import { Time } from './time'
-import { SERVICES, WORKPLACES, RUN } from '../constants'
-import { fetchSamplesByDataSetAction } from '../ducks/header/fetchSamplesByDataset'
-import TextField from '../common/textField'
-import User from '../userInfo'
-import { fetchSamplesByRunAction } from '../ducks/header/fetchSamplesByRun';
+import SearchByDatasetField from './searchByDatasetField'
+import SearchByRunField from './searchBuRunField'
+import { combineGetSamplesByDataSetAndRun } from '../ducks/header/combineSamplesByDataSetAndRun';
 
 const styles = (theme: any) => ({
   header: {
@@ -51,28 +50,6 @@ const styles = (theme: any) => ({
   },
   timeWrapper: {
     paddingRight: 16,
-  },
-  searchBar: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    borderBottom: `1px solid ${theme.palette.primary.main}`,
-    marginBottom: '8px',
-    paddingBottom: '8px',
-  },
-  searchFields: {
-    padding: '0px !important',
-    paddingRight: '8px !important'
-  },
-  cms: {
-    fontSize: '1.5rem',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  services: {
-    height: "fit-content"
-  },
-  service: {
-    background: '#00acc1'
   },
   searchContainer: {
     justifyContent: 'felx-end',
@@ -116,90 +93,67 @@ interface HeaderInterface {
   setMenuContent(type: string): void;
   menuState: boolean;
   workplace: string;
-  fetchSamples(): string[];
+  fetchSamples(formValues: any[]): string[];
 }
 
-class Header extends React.Component<HeaderInterface>{
+const Header = ({
+  classes,
+  setMenuState,
+  menuState,
+  service,
+  setMenuContent,
+  workplace,
+  run,
+  fetchSamples
+}: HeaderInterface) => {
 
-  render() {
-    const
-      { classes,
-        setMenuState,
-        menuState,
-        service,
-        setMenuContent,
-        workplace,
-        run,
-        fetchSamples,
-        ...props } = this.props
-
-    return (
-      <Form onSubmit={(event) => { event.preventDefault(); fetchSamples() }}>
-        <Grid item container className={classes.wrapper}>
-          <Grid item container xs={12} className={classes.header}>
-            <Grid container xs={6} item >
-              <Grid item xs={2}>
-                <img src={Logo} className={classes.logo} 
-                // onClick={() => setMenuState(!menuState)}
-                ></img>
-              </Grid>
-              {/* <Grid item xs={8} container spacing={4} justify="flex-start" className={classes.services}>
-                <Grid item onClick={() => setMenuContent(SERVICES)} className={classes.service}>
-                  {service}
-                </Grid>
-                <Grid item onClick={() => setMenuContent(WORKPLACES)} className={classes.service}>
-                  {workplace}
-                </Grid>
-                <Grid item onClick={() => setMenuContent(RUN)} className={classes.service}>
-                  {run}
-                </Grid>
-              </Grid> */}
-            </Grid>
-            <Grid item className={classes.timeWrapper}>
-              <Time classes={classes.time} />
-            </Grid>
-          </Grid>
-          <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
-            <Paper className={classes.paper}>
-              <Grid item xs={6} className={classes.pathContainer}>
-                path/path/path/path/path/path
-            </Grid>
-              <Grid container item justify="flex-end">
-                <Grid item xs={4} className={classes.searchFields}>
-                  <Field
-                    name="searchField"
-                    placeholder="Search by Data set"
-                    fullWidth={true}
-                    component={TextField}
-                  />
-                </Grid>
-                <Grid item xs={4} className={classes.searchFields}>
-                  <Field
-                    name="searchFieldByRun"
-                    placeholder="Search by Run"
-                    fullWidth={true}
-                    component={TextField}
-                  />
-                </Grid>
-                <Grid item className={classes.submitButtonWrapper}>
-                  <Button type="submit" className={classes.sumbitButton}>
-                    <Search />
-                    Search
-                  </Button>
+  return (
+    <Form
+      onSubmit={(formValues: any) => {
+        fetchSamples(formValues)
+        localStorage.setItem("searchFields", JSON.stringify(formValues))
+      }}
+      initialValues={{
+        searchField: path(['searchField'], JSON.parse(localStorage.getItem('searchFields') as string)),
+        searchFieldByRun: path(['searchFieldByRun'], JSON.parse(localStorage.getItem('searchFields') as string))
+      }}
+      render={({ handleSubmit }) => (
+        <form onSubmit={handleSubmit}>
+          <Grid item container className={classes.wrapper}>
+            <Grid item container xs={12} className={classes.header}>
+              <Grid container xs={6} item >
+                <Grid item xs={2}>
+                  <img src={Logo} className={classes.logo}
+                  ></img>
                 </Grid>
               </Grid>
-            </Paper>
+              <Grid item className={classes.timeWrapper}>
+                <Time classes={classes.time} />
+              </Grid>
+            </Grid>
+            <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
+              <Paper className={classes.paper}>
+                <Grid item xs={6} className={classes.pathContainer}>
+                  {/* path/path/path/path/path/path */}
+                </Grid>
+                <Grid container item justify="flex-end">
+                  <SearchByDatasetField />
+                  <SearchByRunField />
+                  <Grid item className={classes.submitButtonWrapper}>
+                    <Button type="submit" className={classes.sumbitButton}>
+                      <Search />
+                      Search
+                      </Button>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
-      </Form>
-    );
-  }
+        </form>
+      )} />);
 }
 
-export default compose<any, any, any, any>(
-  reduxForm({
-    form: "MAIN_FORM",
-  }),
+export default compose<any, any, any>(
   connect(
     (state: any) => ({
       menuState: getMenuStatus(state),
@@ -215,9 +169,8 @@ export default compose<any, any, any, any>(
         dispatch(setMenuContent(type));
         dispatch(setMenuState(!props.menuState));
       },
-      fetchSamples() {
-        dispatch(fetchSamplesByDataSetAction())
-        dispatch(fetchSamplesByRunAction())
+      fetchSamples(data: any) {
+        dispatch(combineGetSamplesByDataSetAndRun(data))
       }
     })
     )

@@ -1,18 +1,19 @@
 import React from 'react'
-import TextField from "@material-ui/core/TextField";
+import { FormControl, Input, InputLabel, FormHelperText } from "@material-ui/core";
+import { pathOr } from 'ramda';
 
-export default ({
-  input: { name, onChange, value, ...restInput },
-  meta,
-  ...rest
-}) => (
-  <TextField
-    {...rest}
-    name={name}
-    helperText={meta.touched ? meta.error : undefined}
-    error={meta.error && meta.touched}
-    inputProps={restInput}
-    fullWidth={rest.fullWidth}
-    onChange={(e) => onChange(e.target.value)}
-  />
-)
+const TexField = ({ input, meta, onChange, ...props }: any) => {
+  return (
+    <FormControl>
+      <Input
+        fullWidth
+        placeholder={pathOr('', ['placeholder'], props)}
+        onChange={(e) => input.onChange(e.target.value)}
+        value={input.value} />
+      {meta.error &&
+        <FormHelperText>{meta.error}</FormHelperText>
+      }
+    </FormControl>
+  )
+}
+export default TexField

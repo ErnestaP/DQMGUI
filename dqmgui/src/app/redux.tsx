@@ -1,23 +1,23 @@
-import { assoc } from 'ramda';
 import { combineReducers } from 'redux';
-import {reducer as formReducer} from 'redux-form'
 
 import SideMenuReducer from '../components/ducks/sideNav/setMenuStatus'
 import ServicesReducer from '../components/ducks/header/setActiveTabs'
-import GetSamplesReducer from '../components/ducks/header/fetchSamplesByDataset'
+import GetSamplesReducer from '../components/ducks/header/fetchSamples'
 import LaoderReducer from '../components/ducks/loader/loaderActions';
-import SamplesByRunReducer from '../components/ducks/header/fetchSamplesByRun';
+import TablesExpandedLineReducer from '../components/ducks/table/selectedDataSet';
 
 const appReducer = combineReducers({
-    'form': formReducer,
     'MENU': SideMenuReducer,
     'ACTIVE_TABS': ServicesReducer,
-    'SAMPLES': GetSamplesReducer,
+    'SAMPLES': combineReducers({
+        'SAMPLES_LIST': GetSamplesReducer,
+    }),
     'LOADER': LaoderReducer,
-    'SAMPLES_BY_RUN': SamplesByRunReducer,
+    'TABLE': combineReducers({
+        'SELECTED_DATA_SET': TablesExpandedLineReducer,
+    })
 })
 
 export default function createReducer() {
     return appReducer
-  }
-  
+}

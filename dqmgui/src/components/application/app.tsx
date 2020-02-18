@@ -11,6 +11,7 @@ import { getLoaderState } from '../ducks/loader/loaderActions';
 import Loader from '../common/loader';
 
 const Application = ({ isFetching }) => {
+  console.log(isFetching)
   return (
     <Grid container className="Main" direction="column">
       <Loader isFetching={isFetching} />

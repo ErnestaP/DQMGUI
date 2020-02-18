@@ -3,9 +3,9 @@ import axios from "axios";
 import { AnyAction } from 'redux';
 import { path, reduce, assoc, pathOr, uniq, unnest, groupBy } from 'ramda';
 
-import { searchFieldValue } from '../../selectors'
 import { SampleDataInerface } from './interfaces';
 import { setLoader } from '../loader/loaderActions'
+import cleanDeep from "clean-deep";
 
 interface DefaultState {
   samplesList: Object,
@@ -21,7 +21,7 @@ const SET_SAMPLES = "SET_SAMPLES"
 const IS_FETCHING = "IS_FETCHING"
 
 
-const formatDataSet = (sampleList: any[]) => {
+const formatDataSet = (sampleList: any[], searchFieldByRun?: number) => {
   const results: any = []
 
   sampleList.map((sample: SampleDataInerface, index: number) => {
@@ -30,10 +30,20 @@ const formatDataSet = (sampleList: any[]) => {
       if (results[index].items[item.dataset] === undefined) {
         results[index].items[item.dataset] = { runs: {} }
       }
-      results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
+      if (searchFieldByRun && item.run.includes(searchFieldByRun)) {
+        results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
+      }
+      else if (searchFieldByRun && !item.run.includes(searchFieldByRun)) {
+        delete results[index].items[item.dataset]
+      }
+      else if (!searchFieldByRun) {
+        results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
+      }
     })
+    if (!path(['items'], cleanDeep(results[index]))) {
+      delete results[index]
+    }
   })
-
   return (results)
 }
 
@@ -59,15 +69,14 @@ export const setFetching = (data: any) => ({
 })
 
 
-export function fetchSamplesByDataSetAction() {
+export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldByRun?: string) {
   return function action(dispatch, setState) {
-    const searchField: string = searchFieldValue(setState())
     dispatch(setFetching(true))
     dispatch(setLoader(true))
 
     const request = axios({
       method: 'GET',
-      url: `/online-dev/data/json/samples?match=${searchField}`,
+      url: `/online-dev/data/json/samples?match=${serachFieldValues}`,
       headers: []
     });
 
@@ -75,6 +84,33 @@ export function fetchSamplesByDataSetAction() {
       response => {
         const samples = pathOr([], ['data', 'samples'], response)
 
+        dispatch(setFetching(false))
+        dispatch(setLoader(false))
+        dispatch(setSample(formatDataSet(samples, searchFieldByRun)))
+      },
+      error => {
+        dispatch(setFetching(false))
+        dispatch(setLoader(false))
+        console.log(error)
+      }
+    );
+  }
+}
+
+export function fetchSamplesByRunAction(formValues: any) {
+  return function action(dispatch, setState) {
+    dispatch(setFetching(true))
+    dispatch(setLoader(true))
+    
+    const request = axios({
+      method: 'GET',
+      url: `/online-dev/data/json/samples?run=${formValues}`,
+      headers: []
+    });
+
+    return request.then(
+      response => {
+        const samples = pathOr([], ['data', 'samples'], response)
         formatDataSet(samples)
         dispatch(setFetching(false))
         dispatch(setLoader(false))
@@ -89,5 +125,5 @@ export function fetchSamplesByDataSetAction() {
   }
 }
 
-export const getSamples = (state: any) => path(['SAMPLES', 'samplesList'], state);
-export const isFetching = (state: any) => path(['SAMPLES', 'fetching'], state);
+export const getSamplesByDataSet = (state: any) => path(['SAMPLES', 'SAMPLES_LIST', 'samplesList'], state);
+export const isFetching = (state: any) => path(['SAMPLES', 'SAMPLES_LIST', 'fetching'], state);
