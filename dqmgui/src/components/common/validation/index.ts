@@ -1,7 +1,4 @@
 import { pathOr } from "ramda";
 
-export const moreThan = (base: any) => (value: any) => {
-    if (+base < pathOr(0, ['length'], value)) {
-      return `Enter more that ${base} characters`;
-    }
-  };
+export const mustBeMoreThan = (availableLenght: number) => (value: string) =>
+  (pathOr(0, ['length'], value) < 3 ? `Enter more than ${availableLenght} characters` : undefined)

@@ -3,15 +3,17 @@ import { FormControl, Input, InputLabel, FormHelperText } from "@material-ui/cor
 import { pathOr } from 'ramda';
 
 const TexField = ({ input, meta, onChange, ...props }: any) => {
+  console.log(meta.touched)
   return (
     <FormControl>
       <Input
+        {...input}
         fullWidth
         placeholder={pathOr('', ['placeholder'], props)}
         onChange={(e) => input.onChange(e.target.value)}
         value={input.value} />
-      {meta.error &&
-        <FormHelperText>{meta.error}</FormHelperText>
+      {meta.error && meta.touched &&
+        <FormHelperText error>{meta.error}</FormHelperText>
       }
     </FormControl>
   )

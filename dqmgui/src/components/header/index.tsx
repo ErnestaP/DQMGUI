@@ -107,16 +107,17 @@ const Header = ({
   fetchSamples
 }: HeaderInterface) => {
 
+
   return (
     <Form
       onSubmit={(formValues: any) => {
         fetchSamples(formValues)
-        localStorage.setItem("searchFields", JSON.stringify(formValues))
+        // localStorage.setItem("searchFields", JSON.stringify(formValues)) //leave or not saving to local s.????
       }}
-      initialValues={{
-        searchField: path(['searchField'], JSON.parse(localStorage.getItem('searchFields') as string)),
-        searchFieldByRun: path(['searchFieldByRun'], JSON.parse(localStorage.getItem('searchFields') as string))
-      }}
+      // initialValues={{
+      //   searchField: path(['searchField'], JSON.parse(localStorage.getItem('searchFields') as string)),
+      //   searchFieldByRun: path(['searchFieldByRun'], JSON.parse(localStorage.getItem('searchFields') as string))
+      // }}
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
           <Grid item container className={classes.wrapper}>
