@@ -12,6 +12,7 @@ const defaultState: DefaultState = {
 const SET_SELECTED_DATA_SET = "SET_SELECTED_DATA_SET"
 
 export default function tablesExpandedLineReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
+  console.log(type)
   switch (type) {
     case SET_SELECTED_DATA_SET:
       return { ...state, selectedDataSet: payload };

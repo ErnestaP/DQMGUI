@@ -4,9 +4,8 @@ import { TableBody, TableRow, TableCell, Grid, withStyles, Button } from '@mater
 import { compose, findIndex, append } from 'ramda'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import RunsAmountButton from './runsAmountButton'
-import RunsRow from './runsRow'
+import  {RunsRow}  from './runsRow'
 import { connect } from 'react-redux'
-
 import { setSelectedDataSet, getSelectedDataSet } from "../ducks/table/selectedDataSet"
 import { setDataSet, setRun } from "../ducks/header/setPaths"
 import Runs from './runs'
@@ -52,8 +51,8 @@ const styles: any = (theme) => ({
   chipSeparator: {
     padding: 4,
   },
-  
-  gridContainer:{
+
+  gridContainer: {
     display: 'grid',
     gridTemplateColumns: '',
     gridGap: 2,
@@ -61,72 +60,21 @@ const styles: any = (theme) => ({
   }
 })
 
-class SearchResultTableBody extends React.Component<SearchResultTableProps> {
-  state = ({
-    name: ''
-  })
-
-  setName(name) {
-    this.setState({
-      name: name
-    });
-  }
-
-  render() {
-    const { samplesGroup, classes, setSelectedDataSet, setRun } = this.props
-
-    return (
-      <TableBody>
-        {
-          Object.keys(samplesGroup).map((name: string) => {
-            const runs = Object.keys(samplesGroup[name].runs)
-            return (
-              <React.Fragment key={name}>
-                <TableRow >
-                  <TableCell className={classes.dataSetCell} >
-                    <Grid
-                      item>
-                      {name}
-                    </Grid>
-                    <Grid item id={name} className="grid-container">
-
-                    </Grid>
-                  </TableCell>
-                  <TableCell>
-                    <div className="runButton" 
-                      onClick={(e) => {
-                        setSelectedDataSet(name)
-                        let cell = document.getElementById(name)
-                        const runDiv = document.createElement("DIV")
-                        runDiv.style.padding="4px"
-                        runDiv.style.width="fit-content"
-
-                        const btn = document.createElement("BUTTON")
-                        btn.innerHTML = "^"
-                        btn.onclick = () => {
-                          while (cell?.firstChild) {
-                            cell.removeChild(cell.firstChild)
-                          }
-                        }
-                        cell?.appendChild(btn)
-                        runs.map(run => {
-                          runDiv.innerHTML = run
-                          cell?.appendChild(runDiv.cloneNode(true))
-                        })
-                      }}
-                    >
-                      {runs.length}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              </React.Fragment>
-            )
-          }
+const SearchResultTableBody = ({ samplesGroup }: SearchResultTableProps) => {
+  return (
+    <TableBody>
+      {
+        Object.keys(samplesGroup).map((name: string) => {
+          return (
+            <React.Fragment key={name}>
+              <RunsRow samplesGroup={samplesGroup} name={name} />
+            </React.Fragment>
           )
         }
-      </TableBody >
-    )
-  }
+        )
+      }
+    </TableBody >
+  )
 }
 
 export default compose(
@@ -137,9 +85,6 @@ export default compose(
         dispatch(setSelectedDataSet(dataSet))
         dispatch(setDataSet(dataSet))
       },
-      setRun(run) {
-        dispatch(setRun(run))
-      }
     }),
   ),
   withStyles(styles)
