@@ -1,15 +1,15 @@
 import * as React from 'react'
 import { TableBody, TableRow, TableCell, Grid, withStyles, Button } from '@material-ui/core'
 
-import { compose, pathOr } from 'ramda'
+import { compose, findIndex, append } from 'ramda'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import RunsAmountButton from './runsAmountButton'
 import RunsRow from './runsRow'
 import { connect } from 'react-redux'
-import { setRun } from '../ducks/header/setPaths'
 
-import { setSelectedDataSet } from "../ducks/table/selectedDataSet"
-import { setDataSet } from "../ducks/header/setPaths"
+import { setSelectedDataSet, getSelectedDataSet } from "../ducks/table/selectedDataSet"
+import { setDataSet, setRun } from "../ducks/header/setPaths"
+import Runs from './runs'
 
 interface SearchResultTableProps {
   samplesGroup: SampleDataInerface,
@@ -51,65 +51,82 @@ const styles: any = (theme) => ({
   },
   chipSeparator: {
     padding: 4,
+  },
+  
+  gridContainer:{
+    display: 'grid',
+    gridTemplateColumns: '',
+    gridGap: 2,
+    padding: 10,
   }
 })
 
-const SearchResultTableBody = ({ samplesGroup, classes, selectedDataSet, setSelectedDataSet, setRun }: SearchResultTableProps) => {
-  return (
-    <TableBody>
-      {
-        Object.keys(samplesGroup).map((name: string) => {
-          // const runs = samplesGroup && Object.keys(pathOr([], [name, 'runs',], samplesGroup))
-          // const runsObject = samplesGroup && (pathOr([], [name, 'runs',], samplesGroup))
-          return (
-            <React.Fragment key={name}>
-              <TableRow >
-                <TableCell className={classes.dataSetCell} id={name}>
-                  <Grid
-                    className={`${selectedDataSet === name && classes.clicked}${classes.cellWrapper}`}
-                    item>
-                    {name}
-                  </Grid>
-                  {/* {name && <RunsRow
-                    runs={Object.keys(samplesGroup[name].runs)}
-                  />} */}
-                  {/* {selectedDataSet === name &&
-                    <Grid container item xs={12}>
-                      {
-                        runs.map(run => (
-                          <Grid className={classes.chipSeparator} item key={run}>
-                            <span 
-                            onClick={() => setRun(run)}
-                            style={{cursor: 'pointer'}}title={'Import version: ' + pathOr('', [run, 'importversion'], runsObject)}>
-                              {run}
-                            </span>
-                          </Grid>
-                        ))
-                      }
-                    </Grid>} */}
-                </TableCell>
-                <TableCell>
-                  {/* <RunsAmountButton
-                    name={name}
-                    runs={(Object.keys(samplesGroup[name].runs).length)}
-                  /> */}
-                  <div className="runButton"
-                    onClick={(e) => {
-                      console.log(e.currentTarget)
-                      setSelectedDataSet(name)
-                    }}
-                  >
-                    {(Object.keys(samplesGroup[name].runs).length)}
-                  </div>
-                </TableCell>
-              </TableRow>
-            </React.Fragment>
+class SearchResultTableBody extends React.Component<SearchResultTableProps> {
+  state = ({
+    name: ''
+  })
+
+  setName(name) {
+    this.setState({
+      name: name
+    });
+  }
+
+  render() {
+    const { samplesGroup, classes, setSelectedDataSet, setRun } = this.props
+
+    return (
+      <TableBody>
+        {
+          Object.keys(samplesGroup).map((name: string) => {
+            const runs = Object.keys(samplesGroup[name].runs)
+            return (
+              <React.Fragment key={name}>
+                <TableRow >
+                  <TableCell className={classes.dataSetCell} >
+                    <Grid
+                      item>
+                      {name}
+                    </Grid>
+                    <Grid item id={name} className="grid-container">
+
+                    </Grid>
+                  </TableCell>
+                  <TableCell>
+                    <div className="runButton" 
+                      onClick={(e) => {
+                        setSelectedDataSet(name)
+                        let cell = document.getElementById(name)
+                        const runDiv = document.createElement("DIV")
+                        runDiv.style.padding="4px"
+                        runDiv.style.width="fit-content"
+
+                        const btn = document.createElement("BUTTON")
+                        btn.innerHTML = "^"
+                        btn.onclick = () => {
+                          while (cell?.firstChild) {
+                            cell.removeChild(cell.firstChild)
+                          }
+                        }
+                        cell?.appendChild(btn)
+                        runs.map(run => {
+                          runDiv.innerHTML = run
+                          cell?.appendChild(runDiv.cloneNode(true))
+                        })
+                      }}
+                    >
+                      {runs.length}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </React.Fragment>
+            )
+          }
           )
         }
-        )
-      }
-    </TableBody >
-  )
+      </TableBody >
+    )
+  }
 }
 
 export default compose(
@@ -120,6 +137,9 @@ export default compose(
         dispatch(setSelectedDataSet(dataSet))
         dispatch(setDataSet(dataSet))
       },
+      setRun(run) {
+        dispatch(setRun(run))
+      }
     }),
   ),
   withStyles(styles)
