@@ -3,7 +3,7 @@ import { Grid, withStyles, Typography, Button } from '@material-ui/core'
 import { Field, Form } from 'redux-form'
 import AccordionComponent from '../common/accordion';
 
-import { pseudoServices, workPlace } from '../pseudoFields'
+import { pseudoServices, workSpaces } from '../pseudoFields'
 
 const styles = (theme: any) => ({
   header: {
@@ -29,7 +29,7 @@ const Services = ({ classes, ...props }: ServicesInterface) => {
       <AccordionComponent label="Services"
         name="services"
         component={AccordionComponent}
-        pannels={workPlace}
+        pannels={workSpaces}
         getOptionValue={(option: any) => option}
         getOptionLabel={(option: any) => option} />
     </Grid>

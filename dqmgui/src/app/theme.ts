@@ -65,9 +65,19 @@ const createTheme = () => {
         [100]: '#f5f5f5',
         [300]: '#e0e0e0',
         [500]: '#9e9e9e',
-      }
-
+      },
     },
+    // overrides: {
+    //   MuiSelect: {
+    //     root: {
+    //       '&$selected': {
+    //         backgroundColor: 'orange',
+    //       },
+    //       background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    //       color: 'white'
+    //     },
+    //   },
+    // },
   })
   return theme
 };

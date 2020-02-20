@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Grid, withStyles, Icon, Button, Paper } from '@material-ui/core'
+import { Grid, withStyles, Button, Paper } from '@material-ui/core'
 import Search from '@material-ui/icons/Search';
-import { compose, path } from 'ramda'
+import { compose } from 'ramda'
 import { connect } from 'react-redux'
-import { Form, Field } from 'react-final-form'
-import cleanDeep from 'clean-deep';
+import { Form } from 'react-final-form'
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
@@ -13,6 +12,7 @@ import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
 import { combineGetSamplesByDatasetAndRun } from '../ducks/header/combineSamplesByDatasetAndRun';
+import ActiveTabs from './activeTabs';
 
 const styles = (theme: any) => ({
   header: {
@@ -78,6 +78,10 @@ const styles = (theme: any) => ({
   },
   wrapper: {
     width: 'fit-content'
+  },
+  activeTabs:{
+    paddingTop: 16,
+    
   }
 })
 
@@ -94,6 +98,7 @@ interface HeaderInterface {
   menuState: boolean;
   workplace: string;
   fetchSamples(formValues: any[]): string[];
+  path: string;
 }
 
 const Header = ({
@@ -126,6 +131,9 @@ const Header = ({
                 <Grid item xs={2}>
                   <img src={Logo} className={classes.logo}
                   ></img>
+                </Grid>
+                <Grid item className={classes.activeTabs}>
+                  <ActiveTabs />
                 </Grid>
               </Grid>
               <Grid item className={classes.timeWrapper}>
