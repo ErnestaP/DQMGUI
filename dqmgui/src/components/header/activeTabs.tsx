@@ -4,6 +4,7 @@ import { Grid, withStyles } from '@material-ui/core'
 import { pseudoRuns, workSpaces, pseudoServices } from '../pseudoFields'
 import ActiveTabsSwitching from '../common/activeTabsComponent'
 import { Field } from 'react-final-form'
+import NestedList from '../common/nestedList'
 
 interface ActiveTabsProps {
   services: string[]
@@ -90,6 +91,9 @@ const ActiveTabs = ({ services, workspaces, lumisections, runs, classes }: Activ
           selectClass={classes.select}
           dropdownStyle={classes.dropdownStyle}
         />
+      </Grid>
+      <Grid item>
+        <NestedList />
       </Grid>
     </Grid>
   )
