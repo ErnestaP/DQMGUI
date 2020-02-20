@@ -1,32 +1,33 @@
 import * as React from 'react'
-
-import  Button  from "@material-ui/core/Button"
-import { pathOr } from "ramda"
+import Button from "@material-ui/core/Button"
 import { connect } from "react-redux"
-import { compose } from "redux"
 
-import { setSelectedDataSet } from "../ducks/table/selectedDataSet"
-import { setDataSet } from "../ducks/header/setPaths"
+import { setSelectedDataset } from "../ducks/table/selectedDataset"
+import { setDataset } from "../ducks/header/setPaths"
 
+interface RunsAmountButtonProps {
+  setSelectedDataset(name: string): void;
+  runs: string;
+  name: string;
+}
 
-const RunsAmountButton = (props) => {
+const RunsAmountButton = ({ runs, setSelectedDataset, name }: RunsAmountButtonProps) => {
   return (
     <Button variant="outlined"
-      // className={classes.buttons}
       onClick={() => {
-        props.setSelectedDataSet(props.name)
+        setSelectedDataset(name)
       }}>
-      {props.runs}
+      {runs}
     </Button>
   )
 }
 
 export default connect(
-    undefined,
-    (dispatch: any) => ({
-      setSelectedDataSet(dataSet: string) {
-        dispatch(setSelectedDataSet(dataSet))
-        dispatch(setDataSet(dataSet))
-      },
-    })
-  )(RunsAmountButton)
+  undefined,
+  (dispatch: any) => ({
+    setSelectedDataset(dataset: string) {
+      dispatch(setSelectedDataset(dataset))
+      dispatch(setDataset(dataset))
+    },
+  })
+)(RunsAmountButton)

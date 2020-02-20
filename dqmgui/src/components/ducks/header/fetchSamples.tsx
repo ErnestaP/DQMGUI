@@ -2,11 +2,11 @@
 import axios from "axios";
 import { AnyAction } from 'redux';
 import { path, reduce, assoc, pathOr, uniq, unnest, groupBy } from 'ramda';
-import qs from 'qs'
 
 import { SampleDataInerface } from './interfaces';
 import { setLoader } from '../loader/loaderActions'
 import cleanDeep from "clean-deep";
+import {CustomThunkDispatch} from '../../../app/interfaces'
 
 interface DefaultState {
   samplesList: Object,
@@ -18,11 +18,13 @@ const defaultState: DefaultState = {
   fetching: false,
 }
 
+type FetchTemplates = () => CustomThunkDispatch;
+
 const SET_SAMPLES = "SET_SAMPLES"
 const IS_FETCHING = "IS_FETCHING"
 
 
-const formatDataSet = (sampleList: any[], searchFieldByRun?: number) => {
+const formatDataset = (sampleList: any[], searchFieldByRun?: number) => {
   const results: any = []
 
   sampleList.map((sample: SampleDataInerface, index: number) => {
@@ -70,7 +72,7 @@ export const setFetching = (data: any) => ({
 })
 
 
-export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldByRun?: string) {
+export function fetchSamplesByDatasetAction(serachFieldValues: any, searchFieldByRun?: string) {
   return function action(dispatch, setState) {
     dispatch(setFetching(true))
     dispatch(setLoader(true))
@@ -87,7 +89,7 @@ export function fetchSamplesByDataSetAction(serachFieldValues: any, searchFieldB
 
         dispatch(setFetching(false))
         dispatch(setLoader(false))
-        dispatch(setSample(formatDataSet(samples, searchFieldByRun)))
+        dispatch(setSample(formatDataset(samples, searchFieldByRun)))
       },
       error => {
         dispatch(setFetching(false))
@@ -112,10 +114,10 @@ export function fetchSamplesByRunAction(formValues: any) {
     return request.then(
       response => {
         const samples = pathOr([], ['data', 'samples'], response)
-        formatDataSet(samples)
+        formatDataset(samples)
         dispatch(setFetching(false))
         dispatch(setLoader(false))
-        dispatch(setSample(formatDataSet(samples)))
+        dispatch(setSample(formatDataset(samples)))
       },
       error => {
         dispatch(setFetching(false))
@@ -126,5 +128,5 @@ export function fetchSamplesByRunAction(formValues: any) {
   }
 }
 
-export const getSamplesByDataSet = (state: any) => path(['SAMPLES', 'SAMPLES_LIST', 'samplesList'], state);
+export const getSamplesByDataset = (state: any) => path(['SAMPLES', 'SAMPLES_LIST', 'samplesList'], state);
 export const isFetching = (state: any) => path(['SAMPLES', 'SAMPLES_LIST', 'fetching'], state);

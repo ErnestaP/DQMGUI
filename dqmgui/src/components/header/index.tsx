@@ -12,7 +12,7 @@ import { getSelectedPath } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
-import { combineGetSamplesByDataSetAndRun } from '../ducks/header/combineSamplesByDataSetAndRun';
+import { combineGetSamplesByDatasetAndRun } from '../ducks/header/combineSamplesByDatasetAndRun';
 
 const styles = (theme: any) => ({
   header: {
@@ -169,7 +169,7 @@ export default compose<any, any, any>(
         dispatch(setMenuState(!props.menuState));
       },
       fetchSamples(data: any) {
-        dispatch(combineGetSamplesByDataSetAndRun(data))
+        dispatch(combineGetSamplesByDatasetAndRun(data))
       }
     })
     )

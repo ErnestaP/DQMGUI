@@ -1,10 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import lightBlue from '@material-ui/core/colors/lightBlue';
 import blueGrey from '@material-ui/core/colors/blueGrey';
-import indigo from '@material-ui/core/colors/indigo';
-import blue from '@material-ui/core/colors/blue';
-import red from '@material-ui/core/colors/red';
-
 
 declare module '@material-ui/core/styles/transitions' {
   interface Transitions {

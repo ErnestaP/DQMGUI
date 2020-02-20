@@ -1,17 +1,17 @@
 import { pathOr } from 'ramda'
-import { fetchSamplesByDataSetAction, fetchSamplesByRunAction } from './fetchSamples'
+import { fetchSamplesByDatasetAction, fetchSamplesByRunAction } from './fetchSamples'
 
-export const combineGetSamplesByDataSetAndRun: any = (formValues: any) => (dispatch, getState) => {
+export const combineGetSamplesByDatasetAndRun: any = (formValues: any) => (dispatch, getState) => {
   const searchFieldByRun: string = pathOr('', ['searchFieldByRun'], formValues)
-  const searchFieldByDataSet: string = pathOr('', ['searchField'], formValues)
+  const searchFieldByDataset: string = pathOr('', ['searchField'], formValues)
 
-  if (searchFieldByDataSet && searchFieldByRun) {
-    dispatch(fetchSamplesByDataSetAction(searchFieldByDataSet, searchFieldByRun))
+  if (searchFieldByDataset && searchFieldByRun) {
+    dispatch(fetchSamplesByDatasetAction(searchFieldByDataset, searchFieldByRun))
   }
-  else if (searchFieldByDataSet && !searchFieldByRun) {
-    dispatch(fetchSamplesByDataSetAction(searchFieldByDataSet)) 
+  else if (searchFieldByDataset && !searchFieldByRun) {
+    dispatch(fetchSamplesByDatasetAction(searchFieldByDataset)) 
   }
-  else if (searchFieldByRun && !searchFieldByDataSet) {
+  else if (searchFieldByRun && !searchFieldByDataset) {
     dispatch(fetchSamplesByRunAction(searchFieldByRun)) 
   }
 }

@@ -51,7 +51,7 @@ export const setRun = (data: any) => ({
   payload: data,
 })
 
-export const setDataSet = (data: any) => ({
+export const setDataset = (data: any) => ({
   type: SET_DATA_SET,
   payload: data,
 })
@@ -59,16 +59,16 @@ export const setDataSet = (data: any) => ({
 export const getService = (state: any) => path(['ACTIVE_TABS', 'service'], state);
 export const getWorkplace = (state: any) => path(['ACTIVE_TABS', 'workplace'], state);
 export const getRun = (state: any) => path(['ACTIVE_TABS', 'run'], state);
-export const getDataSet = (state: any) => path(['ACTIVE_TABS', 'dataset'], state);
+export const getDataset = (state: any) => path(['ACTIVE_TABS', 'dataset'], state);
 
 export const getSelectedPath = createSelector(
   getRun,
-  getDataSet,
-  (run, dataSet) => [dataSet, run].join('/')
+  getDataset,
+  (run, dataset) => [dataset, run].join('/')
 )
 
 export const getSelectedPathForApi = createSelector(
   getRun,
-  getDataSet,
-  (run, dataSet) => [run, dataSet].join('/')
+  getDataset,
+  (run, dataset) => [run, dataset].join('/')
 )

@@ -2,11 +2,11 @@ import { AnyAction } from 'redux';
 import { path } from 'ramda';
 
 interface DefaultState {
-  selectedDataSet: null,
+  selectedDataset: null,
 }
 
 const defaultState: DefaultState = {
-  selectedDataSet: null,
+  selectedDataset: null,
 }
 
 const SET_SELECTED_DATA_SET = "SET_SELECTED_DATA_SET"
@@ -15,15 +15,15 @@ export default function tablesExpandedLineReducer(state = defaultState, { type, 
   console.log(type)
   switch (type) {
     case SET_SELECTED_DATA_SET:
-      return { ...state, selectedDataSet: payload };
+      return { ...state, selectedDataset: payload };
     default:
       return state;
   }
 }
 
-export const setSelectedDataSet = (data: any) => ({
+export const setSelectedDataset = (data: any) => ({
   type: SET_SELECTED_DATA_SET,
   payload: data,
 })
 
-export const getSelectedDataSet = (state: any) => path(['TABLE', 'SELECTED_DATA_SET', 'selectedDataSet'], state);
+export const getSelectedDataset = (state: any) => path(['TABLE', 'SELECTED_DATA_SET', 'selectedDataset'], state);

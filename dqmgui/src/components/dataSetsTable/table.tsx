@@ -6,13 +6,14 @@ import SearchResultTableBody from './body'
 import { datasetParts } from '../constants'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import { typesTranlsation } from '../../translation/typesTranslation'
-import { getSelectedDataSet } from '../ducks/table/selectedDataSet'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
 
 interface SearchResultTableProps {
   samplesGroup: SampleDataInerface;
-  classes: any;
+  classes: {
+    header: string;
+    dataSetPartsWrapper: string;
+    type: string;
+  }
 }
 
 const styles: any = (theme: Theme) => ({
@@ -30,13 +31,13 @@ const styles: any = (theme: Theme) => ({
   },
 })
 
-const SearchResultTable = ({ classes,selectedDataSet,...props }: SearchResultTableProps) => {
-  return (<Table>
+const SearchResultTable = ({ classes, samplesGroup }: SearchResultTableProps) =>
+  <Table>
     <TableHead>
       <TableRow className={classes.header}>
         <TableCell >
           <Typography className={classes.type}>
-            {typesTranlsation(pathOr('', ['samplesGroup', 'type'], props))}
+            {typesTranlsation(pathOr('', ['type'], samplesGroup))}
           </Typography>
         </TableCell>
         <TableCell />
@@ -52,21 +53,9 @@ const SearchResultTable = ({ classes,selectedDataSet,...props }: SearchResultTab
       </TableRow>
     </TableHead>
     <SearchResultTableBody
-      samplesGroup={pathOr([], ['samplesGroup', 'items'], props)}
-    >
-{
-
-}
-    </SearchResultTableBody>
+      samplesGroup={pathOr([], ['items'], samplesGroup)}
+    />
   </Table>
-  )
-}
 
-export default compose(
-  connect(
-    (state: any) => ({
-      selectedDataSet: getSelectedDataSet(state),
-    }),
-    undefined
-  ), withStyles(styles)
-)(SearchResultTable)
+
+export default withStyles(styles)(SearchResultTable)

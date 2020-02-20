@@ -1,8 +1,5 @@
 import * as React from 'react'
 import { Grid, TableRow, TableCell } from '@material-ui/core'
-import { setRun } from '../ducks/header/setPaths'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
 
 interface RunRowsProps {
   samplesGroup: any
@@ -10,7 +7,6 @@ interface RunRowsProps {
 }
 
 const renderRuns = (runs: string) => {
-  console.log('called')
   return Object.keys(runs).map(run => {
     return <p key={run}>{run}</p>
   })
