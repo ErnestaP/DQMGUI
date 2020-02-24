@@ -13,7 +13,8 @@ interface SearchResultTableProps {
     header: string;
     dataSetPartsWrapper: string;
     type: string;
-  }
+  },
+  index: number,
 }
 
 const styles: any = (theme: Theme) => ({
@@ -31,12 +32,16 @@ const styles: any = (theme: Theme) => ({
   },
 })
 
-const SearchResultTable = ({ classes, samplesGroup }: SearchResultTableProps) =>
+export const SearchResultTable = ({ classes, samplesGroup, index }: SearchResultTableProps) =>
   <Table>
     <TableHead>
-      <TableRow className={classes.header}>
+      <TableRow 
+      // className={classes.header}
+      >
         <TableCell >
-          <Typography className={classes.type}>
+          <Typography 
+          // className={classes.type}
+          >
             {typesTranlsation(pathOr('', ['type'], samplesGroup))}
           </Typography>
         </TableCell>
@@ -46,13 +51,15 @@ const SearchResultTable = ({ classes, samplesGroup }: SearchResultTableProps) =>
         {datasetParts.map((part: string) =>
           <TableCell
             key={part}
-            className={classes.dataSetPartsWrapper}>
+            // className={classes.dataSetPartsWrapper}
+            >
             {part}
           </TableCell>
         )}
       </TableRow>
     </TableHead>
     <SearchResultTableBody
+      index={index}
       samplesGroup={pathOr([], ['items'], samplesGroup)}
     />
   </Table>

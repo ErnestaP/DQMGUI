@@ -9,8 +9,9 @@ module.exports = merge(common, {
     // contentBase: path.resolve(__dirname, 'assets'),
     port: 8084,
     proxy: [{
-      context: ['/offline'],
-      target: 'http://localhost:8081/dqm/',
+      context: ['/offline-test', '/data'], 
+      //https://cmsweb.cern.ch/dqm/offline-test/data/json/samples?match=Stream*.&run=32
+      target: 'http://localhost:8081/dqm/offline',
     },
     {
       context: ['offline/data/json/archive'],

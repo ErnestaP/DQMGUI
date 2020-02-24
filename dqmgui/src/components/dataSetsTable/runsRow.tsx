@@ -8,18 +8,25 @@ interface RunRowsProps {
 
 const renderRuns = (runs: string) => {
   return Object.keys(runs).map(run => {
-    return <p key={run}>{run}</p>
+    return <p style={{
+      color: 'white',
+      background: 'grey',
+      borderRadius: '15px',
+      display: "flex",
+      justifyContent: 'center'
+    }} key={run}>{run}</p>
   })
 }
 
-export const RunsRow = ({ samplesGroup, name }: RunRowsProps) => {
+const runs_length = (runs: any[]) => Object.keys(runs).length
+
+const RunsRow = ({ samplesGroup, name }: RunRowsProps) => {
   const [dataSetName, setName] = React.useState()
-  console.log(samplesGroup)
+
   return (
     <TableRow >
       <TableCell>
-        <Grid
-          item>
+        <Grid item>
           {name}
         </Grid>
         <Grid item id={name} className="grid-container">
@@ -29,16 +36,17 @@ export const RunsRow = ({ samplesGroup, name }: RunRowsProps) => {
       <TableCell>
         <div className="runButton"
           onClick={(e) => {
-            name === dataSetName ?
+            dataSetName === name ?
               setName('')
               :
               setName(name)
           }}
         >
-          {/* {runs_length} */}
-          hellooo
-      </div>
+          {runs_length(samplesGroup[name].runs)}
+        </div>
       </TableCell>
     </TableRow>
   )
 }
+
+export default RunsRow

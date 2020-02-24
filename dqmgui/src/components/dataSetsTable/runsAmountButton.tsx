@@ -7,18 +7,20 @@ import { setDataset } from "../ducks/header/setPaths"
 
 interface RunsAmountButtonProps {
   setSelectedDataset(name: string): void;
-  runs: string;
+  runsAmount: string;
   name: string;
+  index: string;
 }
 
-const RunsAmountButton = ({ runs, setSelectedDataset, name }: RunsAmountButtonProps) => {
+const RunsAmountButton = ({ runsAmount, setSelectedDataset, name, index }: RunsAmountButtonProps) => {
   return (
-    <Button variant="outlined"
-      onClick={() => {
+    <div className="runButton"
+      onClick={(e) => {
         setSelectedDataset(name)
-      }}>
-      {runs}
-    </Button>
+      }}
+    >
+      {runsAmount}
+    </div>
   )
 }
 
@@ -27,7 +29,7 @@ export default connect(
   (dispatch: any) => ({
     setSelectedDataset(dataset: string) {
       dispatch(setSelectedDataset(dataset))
-      dispatch(setDataset(dataset))
+      // dispatch(setDataset(dataset))
     },
   })
 )(RunsAmountButton)

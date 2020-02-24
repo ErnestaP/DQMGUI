@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import { Grid, Paper, withStyles } from '@material-ui/core'
 import { pathOr, isEmpty } from 'ramda'
 
-import ContentTable from './table'
+import {SearchResultTable as ContentTable} from './table'
 import { getSamplesByDataset } from '../ducks/header/fetchSamples'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import NoRecords from '../../components/common/noRecords'
@@ -19,22 +19,26 @@ interface TablesProps {
 
 const styles = (theme: any) => ({
   samplesGroupsWrapper: {
-    width: '100%'
+    // width: '100%'
   },
   paper: {
     margin: '8px',
-    width: 'calc(100% - 16px)'
+    // width: 'calc(100% - 16px)'
   }
 })
 
 const Tables = ({ classes, ...props }: TablesProps) => {
   const samples = pathOr([], ['samplesGroups'], props)
-  return (<Grid container className={classes.samplesGroupsWrapper}>
+  return (<Grid container 
+  // className={classes.samplesGroupsWrapper}
+  >
     {
       isEmpty(samples) ? <NoRecords /> :
         samples.map((samplesGroup: SampleDataInerface) =>
           <Grid item xs={12} key={samplesGroup.type}>
-            <Paper className={classes.paper}>
+            <Paper 
+            // className={classes.paper}
+            >
               <ContentTable samplesGroup={samplesGroup} />
             </Paper>
           </Grid>
@@ -50,5 +54,5 @@ export default compose(
     }),
     undefined
   ),
-  withStyles(styles)
+  // withStyles(styles)
 )(Tables)

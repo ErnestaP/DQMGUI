@@ -14,7 +14,7 @@ const appReducer = combineReducers({
     }),
     'LOADER': LaoderReducer,
     'TABLE': combineReducers({
-        'SELECTED_DATA_SET': TablesExpandedLineReducer,
+        'SELECTED_DATA': TablesExpandedLineReducer,
     })
 })
 

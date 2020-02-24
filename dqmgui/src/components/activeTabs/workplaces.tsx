@@ -3,7 +3,7 @@ import { Grid, withStyles, Typography, Button } from '@material-ui/core'
 import { Field, Form } from 'redux-form'
 import AccordionComponent from '../common/accordion';
 
-import { pseudoServices, workSpaces } from '../pseudoFields'
+import {  workSpaces } from '../pseudoFields'
 
 const styles = (theme: any) => ({
   header: {

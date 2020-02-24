@@ -11,8 +11,9 @@ import { getSelectedPath } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
-import { combineGetSamplesByDatasetAndRun } from '../ducks/header/combineSamplesByDatasetAndRun';
+import { fetchSamples } from '../ducks/header/fetchSamples';
 import ActiveTabs from './activeTabs';
+import {PinnedSubheaderList} from '../common/subHeadList';
 
 const styles = (theme: any) => ({
   header: {
@@ -79,9 +80,9 @@ const styles = (theme: any) => ({
   wrapper: {
     width: 'fit-content'
   },
-  activeTabs:{
+  activeTabs: {
     paddingTop: 16,
-    
+
   }
 })
 
@@ -133,7 +134,7 @@ const Header = ({
                   ></img>
                 </Grid>
                 <Grid item className={classes.activeTabs}>
-                  <ActiveTabs />
+                  {/* <ActiveTabs /> */}
                 </Grid>
               </Grid>
               <Grid item className={classes.timeWrapper}>
@@ -142,17 +143,22 @@ const Header = ({
             </Grid>
             <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
               <Paper className={classes.paper}>
-                <Grid item xs={6} className={classes.pathContainer}>
-                  {path}
-                </Grid>
-                <Grid container item justify="flex-end">
-                  <SearchByDatasetField />
-                  <SearchByRunField />
-                  <Grid item className={classes.submitButtonWrapper}>
-                    <Button type="submit" className={classes.sumbitButton}>
-                      <Search />
-                      Search
+                <Grid item container xs={12}>
+                  <PinnedSubheaderList/>
+                  </Grid>
+                <Grid item container xs={12}>
+                  <Grid item xs={6} className={classes.pathContainer}>
+                    {path}
+                  </Grid>
+                  <Grid container item justify="flex-end">
+                    <SearchByDatasetField />
+                    <SearchByRunField />
+                    <Grid item className={classes.submitButtonWrapper}>
+                      <Button type="submit" className={classes.sumbitButton}>
+                        <Search />
+                        Search
                       </Button>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Paper>
@@ -177,7 +183,7 @@ export default compose<any, any, any>(
         dispatch(setMenuState(!props.menuState));
       },
       fetchSamples(data: any) {
-        dispatch(combineGetSamplesByDatasetAndRun(data))
+        dispatch(fetchSamples(data))
       }
     })
     )

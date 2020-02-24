@@ -6,7 +6,7 @@ import { path, reduce, assoc, pathOr, uniq, unnest, groupBy } from 'ramda';
 import { SampleDataInerface } from './interfaces';
 import { setLoader } from '../loader/loaderActions'
 import cleanDeep from "clean-deep";
-import {CustomThunkDispatch} from '../../../app/interfaces'
+import { CustomThunkDispatch } from '../../../app/interfaces'
 
 interface DefaultState {
   samplesList: Object,
@@ -24,7 +24,7 @@ const SET_SAMPLES = "SET_SAMPLES"
 const IS_FETCHING = "IS_FETCHING"
 
 
-const formatDataset = (sampleList: any[], searchFieldByRun?: number) => {
+const formatDataset = (sampleList: any[]) => {
   const results: any = []
 
   sampleList.map((sample: SampleDataInerface, index: number) => {
@@ -33,20 +33,10 @@ const formatDataset = (sampleList: any[], searchFieldByRun?: number) => {
       if (results[index].items[item.dataset] === undefined) {
         results[index].items[item.dataset] = { runs: {} }
       }
-      if (searchFieldByRun && item.run.includes(searchFieldByRun)) {
-        results[index].items[item.dataset].runs[item.run] = { importversion: item.importversion, version: item.version }
-      }
-      else if (searchFieldByRun && !item.run.includes(searchFieldByRun)) {
-        delete results[index].items[item.dataset]
-      }
-      else if (!searchFieldByRun) {
-        results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
-      }
+      results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
     })
-    if (!path(['items'], cleanDeep(results[index]))) {
-      delete results[index]
-    }
   })
+
   return (results)
 }
 
@@ -72,14 +62,17 @@ export const setFetching = (data: any) => ({
 })
 
 
-export function fetchSamplesByDatasetAction(serachFieldValues: any, searchFieldByRun?: string) {
+export function fetchSamples(formValues: any) {
   return function action(dispatch, setState) {
     dispatch(setFetching(true))
     dispatch(setLoader(true))
 
+    const searchFieldByRun: string = pathOr('', ['searchFieldByRun'], formValues)
+    const searchFieldByDataset: string = pathOr('', ['searchField'], formValues)
+
     const request = axios({
       method: 'GET',
-      url: `/offline/data/json/samples?match=${serachFieldValues}`,
+      url: `/data/json/samples?match=${searchFieldByDataset}&run=${searchFieldByRun}`,
       headers: []
     });
 
@@ -87,34 +80,6 @@ export function fetchSamplesByDatasetAction(serachFieldValues: any, searchFieldB
       response => {
         const samples = pathOr([], ['data', 'samples'], response)
 
-        dispatch(setFetching(false))
-        dispatch(setLoader(false))
-        dispatch(setSample(formatDataset(samples, searchFieldByRun)))
-      },
-      error => {
-        dispatch(setFetching(false))
-        dispatch(setLoader(false))
-        console.log(error)
-      }
-    );
-  }
-}
-
-export function fetchSamplesByRunAction(formValues: any) {
-  return function action(dispatch, setState) {
-    dispatch(setFetching(true))
-    dispatch(setLoader(true))
-    
-    const request = axios({
-      method: 'GET',
-      url: `/offline/data/json/samples?run=${formValues}`,
-      headers: []
-    });
-
-    return request.then(
-      response => {
-        const samples = pathOr([], ['data', 'samples'], response)
-        formatDataset(samples)
         dispatch(setFetching(false))
         dispatch(setLoader(false))
         dispatch(setSample(formatDataset(samples)))

@@ -11,7 +11,6 @@ const ActiveTabsSwitching = ({ options }: any) => {
 
 
   const recordButtonPosition = (event: any) => {
-    console.log(event.currentTarget)
     setAnchorEl(event.currentTarget);
     setMenuOpen(true);
   }
