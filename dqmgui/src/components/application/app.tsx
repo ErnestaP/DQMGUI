@@ -10,12 +10,13 @@ import Header from '../../components/header'
 import Table from '../dataSetsTable/'
 import { getLoaderState } from '../ducks/loader/loaderActions';
 import Loader from '../common/loader';
+import Router  from '../../app/routers'
 
 interface ApplicationProps {
   isFetching?: boolean
 }
 
-const Application = (props : ApplicationProps) => {
+const Application = (props: ApplicationProps) => {
   return (
     <Grid container className="Main" direction="column">
       <Loader isFetching={pathOr(false, ['isFetching'], props)} />
@@ -26,7 +27,7 @@ const Application = (props : ApplicationProps) => {
         <SideNavigation />
       </Grid>
       <Grid item style={{ display: 'flex', justifyContent: "center", paddingTop: 16 }}>
-        <Table />
+        <Router />
       </Grid>
     </Grid>
   )
