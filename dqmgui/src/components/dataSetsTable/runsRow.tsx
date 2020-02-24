@@ -1,26 +1,19 @@
 import * as React from 'react'
-import { Grid, TableRow, TableCell } from '@material-ui/core'
+import { Grid, TableRow, TableCell, withStyles } from '@material-ui/core'
+import { connect } from 'react-redux'
+
+import RenderRuns from './renderedRuns'
+import { setDataset } from '../ducks/header/setPaths'
+
 
 interface RunRowsProps {
   samplesGroup: any
   name: string
 }
 
-const renderRuns = (runs: string) => {
-  return Object.keys(runs).map(run => {
-    return <p style={{
-      color: 'white',
-      background: 'grey',
-      borderRadius: '15px',
-      display: "flex",
-      justifyContent: 'center'
-    }} key={run}>{run}</p>
-  })
-}
-
 const runs_length = (runs: any[]) => Object.keys(runs).length
 
-const RunsRow = ({ samplesGroup, name }: RunRowsProps) => {
+const RunsRow = ({ samplesGroup, name, setDataset }: RunRowsProps) => {
   const [dataSetName, setName] = React.useState()
 
   return (
@@ -30,12 +23,15 @@ const RunsRow = ({ samplesGroup, name }: RunRowsProps) => {
           {name}
         </Grid>
         <Grid item id={name} className="grid-container">
-          {dataSetName === name && renderRuns(samplesGroup[name].runs)}
+          {dataSetName === name &&
+            <RenderRuns runs={samplesGroup[name].runs} />
+          }
         </Grid>
       </TableCell>
       <TableCell>
         <div className="runButton"
           onClick={(e) => {
+            setDataset(name)
             dataSetName === name ?
               setName('')
               :
@@ -49,4 +45,7 @@ const RunsRow = ({ samplesGroup, name }: RunRowsProps) => {
   )
 }
 
-export default RunsRow
+export default connect(
+  undefined,
+ {setDataset}
+)(RunsRow)

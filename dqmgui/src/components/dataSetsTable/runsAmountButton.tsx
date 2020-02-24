@@ -1,9 +1,7 @@
 import * as React from 'react'
-import Button from "@material-ui/core/Button"
 import { connect } from "react-redux"
 
-import { setSelectedDataset } from "../ducks/table/selectedDataset"
-import { setDataset } from "../ducks/header/setPaths"
+import { setSelectedDataset } from "../ducks/table/selectedData"
 
 interface RunsAmountButtonProps {
   setSelectedDataset(name: string): void;

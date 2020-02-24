@@ -4,7 +4,7 @@ import SideMenuReducer from '../components/ducks/sideNav/setMenuStatus'
 import ServicesReducer from '../components/ducks/header/setPaths'
 import GetSamplesReducer from '../components/ducks/header/fetchSamples'
 import LaoderReducer from '../components/ducks/loader/loaderActions';
-import TablesExpandedLineReducer from '../components/ducks/table/selectedDataset';
+import SelectedDataReducer from '../components/ducks/table/selectedData';
 
 const appReducer = combineReducers({
     'MENU': SideMenuReducer,
@@ -14,7 +14,7 @@ const appReducer = combineReducers({
     }),
     'LOADER': LaoderReducer,
     'TABLE': combineReducers({
-        'SELECTED_DATA': TablesExpandedLineReducer,
+        'SELECTED_DATA': SelectedDataReducer,
     })
 })
 

@@ -64,8 +64,13 @@ export const getDataset = (state: any) => path(['ACTIVE_TABS', 'dataset'], state
 export const getSelectedPath = createSelector(
   getRun,
   getDataset,
-  (run, dataset) =>
-    run || dataset && [dataset, run].join('/')
+  (run, dataset) => {
+    const runWithPath = run ? run : ''
+    const datasetWithPath = dataset ? dataset : ''
+    const path = [datasetWithPath, runWithPath].join('/')
+
+    return path
+  }
 )
 
 export const getSelectedPathForApi = createSelector(

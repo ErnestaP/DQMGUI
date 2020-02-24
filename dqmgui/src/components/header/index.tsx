@@ -13,7 +13,7 @@ import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
 import { fetchSamples } from '../ducks/header/fetchSamples';
 import ActiveTabs from './activeTabs';
-import {PinnedSubheaderList} from '../common/subHeadList';
+import { PinnedSubheaderList } from '../common/subHeadList';
 
 const styles = (theme: any) => ({
   header: {
@@ -57,8 +57,8 @@ const styles = (theme: any) => ({
     display: 'flex',
   },
   pathContainer: {
-    display: 'flex',
-    alignItems: 'center',
+    // display: 'flex',
+    // alignItems: 'center',
     padding: 8,
   },
   submitButtonWrapper: {
@@ -113,7 +113,7 @@ const Header = ({
   fetchSamples
 }: HeaderInterface) => {
 
-
+  console.log(path)
   return (
     <Form
       onSubmit={(formValues: any) => {
@@ -141,15 +141,12 @@ const Header = ({
                 <Time classes={classes.time} />
               </Grid>
             </Grid>
-            <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
-              <Paper className={classes.paper}>
-                <Grid item container xs={12}>
-                  <PinnedSubheaderList/>
-                  </Grid>
-                <Grid item container xs={12}>
-                  <Grid item xs={6} className={classes.pathContainer}>
-                    {path}
-                  </Grid>
+            <Paper className={classes.paper}>
+              <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
+                <Grid item xs={6}>
+                  <PinnedSubheaderList />
+                </Grid>
+                <Grid item xs={6} justify="flex-start">
                   <Grid container item justify="flex-end">
                     <SearchByDatasetField />
                     <SearchByRunField />
@@ -161,8 +158,11 @@ const Header = ({
                     </Grid>
                   </Grid>
                 </Grid>
-              </Paper>
-            </Grid>
+                <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
+                  {path}
+                </Grid>
+              </Grid>
+            </Paper>
           </Grid>
         </form>
       )} />);
