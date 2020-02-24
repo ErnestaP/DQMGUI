@@ -11,7 +11,7 @@ import NoRecords from '../../components/common/noRecords'
 
 interface TablesProps {
   samplesGroups?: SampleDataInerface[];
-  classes: {
+  classes?: {
     samplesGroupsWrapper: string;
     paper: string;
   }

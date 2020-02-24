@@ -2,8 +2,9 @@ import * as React from 'react'
 import { withStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { Route } from 'react-router-dom'
 
-import { setRun } from '../ducks/header/setPaths'
+import { setRun, getSelectedPathForApi } from '../ducks/header/setPaths'
 
 interface RenderRows {
   runs: any
@@ -24,21 +25,35 @@ const styles = () => ({
   }
 })
 
-const RenderRuns = ({ runs, classes, setRun }: RenderRows) =>
-  <>
-    {Object.keys(runs).map(run =>
-      <p
-        onClick={(e) => setRun(run)}
-        className={classes.runs}
-        key={run}>
-        {run}
-      </p>
-    )}
-  </>
+const RenderRuns = ({ runs, classes, setRun, pathOfDirectories }: RenderRows) => {
+
+  return (
+  // <Route render={({ history }) => (
+    <>
+      {
+        Object.keys(runs).map(run =>
+          <p
+            onClick={(e) => {
+              setRun(run)
+              // console.log(pathOfDirectories)
+              // history.push(`${pathOfDirectories}`)
+            }}
+            className={classes.runs}
+            key={run}>
+            {run}
+          </p>
+        )
+      }
+    </>
+  )
+// } />)
+}
 
 export default compose(
   connect(
-    undefined,
+    (state: any) => ({
+      pathOfDirectories: getSelectedPathForApi(state)
+    }),
     { setRun }
   ),
   withStyles(styles)
