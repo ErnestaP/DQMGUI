@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 
 import { setRun, getSelectedPathForApi, changeToDirectoriesRoute } from '../ducks/header/setPaths'
+import { Route } from 'react-router-dom'
 
 interface RenderRows {
   runs: any
@@ -25,24 +26,21 @@ const styles = () => ({
   }
 })
 
-const RenderRuns = ({ runs, classes, setRun, changeToDirectoriesRoute }: RenderRows) => {
+const RenderRuns = ({ runs, classes, setRun, pathOfDirectories }: RenderRows) => {
   return (
-    <>
-      {
-        Object.keys(runs).map(run =>
-          <p
-            onClick={(e) => {
-              setRun(run)
-              changeToDirectoriesRoute()
-            }}
-            className={classes.runs}
-            key={run}>
-            {run}
-          </p>
-        )
-      }
-    </>
-  )
+    <Route render={({ history }) => (
+      Object.keys(runs).map(run =>
+        <p
+          onClick={(e) => {
+            setRun(run)
+            history.replace(pathOfDirectories)
+          }}
+          className={classes.runs}
+          key={run}>
+          {run}
+        </p>
+      )
+    )} />)
 }
 
 export default compose(
