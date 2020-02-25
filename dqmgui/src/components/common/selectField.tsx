@@ -1,6 +1,5 @@
 import * as React from 'React';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import { InputLabel, FormControl, FormHelperText } from '@material-ui/core';
+import { InputLabel, FormControl, FormHelperText, Select } from '@material-ui/core';
 
 interface SelectFieldProps {
   options: any[];
@@ -9,28 +8,48 @@ interface SelectFieldProps {
   label: string;
   onChange: any;
   input: any;
-  error: any;
+  meta: {
+    error: string
+  };
 }
 
-const SelectField = ({ label, onChange, input, error, options, getOptionLabel, getOptionValue, ...props }: SelectFieldProps) => {
-  const optionValues = Object.values(options)
+
+const SelectField = ({ label, input, meta, options, getOptionLabel, getOptionValue,dropdownStyle,  selectClass, formControlClass, inputFieldClass }: SelectFieldProps) => {
+
   return (
-    <FormControl>
-      <InputLabel>{label}</InputLabel>
-      <NativeSelect
+    <FormControl variant="outlined" 
+    className={formControlClass}
+    >
+      <InputLabel className={inputFieldClass}>
+        {label}
+      </InputLabel>
+      <Select
+        native
+        variant="outlined"
+        value={input.value}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => input.onChange(event.target.value)}
         inputProps={{
           name: 'selectField',
+          id: 'select-field-for-active-tabs',
+          className: inputFieldClass,
         }}
-        onChange={(e) => input.onChange(e.target.value)}
+        MenuProps={{ classes: { paper: dropdownStyle } }}
+        classes={{
+          // root: inputFieldClass,
+          // filled: inputFieldClass,
+          // icon: inputFieldClass,
+          // outlined: inputFieldClass,
+          // selectMenu: selectClass
+        }}
       >
-        {optionValues.map((option: any) => (
-          <option key={option} value={getOptionValue(option)}>
+        {options.map((option: any) => (
+          <option key={getOptionValue(option)} value={getOptionValue(option)}>
             {getOptionLabel(option)}
           </option>
         ))}
-      </NativeSelect>
-      {error &&
-        <FormHelperText>{error}</FormHelperText>
+      </Select>
+      {meta.error &&
+        <FormHelperText>{meta.error}</FormHelperText>
       }
     </FormControl>
   )

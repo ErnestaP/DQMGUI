@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { Grid, withStyles, Icon, Button, Paper } from '@material-ui/core'
+import { Grid, withStyles, Button, Paper } from '@material-ui/core'
 import Search from '@material-ui/icons/Search';
-import { compose, path } from 'ramda'
+import { compose } from 'ramda'
 import { connect } from 'react-redux'
-import { Form, Field } from 'react-final-form'
-import cleanDeep from 'clean-deep';
+import { Form } from 'react-final-form'
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
-import { getService, getWorkplace, getRun } from '../ducks/header/setActiveTabs'
+import { getSelectedPath } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
-import { combineGetSamplesByDataSetAndRun } from '../ducks/header/combineSamplesByDataSetAndRun';
+import { fetchSamples } from '../ducks/header/fetchSamples';
+import ActiveTabs from './activeTabs';
+import { PinnedSubheaderList } from '../common/subHeadList';
 
 const styles = (theme: any) => ({
   header: {
@@ -56,8 +57,8 @@ const styles = (theme: any) => ({
     display: 'flex',
   },
   pathContainer: {
-    display: 'flex',
-    alignItems: 'center',
+    // display: 'flex',
+    // alignItems: 'center',
     padding: 8,
   },
   submitButtonWrapper: {
@@ -78,6 +79,10 @@ const styles = (theme: any) => ({
   },
   wrapper: {
     width: 'fit-content'
+  },
+  activeTabs: {
+    paddingTop: 16,
+
   }
 })
 
@@ -94,6 +99,7 @@ interface HeaderInterface {
   menuState: boolean;
   workplace: string;
   fetchSamples(formValues: any[]): string[];
+  path: string;
 }
 
 const Header = ({
@@ -103,20 +109,21 @@ const Header = ({
   service,
   setMenuContent,
   workplace,
-  run,
+  path,
   fetchSamples
 }: HeaderInterface) => {
 
+  console.log(path)
   return (
     <Form
       onSubmit={(formValues: any) => {
         fetchSamples(formValues)
-        localStorage.setItem("searchFields", JSON.stringify(formValues))
+        // localStorage.setItem("searchFields", JSON.stringify(formValues)) //leave or not saving to local s.????
       }}
-      initialValues={{
-        searchField: path(['searchField'], JSON.parse(localStorage.getItem('searchFields') as string)),
-        searchFieldByRun: path(['searchFieldByRun'], JSON.parse(localStorage.getItem('searchFields') as string))
-      }}
+      // initialValues={{
+      //   searchField: path(['searchField'], JSON.parse(localStorage.getItem('searchFields') as string)),
+      //   searchFieldByRun: path(['searchFieldByRun'], JSON.parse(localStorage.getItem('searchFields') as string))
+      // }}
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
           <Grid item container className={classes.wrapper}>
@@ -126,28 +133,36 @@ const Header = ({
                   <img src={Logo} className={classes.logo}
                   ></img>
                 </Grid>
+                <Grid item className={classes.activeTabs}>
+                  {/* <ActiveTabs /> */}
+                </Grid>
               </Grid>
               <Grid item className={classes.timeWrapper}>
                 <Time classes={classes.time} />
               </Grid>
             </Grid>
-            <Grid container item xs={12} justify="flex-end" className={classes.searchContainer}>
-              <Paper className={classes.paper}>
-                <Grid item xs={6} className={classes.pathContainer}>
-                  {/* path/path/path/path/path/path */}
+            <Paper className={classes.paper}>
+              <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
+                <Grid item xs={6}>
+                  <PinnedSubheaderList />
                 </Grid>
-                <Grid container item justify="flex-end">
-                  <SearchByDatasetField />
-                  <SearchByRunField />
-                  <Grid item className={classes.submitButtonWrapper}>
-                    <Button type="submit" className={classes.sumbitButton}>
-                      <Search />
-                      Search
+                <Grid item xs={6} justify="flex-start">
+                  <Grid container item justify="flex-end">
+                    <SearchByDatasetField />
+                    <SearchByRunField />
+                    <Grid item className={classes.submitButtonWrapper}>
+                      <Button type="submit" className={classes.sumbitButton}>
+                        <Search />
+                        Search
                       </Button>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Paper>
-            </Grid>
+                <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
+                  {path}
+                </Grid>
+              </Grid>
+            </Paper>
           </Grid>
         </form>
       )} />);
@@ -157,9 +172,7 @@ export default compose<any, any, any>(
   connect(
     (state: any) => ({
       menuState: getMenuStatus(state),
-      service: getService(state),
-      workplace: getWorkplace(state),
-      run: getRun(state),
+      path: getSelectedPath(state)
     }),
     ((dispatch: any, props: any) => ({
       setMenuState(state: boolean) {
@@ -170,7 +183,7 @@ export default compose<any, any, any>(
         dispatch(setMenuState(!props.menuState));
       },
       fetchSamples(data: any) {
-        dispatch(combineGetSamplesByDataSetAndRun(data))
+        dispatch(fetchSamples(data))
       }
     })
     )

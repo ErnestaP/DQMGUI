@@ -4,8 +4,8 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { compose } from 'ramda';
 import { connect } from 'react-redux'
 
-import { pseudoServices } from '../pseudoFields'
-import { setService, getService} from '../ducks/header/setActiveTabs'
+import { services } from '../pseudoFields'
+import { setService, getService} from '../ducks/header/setPaths'
 import { setMenuContent} from '../ducks/sideNav/setMenuStatus'
 
 
@@ -42,7 +42,7 @@ const styles = (theme: any) => ({
 })
 
 const Services = ({ setService, classes, selectedService, setMenuContent, ...props }: ServicesProps) => {
-  const servicesValues = Object.values(pseudoServices)
+  const servicesValues = Object.values(services)
   return (
     <Grid container item direction="column" className={classes.wrapper}>
       <Grid item>

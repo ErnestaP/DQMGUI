@@ -1,10 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import lightBlue from '@material-ui/core/colors/lightBlue';
 import blueGrey from '@material-ui/core/colors/blueGrey';
-import indigo from '@material-ui/core/colors/indigo';
-import blue from '@material-ui/core/colors/blue';
-import red from '@material-ui/core/colors/red';
-
 
 declare module '@material-ui/core/styles/transitions' {
   interface Transitions {
@@ -69,9 +65,19 @@ const createTheme = () => {
         [100]: '#f5f5f5',
         [300]: '#e0e0e0',
         [500]: '#9e9e9e',
-      }
-
+      },
     },
+    // overrides: {
+    //   MuiSelect: {
+    //     root: {
+    //       '&$selected': {
+    //         backgroundColor: 'orange',
+    //       },
+    //       background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    //       color: 'white'
+    //     },
+    //   },
+    // },
   })
   return theme
 };

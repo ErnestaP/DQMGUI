@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { CircularProgress, Dialog, DialogContent, withStyles, } from '@material-ui/core'
+import { CircularProgress, Dialog, DialogContent, withStyles } from '@material-ui/core'
 
 interface LoaderProps {
   isFetching: boolean;
@@ -13,20 +13,17 @@ const styles = () => ({
   }
 })
 
-const Loader = ({ isFetching, classes, ...props }: LoaderProps) => {
-  console.log(isFetching)
-  return (
-    <Dialog open={isFetching}
-      PaperProps={{
-        classes: {
-          root: classes.spinnerPaperRoot,
-        },
-      }}
-    >
-      <DialogContent>
-        <CircularProgress />
-      </DialogContent>
-    </Dialog>
-  )
-}
+const Loader = ({ isFetching, classes }: LoaderProps) =>
+  <Dialog open={isFetching}
+    PaperProps={{
+      classes: {
+        root: classes.spinnerPaperRoot,
+      },
+    }}
+  >
+    <DialogContent>
+      <CircularProgress />
+    </DialogContent>
+  </Dialog>
+
 export default withStyles(styles)(Loader)

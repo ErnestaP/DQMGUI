@@ -3,15 +3,15 @@ import { Grid, Typography } from '@material-ui/core'
 import { compose } from 'ramda';
 import { connect } from 'react-redux'
 
-import { pseudoRuns } from '../pseudoFields'
-import { setRun } from '../ducks/header/setActiveTabs'
+import { runs } from '../pseudoFields'
+import { setRun } from '../ducks/header/setPaths'
 
 interface RunsProps {
   setRun(type: string): void;
 }
 
 const Runs = ({ setRun, ...props }: RunsProps) => {
-  const runsValues = Object.values(pseudoRuns)
+  const runsValues = Object.values(runs)
 
   return (
     <Grid>

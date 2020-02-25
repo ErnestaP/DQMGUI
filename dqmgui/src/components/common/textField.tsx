@@ -6,12 +6,13 @@ const TexField = ({ input, meta, onChange, ...props }: any) => {
   return (
     <FormControl>
       <Input
+        {...input}
         fullWidth
         placeholder={pathOr('', ['placeholder'], props)}
         onChange={(e) => input.onChange(e.target.value)}
         value={input.value} />
-      {meta.error &&
-        <FormHelperText>{meta.error}</FormHelperText>
+         {meta.error && meta.visited &&
+        <FormHelperText error>{meta.error}</FormHelperText>
       }
     </FormControl>
   )

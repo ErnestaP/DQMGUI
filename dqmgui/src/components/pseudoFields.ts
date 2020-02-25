@@ -1,5 +1,5 @@
 
-export const pseudoServices = {
+export const services = {
     Online: {
         title: "Online",
         href: 'www'
@@ -29,7 +29,7 @@ export const pseudoServices = {
         href: 'www'
     }
 }
-export const pseudoSummaries = {
+const Summaries = {
     Summary: "Summary",
     Reports: "Reports",
     Shifts: "Shifts",
@@ -37,39 +37,39 @@ export const pseudoSummaries = {
     Certifications: "Certifications",
     Everything: "Everything"
 }
-export const pseudoTriggers = {
+const Triggers = {
     Trigger: "Trigger",
     LIT: "LIT",
     LITEMU: "LITEMU",
     HLT: "HLT"
 }
-export const pseudoTracker = {
+const Tracker = {
     Tracker: "Tracker",
     PixelPhase1: "PixelPhase1",
     Pixel: "Pixel",
     Sistrip: "Sistrip"
 }
-export const pseudoCalorimeters = {
+const Calorimeters = {
     Calorimeters: "Calorimeters",
     Ecal: "Ecal",
     EcalPreshower: "EcalPreshower",
     HCAL: "HCAL",
     HCALcalib: "HCALcalib"
 }
-export const pseudoMouns = {
+const Mouns = {
     Mouns: "Mouns",
     CDC: "CDC",
     DT: "DT",
     RPC: "RPC"
 }
-export const pseudoCTTPS = {
+const CTTPS = {
     CTTPS: "CTTPS",
     TrackingStrip: "TrackingStrip",
     TrackingPixel: "TrackingPixel",
     TrackingDiamond: "TrackingDiamond",
     TrackingFastSilicon: "TrackingFastSilicon"
 }
-export const pseudoPOG = {
+const POG = {
     POG: "POG",
     Mouns: "Mouns",
     JetMet: "JetMet",
@@ -79,17 +79,17 @@ export const pseudoPOG = {
     Tau: "Tau"
 }
 
-export const workPlace = {
-    pseudoSummaries: pseudoSummaries,
-    pseudoTriggers: pseudoTriggers,
-    pseudoTracker: pseudoTracker,
-    pseudoCalorimeters: pseudoCalorimeters,
-    pseudoMouns: pseudoMouns,
-    pseudoCTTPS: pseudoCTTPS,
-    pseudoPOG: pseudoPOG
+export const workSpaces = {
+    Summaries: Summaries,
+    Triggers: Triggers,
+    Tracker: Tracker,
+    Calorimeters: Calorimeters,
+    Mouns: Mouns,
+    CTTPS: CTTPS,
+    POG: POG
 }
 
-export const pseudoRuns =
+export const runs =
 {
     111: '11',
     112: '12',

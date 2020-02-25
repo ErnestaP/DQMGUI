@@ -9,7 +9,12 @@ import { typesTranlsation } from '../../translation/typesTranslation'
 
 interface SearchResultTableProps {
   samplesGroup: SampleDataInerface;
-  classes: any;
+  classes: {
+    header: string;
+    dataSetPartsWrapper: string;
+    type: string;
+  },
+  index: number,
 }
 
 const styles: any = (theme: Theme) => ({
@@ -27,13 +32,17 @@ const styles: any = (theme: Theme) => ({
   },
 })
 
-const SearchResultTable = ({ classes, ...props }: SearchResultTableProps) => {
-  return (<Table>
+export const SearchResultTable = ({ classes, samplesGroup, index }: SearchResultTableProps) =>
+  <Table>
     <TableHead>
-      <TableRow className={classes.header}>
+      <TableRow 
+      // className={classes.header}
+      >
         <TableCell >
-          <Typography className={classes.type}>
-            {typesTranlsation(pathOr('', ['samplesGroup', 'type'], props))}
+          <Typography 
+          // className={classes.type}
+          >
+            {typesTranlsation(pathOr('', ['type'], samplesGroup))}
           </Typography>
         </TableCell>
         <TableCell />
@@ -42,17 +51,18 @@ const SearchResultTable = ({ classes, ...props }: SearchResultTableProps) => {
         {datasetParts.map((part: string) =>
           <TableCell
             key={part}
-            className={classes.dataSetPartsWrapper}>
+            // className={classes.dataSetPartsWrapper}
+            >
             {part}
           </TableCell>
         )}
       </TableRow>
     </TableHead>
     <SearchResultTableBody
-      samplesGroup={pathOr([], ['samplesGroup', 'items'], props)}
+      index={index}
+      samplesGroup={pathOr([], ['items'], samplesGroup)}
     />
   </Table>
-  )
-}
+
 
 export default withStyles(styles)(SearchResultTable)

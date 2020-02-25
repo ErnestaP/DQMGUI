@@ -2,17 +2,40 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles/';
 import { Provider } from 'react-redux';
+// import Route from 'react-router-dom/Route';
+// import Router from 'react-router-dom/Router';
+// import Switch from 'react-router-dom/Switch';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import moment from 'moment';
 
 import theme from './theme'
 import './styles.scss';
-import DQMGUI from '../components/application/app'
 import { store } from './store'
+import dynamicImport from '../common/dynamic-import';
+
+const DQMGUI = dynamicImport(() =>
+  import(/* webpackChunkName: "app" */ '../components/application/app'),
+);
+
 
 const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
-        <DQMGUI />
+        <Router>
+          <Route path="/">
+            <Switch>
+              <Route
+                component={() => <DQMGUI />}
+              />
+            </Switch>
+          </Route>
+        </Router>
       </Provider>
     </MuiThemeProvider>
   )
