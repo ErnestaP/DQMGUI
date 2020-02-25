@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 
-import { setRun, getSelectedPathForApi, changeToDirectoriesRoute } from '../ducks/header/setPaths'
+import { setRun, getSelectedPathForApi, changeToDirectoriesRoute, getDataset } from '../ducks/header/setPaths'
 import { Route } from 'react-router-dom'
 
 interface RenderRows {
@@ -33,7 +33,8 @@ const RenderRuns = ({ runs, classes, setRun, pathOfDirectories }: RenderRows) =>
         <p
           onClick={(e) => {
             setRun(run)
-            history.replace(pathOfDirectories)
+            history.replace("/" + run  + pathOfDirectories)
+            console.log("/" + run  + pathOfDirectories +" setting new path to history")
           }}
           className={classes.runs}
           key={run}>
@@ -45,9 +46,11 @@ const RenderRuns = ({ runs, classes, setRun, pathOfDirectories }: RenderRows) =>
 
 export default compose(
   connect(
-    (state: any) => ({
-      pathOfDirectories: getSelectedPathForApi(state)
-    }),
+    (state: any) => {
+      return ({
+        pathOfDirectories: getDataset(state),
+      })
+    },
     { setRun, changeToDirectoriesRoute }
   ),
   withStyles(styles)

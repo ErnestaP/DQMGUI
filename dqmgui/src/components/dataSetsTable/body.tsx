@@ -10,6 +10,7 @@ interface SearchResultTableProps {
 }
 
 const SearchResultTableBody = ({ samplesGroup, index }: SearchResultTableProps) => {
+  var oldDataset = {a: ''}
 
   return (
     <TableBody>
@@ -17,7 +18,7 @@ const SearchResultTableBody = ({ samplesGroup, index }: SearchResultTableProps) 
         Object.keys(samplesGroup).map((name: string) => {
           return (
             <React.Fragment key={name}>
-              <RunsRow samplesGroup={samplesGroup} name={name} index={index}/>
+              <RunsRow oldDataset={oldDataset} samplesGroup={samplesGroup} name={name} index={index}/>
             </React.Fragment>
           )
         }

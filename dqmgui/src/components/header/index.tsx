@@ -113,7 +113,6 @@ const Header = ({
   fetchSamples
 }: HeaderInterface) => {
 
-  console.log(path)
   return (
     <Form
       onSubmit={(formValues: any) => {

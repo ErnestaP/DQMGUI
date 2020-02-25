@@ -49,7 +49,7 @@ export const setWorkplace = (data: any) => ({
 })
 
 export const setRun = (data: any) => {
-  return ({
+  return  ({
     type: SET_RUN,
     payload: data,
   })
@@ -87,9 +87,3 @@ export const getSelectedPathForApi = createSelector(
     return [run, withoutFirstSlash].join('/')
   }
 )
-
-export const changeToDirectoriesRoute = () => (dispatch, getState) =>{
-  history.replace('/ff')
-}
-
-
