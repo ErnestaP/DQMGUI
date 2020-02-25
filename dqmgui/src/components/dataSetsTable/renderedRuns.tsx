@@ -2,9 +2,8 @@ import * as React from 'react'
 import { withStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { Route } from 'react-router-dom'
 
-import { setRun, getSelectedPathForApi } from '../ducks/header/setPaths'
+import { setRun, getSelectedPathForApi, changeToDirectoriesRoute } from '../ducks/header/setPaths'
 
 interface RenderRows {
   runs: any
@@ -12,6 +11,7 @@ interface RenderRows {
     runs: string
   },
   setRun(run: string): void,
+  changeToDirectoriesRoute(): void;
 }
 
 const styles = () => ({
@@ -25,18 +25,15 @@ const styles = () => ({
   }
 })
 
-const RenderRuns = ({ runs, classes, setRun, pathOfDirectories }: RenderRows) => {
-
+const RenderRuns = ({ runs, classes, setRun, changeToDirectoriesRoute }: RenderRows) => {
   return (
-  // <Route render={({ history }) => (
     <>
       {
         Object.keys(runs).map(run =>
           <p
             onClick={(e) => {
               setRun(run)
-              // console.log(pathOfDirectories)
-              // history.push(`${pathOfDirectories}`)
+              changeToDirectoriesRoute()
             }}
             className={classes.runs}
             key={run}>
@@ -46,7 +43,6 @@ const RenderRuns = ({ runs, classes, setRun, pathOfDirectories }: RenderRows) =>
       }
     </>
   )
-// } />)
 }
 
 export default compose(
@@ -54,7 +50,7 @@ export default compose(
     (state: any) => ({
       pathOfDirectories: getSelectedPathForApi(state)
     }),
-    { setRun }
+    { setRun, changeToDirectoriesRoute }
   ),
   withStyles(styles)
 )(RenderRuns)

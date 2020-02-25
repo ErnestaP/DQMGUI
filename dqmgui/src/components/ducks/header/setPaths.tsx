@@ -1,6 +1,8 @@
 import { AnyAction } from 'redux';
-import { path } from 'ramda';
+import { path, pathOr } from 'ramda';
 import { createSelector } from 'reselect'
+
+import history from '../../../app/routers/history';
 
 interface DefaultState {
   service: string
@@ -46,20 +48,25 @@ export const setWorkplace = (data: any) => ({
   payload: data,
 })
 
-export const setRun = (data: any) => ({
-  type: SET_RUN,
-  payload: data,
-})
+export const setRun = (data: any) => {
+  console.log(data)
+  return ({
+    type: SET_RUN,
+    payload: data,
+  })
+}
 
-export const setDataset = (data: any) => ({
-  type: SET_DATA_SET,
-  payload: data,
-})
+export const setDataset = (data: any) => {
+  return ({
+    type: SET_DATA_SET,
+    payload: data,
+  })
+}
 
-export const getService = (state: any) => path(['ACTIVE_TABS', 'service'], state);
-export const getWorkplace = (state: any) => path(['ACTIVE_TABS', 'workplace'], state);
-export const getRun = (state: any) => path(['ACTIVE_TABS', 'run'], state);
-export const getDataset = (state: any) => path(['ACTIVE_TABS', 'dataset'], state);
+export const getService = (state: any): string => pathOr('', ['ACTIVE_TABS', 'service'], state);
+export const getWorkplace = (state: any): string => pathOr('', ['ACTIVE_TABS', 'workplace'], state);
+export const getRun = (state: any): string => pathOr('', ['ACTIVE_TABS', 'run'], state);
+export const getDataset = (state: any): string => pathOr('', ['ACTIVE_TABS', 'dataset'], state);
 
 export const getSelectedPath = createSelector(
   getRun,
@@ -76,5 +83,14 @@ export const getSelectedPath = createSelector(
 export const getSelectedPathForApi = createSelector(
   getRun,
   getDataset,
-  (run, dataset) => [run, dataset].join('/')
+  (run: string, dataset: string) => {
+    const withoutFirstSlash = dataset.substring(1, dataset.length) as string
+    return [run, withoutFirstSlash].join('/')
+  }
 )
+
+export const changeToDirectoriesRoute = () => (dispatch, getState) =>{
+  history.push(getSelectedPathForApi(getState()))
+}
+
+
