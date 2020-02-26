@@ -33,7 +33,7 @@ const formatDataset = (sampleList: any[]) => {
       if (results[index].items[item.dataset] === undefined) {
         results[index].items[item.dataset] = { runs: {} }
       }
-      results[index].items[item.dataset].runs[item.run] = { run: item.run, importversion: item.importversion, version: item.version }
+      results[index].items[item.dataset].runs[item.run] = { importversion: item.importversion}
     })
   })
 
@@ -72,7 +72,7 @@ export function fetchSamples(formValues: any) {
 
     const request = axios({
       method: 'GET',
-      url: `/data/json/samples?match=${searchFieldByDataset}&run=${searchFieldByRun}`,
+      url: `/samples?match=${searchFieldByDataset}&run=${searchFieldByRun}`,
       headers: []
     });
 

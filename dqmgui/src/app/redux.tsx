@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import SideMenuReducer from '../components/ducks/sideNav/setMenuStatus'
 import ServicesReducer from '../components/ducks/header/setPaths'
 import GetSamplesReducer from '../components/ducks/header/fetchSamples'
-import LaoderReducer from '../components/ducks/loader/loaderActions';
+import LoaderReducer from '../components/ducks/loader/loaderActions';
 import SelectedDataReducer from '../components/ducks/table/selectedData';
 
 const appReducer = combineReducers({
@@ -12,7 +12,7 @@ const appReducer = combineReducers({
     'SAMPLES': combineReducers({
         'SAMPLES_LIST': GetSamplesReducer,
     }),
-    'LOADER': LaoderReducer,
+    'LOADER': LoaderReducer,
     'TABLE': combineReducers({
         'SELECTED_DATA': SelectedDataReducer,
     })

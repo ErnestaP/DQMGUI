@@ -6,16 +6,11 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
-    // contentBase: path.resolve(__dirname, 'assets'),
     port: 8084,
-    proxy: [{
-      context: ['/offline-test', '/data'], 
-      //https://cmsweb.cern.ch/dqm/offline-test/data/json/samples?match=Stream*.&run=32
-      target: 'http://localhost:8081/dqm/offline',
-    },
+    proxy: [
     {
-      context: ['offline/data/json/archive'],
-      target: 'https://cmsweb.cern.ch/dqm/',
+      context: ['/archive', '/samples'],
+      target: 'http://localhost:8081/dqm/offline/data/json',
     }
     ],
   }

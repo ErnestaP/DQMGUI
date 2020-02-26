@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Table, TableHead, TableCell, TableRow, withStyles, Typography, Theme } from '@material-ui/core'
+import { Table, TableHead, TableCell, TableRow } from '@material-ui/core'
 import { pathOr } from 'ramda'
 
 import SearchResultTableBody from './body'
@@ -8,61 +8,31 @@ import { SampleDataInerface } from '../ducks/header/interfaces'
 import { typesTranlsation } from '../../translation/typesTranslation'
 
 interface SearchResultTableProps {
-  samplesGroup: SampleDataInerface;
-  classes: {
-    header: string;
-    dataSetPartsWrapper: string;
-    type: string;
-  },
-  index: number,
+  samplesGroup?: SampleDataInerface;
 }
 
-const styles: any = (theme: Theme) => ({
-  header: {
-    background: theme.palette.secondary.light,
-    padding: '8px !important'
-  },
-  dataSetPartsWrapper: {
-    width: '100%',
-    fontFamily: 'Raleway, sans-serif'
-  },
-  type: {
-    fontWeight: 'bold',
-    fontSize: '0.725rem',
-  },
-})
-
-export const SearchResultTable = ({ classes, samplesGroup, index }: SearchResultTableProps) =>
+export const SearchResultTable = ({ samplesGroup }: SearchResultTableProps) =>
   <Table>
     <TableHead>
-      <TableRow 
-      // className={classes.header}
-      >
-        <TableCell >
-          <Typography 
-          // className={classes.type}
-          >
-            {typesTranlsation(pathOr('', ['type'], samplesGroup))}
-          </Typography>
+      <TableRow >
+        <TableCell>
+          {typesTranlsation(pathOr('', ['type'], samplesGroup))}
         </TableCell>
         <TableCell />
       </TableRow>
       <TableRow hover={true}>
         {datasetParts.map((part: string) =>
           <TableCell
-            key={part}
-            // className={classes.dataSetPartsWrapper}
-            >
+            key={part}>
             {part}
           </TableCell>
         )}
       </TableRow>
     </TableHead>
     <SearchResultTableBody
-      index={index}
       samplesGroup={pathOr([], ['items'], samplesGroup)}
     />
   </Table>
 
 
-export default withStyles(styles)(SearchResultTable)
+export default SearchResultTable

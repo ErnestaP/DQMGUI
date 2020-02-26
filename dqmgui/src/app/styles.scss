@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 
+$primary_main: #039be5;
+$primary_light: #29b6f6;
+$primary_dark: #2577bd;
+$primary_contrastText: #FFF;
 
 html,
 body,
@@ -45,9 +49,18 @@ body,
   margin-left: 50px;
 }
 
+.runButton{
+  display: flex;
+  justify-content: center;
+  border: 1px solid $primary_light;
+  border-radius: 15px;
+  background-color: $primary_light;
+  color: $primary_contrastText;
+  cursor: pointer;
+}
+
 .runButton:hover {
-  background-color: green;
-  cursor: pointer
+  background-color: $primary_main;
 }
 
 @media screen and (max-height: 450px) {

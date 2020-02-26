@@ -3,16 +3,16 @@ import { withStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 
-import { setRun, getSelectedPathForApi, changeToDirectoriesRoute, getDataset } from '../ducks/header/setPaths'
+import { setPath } from '../ducks/header/setPaths'
 import { Route } from 'react-router-dom'
 
 interface RenderRows {
-  runs: any
+  setPath(path: string): void,
+  runs: any,
   classes: {
     runs: string
   },
-  setRun(run: string): void,
-  changeToDirectoriesRoute(): void;
+  dataSetName: string
 }
 
 const styles = () => ({
@@ -26,32 +26,34 @@ const styles = () => ({
   }
 })
 
-const RenderRuns = ({ runs, classes, setRun, pathOfDirectories }: RenderRows) => {
+
+const make_a_path = (dataset: string, run: string) => [dataset, run].join('/')
+
+const RenderRuns = ({ setPath, runs, dataSetName, classes }: RenderRows) => {
   return (
     <Route render={({ history }) => (
       Object.keys(runs).map(run =>
         <p
           onClick={(e) => {
-            setRun(run)
-            history.replace("/" + run  + pathOfDirectories)
-            console.log("/" + run  + pathOfDirectories +" setting new path to history")
+            setPath(make_a_path(dataSetName, run))
+            history.replace(make_a_path(dataSetName, run))
+            console.log(make_a_path(dataSetName, run))
           }}
           className={classes.runs}
           key={run}>
           {run}
         </p>
       )
-    )} />)
+    )}
+    />
+  )
 }
+
 
 export default compose(
   connect(
-    (state: any) => {
-      return ({
-        pathOfDirectories: getDataset(state),
-      })
-    },
-    { setRun, changeToDirectoriesRoute }
+    undefined,
+    { setPath }
   ),
   withStyles(styles)
 )(RenderRuns)

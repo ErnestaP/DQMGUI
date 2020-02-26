@@ -1,11 +1,7 @@
 import * as React from 'react'
-import { Grid, TableRow, TableCell, withStyles } from '@material-ui/core'
-import { connect } from 'react-redux'
+import { Grid, TableRow, TableCell } from '@material-ui/core'
 
 import RenderRuns from './renderedRuns'
-import { setDataset, getDataset } from '../ducks/header/setPaths'
-import { appendChildren, removeChildren } from './appendingChildren'
-
 
 interface RunRowsProps {
   samplesGroup: any
@@ -14,50 +10,68 @@ interface RunRowsProps {
 
 const runs_length = (runs: any[]) => Object.keys(runs).length
 
-const RunsRow = ({ samplesGroup, name, setDataset, dataSet }: RunRowsProps) => {
-  const [dataSetName, setName] = React.useState()
-  const a = () => { console.log('sss'); return true }
-  return (
-    <TableRow >
-      <TableCell>
-        <Grid item>
-          {name}
-        </Grid>
-        <Grid item id={name} className="grid-container">
-          {dataSetName === name &&
-            <RenderRuns runs={samplesGroup[name].runs} />
-          }
-        </Grid>
-      </TableCell>
-      <TableCell>
-        <div className="runButton"
-          onClick={(e) => {
-            // console.log(document.getElementById(name))
-            // if (dataSet) {
-            //   removeChildren(dataSet)
-            // }
-            // if (name !== dataSet) {
-            //   appendChildren(name, Object.keys(samplesGroup[name].runs), dataSet)
-            // }
+const setToLocalStorage = (datasetName: string) =>
+  localStorage.setItem("dataSetName", datasetName)
 
-            setDataset(name)
-            dataSetName === name ?
-              setName('')
-              :
-              setName(name)
-          }}
-        >
-          {runs_length(samplesGroup[name].runs)}
-        </div>
-      </TableCell>
-    </TableRow>
-  )
+const getFromLocalStorage = () =>
+  localStorage.getItem("dataSetName")
+
+class RunsRow extends React.Component<RunRowsProps>{
+  update() {
+    this.forceUpdate()
+  }
+
+  componentWillUnmount() {
+    localStorage.clear();
+  }
+
+  componentWillMount() {
+    localStorage.clear();
+  }
+
+  render() {
+    const { samplesGroup, name, setDataset, dataSet } = this.props
+    let dataSetName = getFromLocalStorage()
+
+    return (
+      <TableRow >
+        <TableCell>
+          {name}
+          <Grid item id={name} className="grid-container">
+            {dataSetName === name &&
+              <RenderRuns
+                dataSetName={dataSetName}
+                runs={samplesGroup[name].runs}
+              />
+            }
+          </Grid>
+        </TableCell>
+        <TableCell>
+          <div className="runButton"
+            onClick={(e) => {
+              // console.log(document.getElementById(name))
+              // if (dataSet) {
+              //   removeChildren(dataSet)
+              // }
+              // if (name !== dataSet) {
+              //   appendChildren(name, Object.keys(samplesGroup[name].runs), dataSet)
+              // }
+              if (dataSetName) {
+                localStorage.clear()
+                this.update()
+              }
+              if (dataSetName !== name) {
+                setToLocalStorage(name)
+                this.update()
+              }
+            }}
+          >
+            {runs_length(samplesGroup[name].runs)}
+          </div>
+        </TableCell>
+      </TableRow >
+    )
+  }
 }
 
-export default connect(
-  // (state: any) => ({
-  //   dataSet: getDataset(state)
-  // }),
-  undefined,
-  { setDataset }
-)(RunsRow)
+export default RunsRow

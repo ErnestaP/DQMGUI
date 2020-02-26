@@ -7,7 +7,7 @@ import { Form } from 'react-final-form'
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
-import { getSelectedPath } from '../ducks/header/setPaths'
+import { getPath } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
@@ -171,7 +171,7 @@ export default compose<any, any, any>(
   connect(
     (state: any) => ({
       menuState: getMenuStatus(state),
-      path: getSelectedPath(state)
+      path: getPath(state)
     }),
     ((dispatch: any, props: any) => ({
       setMenuState(state: boolean) {

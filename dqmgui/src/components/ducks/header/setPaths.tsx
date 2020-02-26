@@ -1,14 +1,12 @@
 import { AnyAction } from 'redux';
-import { path, pathOr } from 'ramda';
-import { createSelector } from 'reselect'
-
-import history from '../../../app/routers/history';
+import { pathOr } from 'ramda';
 
 interface DefaultState {
   service: string
   workplace: string
   run: string
   dataset: string
+  path: string
 }
 
 const defaultState: DefaultState = {
@@ -16,12 +14,14 @@ const defaultState: DefaultState = {
   workplace: '',
   run: '',
   dataset: '',
+  path: ''
 }
 
 const SET_SERVICE = "SET_SERVICE"
 const SET_WORKPLACES = "SET_WORKPLACES"
 const SET_RUN = "SET_RUN"
 const SET_DATA_SET = "SET_DATA_SET"
+const SET_PATH = "SET_PATH"
 
 export default function serviceSetReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
@@ -33,6 +33,8 @@ export default function serviceSetReducer(state = defaultState, { type, payload 
       return { ...state, run: payload };
     case SET_DATA_SET:
       return { ...state, dataset: payload };
+    case SET_PATH:
+      return { ...state, path: payload };
     default:
       return state;
   }
@@ -49,7 +51,7 @@ export const setWorkplace = (data: any) => ({
 })
 
 export const setRun = (data: any) => {
-  return  ({
+  return ({
     type: SET_RUN,
     payload: data,
   })
@@ -62,28 +64,16 @@ export const setDataset = (data: any) => {
   })
 }
 
+export const setPath = (data: any) => {
+  return ({
+    type: SET_PATH,
+    payload: data,
+  })
+}
+
 export const getService = (state: any): string => pathOr('', ['ACTIVE_TABS', 'service'], state);
 export const getWorkplace = (state: any): string => pathOr('', ['ACTIVE_TABS', 'workplace'], state);
 export const getRun = (state: any): string => pathOr('', ['ACTIVE_TABS', 'run'], state);
 export const getDataset = (state: any): string => pathOr('', ['ACTIVE_TABS', 'dataset'], state);
+export const getPath = (state: any): string => pathOr('', ['ACTIVE_TABS', 'path'], state);
 
-export const getSelectedPath = createSelector(
-  getRun,
-  getDataset,
-  (run, dataset) => {
-    const runWithPath = run ? run : ''
-    const datasetWithPath = dataset ? dataset : ''
-    const path = [datasetWithPath, runWithPath].join('/')
-
-    return path
-  }
-)
-
-export const getSelectedPathForApi = createSelector(
-  getRun,
-  getDataset,
-  (run: string, dataset: string) => {
-    const withoutFirstSlash = dataset.substring(1, dataset.length) as string
-    return [run, withoutFirstSlash].join('/')
-  }
-)

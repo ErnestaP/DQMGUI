@@ -9,11 +9,12 @@ import {
 import Home from '../../components/dataSetsTable'
 import Directories from "../../components/directories";
 import { connect } from "react-redux";
-import { getSelectedPathForApi } from "../../components/ducks/header/setPaths";
+import { getPath } from "../../components/ducks/header/setPaths";
 import NotFound from "../../../src/components/directories/notFound";
 
 const AppRouter = (props) => {
   const { path } = props.match;
+  console.log(props.pathOfDirectories)
   return (
     <Switch>
       <Route
@@ -25,7 +26,7 @@ const AppRouter = (props) => {
       <Route
         key="directories"
         exact={true}
-        path={"/"+`${props.pathOfDirectories}`}
+        path={`${props.pathOfDirectories}`}
         component={Directories} />
       <Route
         key="notFound"
@@ -38,7 +39,7 @@ const AppRouter = (props) => {
 
 export default withRouter(connect(
   (state: any) => ({
-    pathOfDirectories: getSelectedPathForApi(state)
+    pathOfDirectories: getPath(state)
   })
 )(AppRouter))
 

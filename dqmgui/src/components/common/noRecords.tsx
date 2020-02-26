@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Typography, withStyles, Table, TableCell, TableRow, TableHead, TableBody } from '@material-ui/core'
+import { path } from 'ramda'
 
 interface NotFoundInterface {
-  isFetching: boolean,
-  classes: {
+  classes?: {
     noRecords: string
   }
 }
@@ -22,7 +22,7 @@ const NoRecords = ({ classes }: NotFoundInterface) => {
       <TableHead />
       <TableBody>
         <TableRow>
-          <TableCell className={classes.noRecords}>
+          <TableCell className={path(['noRecords'], classes)}>
             <Typography>
               No Records Found
             </Typography>
