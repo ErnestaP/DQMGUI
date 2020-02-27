@@ -9,13 +9,14 @@ import { getMenuStatus, getMenuContent } from '../ducks/sideNav/setMenuStatus'
 
 const styles = (theme: any) => ({
   header: {
-    background: theme.palette.secondary.main,
-    height: '94vh',
+    background: '#0d47a1',
+    height: '100vh',
+    margin: 0,
     [theme.breakpoints.up('xl')]: {
       width: '12vw',
     },
     [theme.breakpoints.down('lg')]: {
-      width: '14vw',
+      width: '12vw',
     },
     [theme.breakpoints.down('sm')]: {
       width: '16vw',

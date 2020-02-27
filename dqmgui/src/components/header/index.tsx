@@ -11,6 +11,7 @@ import { path_for_header } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
+import SearchByPlotByName from './searchByPlotName'
 import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/header/serchFields';
 import ActiveTabs from './activeTabs';
 import { PinnedSubheaderList } from '../common/subHeadList';
@@ -18,11 +19,12 @@ import { PinnedSubheaderList } from '../common/subHeadList';
 const styles = (theme: any) => ({
   header: {
     background: 'linear-gradient(to right, #0d47a1, #00acc1)',
-    height: '6vh',
+    height: 'fit-content',
     alignItems: 'center',
     color: theme.palette.common.white,
     display: 'flex',
-    justifyContent: 'space-between'
+    width: '100%',
+    justifyContent: 'space-between',
   },
 
   logo: {
@@ -51,14 +53,17 @@ const styles = (theme: any) => ({
   },
   timeWrapper: {
     paddingRight: 16,
+    justifyContent: 'flex-end',
+    display: 'flex',
   },
   searchContainer: {
     justifyContent: 'felx-end',
     display: 'flex',
+    background: 'white',
+    boxShadow: '2px 10px 14px 0px rgba(0, 0, 0, 0.04)',
+
   },
   pathContainer: {
-    // display: 'flex',
-    // alignItems: 'center',
     padding: 8,
   },
   submitButtonWrapper: {
@@ -74,15 +79,13 @@ const styles = (theme: any) => ({
     }
   },
   paper: {
-    width: '100vw',
     display: 'flex'
   },
   wrapper: {
-    width: 'fit-content'
+    display: 'flex',
   },
   activeTabs: {
     paddingTop: 16,
-
   }
 })
 
@@ -117,44 +120,53 @@ const Header = ({
         setSearachFieldByRun(pathOr('', ['searchFieldByRun'], formValues))
       }}
       render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}
+          style={{ display: 'flex', justifyContent: 'flex-end' }}
+        >
           <Grid item container className={classes.wrapper}>
             <Grid item container xs={12} className={classes.header}>
-              <Grid container xs={6} item >
+              <Grid container xs={4} item >
                 <Grid item xs={2}>
                   <img src={Logo} className={classes.logo}
                   ></img>
                 </Grid>
-                <Grid item className={classes.activeTabs}>
-                  {/* <ActiveTabs /> */}
-                </Grid>
+                {/* <Grid item className={classes.activeTabs}>
+                  <ActiveTabs />
+                </Grid> */}
               </Grid>
-              <Grid item className={classes.timeWrapper}>
+              <Grid item xs={8} className={classes.timeWrapper} >
                 <Time classes={classes.time} />
               </Grid>
             </Grid>
-            <Paper className={classes.paper}>
-              <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
-                <Grid item xs={6}>
+            <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
+              {/* <Paper className={classes.paper}> */}
+              {/* <Grid item xs={6}>
                   <PinnedSubheaderList />
-                </Grid>
-                <Grid item xs={6} justify="flex-start">
-                  <Grid container item justify="flex-end">
+                </Grid> */}
+              <Grid item xs={12} justify="flex-start">
+                <Grid container item justify="flex-end">
+                  <Grid item xs={2}>
                     <SearchByDatasetField />
+                  </Grid>
+                  <Grid item xs={2}>
                     <SearchByRunField />
-                    <Grid item className={classes.submitButtonWrapper}>
-                      <Button type="submit" className={classes.sumbitButton}>
-                        <Search />
-                        Search
+                  </Grid>
+                  <Grid item xs={2}>
+                    <SearchByPlotByName />
+                  </Grid>
+                  <Grid item className={classes.submitButtonWrapper}>
+                    <Button type="submit" className={classes.sumbitButton}>
+                      <Search />
+                      Search
                       </Button>
-                    </Grid>
                   </Grid>
                 </Grid>
-                <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
-                  {path}
-                </Grid>
               </Grid>
-            </Paper>
+              {/* <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
+                  {path}
+                </Grid> */}
+              {/* </Paper> */}
+            </Grid>
           </Grid>
         </form>
       )} />);

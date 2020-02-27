@@ -15,16 +15,14 @@ interface SearchByDatasetProps {
   classes: any
 }
 
-const SearchByDataset = ({classes}: SearchByDatasetProps) => {
+const SearchByDataset = ({ classes }: SearchByDatasetProps) => {
   return (
-    <Grid item xs={2} className={classes.searchFields}>
-      <Field
-        name="searchField"
-        placeholder="Search by Data set"
-        fullWidth
-        component={TextField}
-      />
-    </Grid>
+    <Field
+      name="searchField"
+      placeholder="Search by Data set"
+      fullWidth
+      component={TextField}
+    />
   )
 }
 

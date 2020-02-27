@@ -13,12 +13,15 @@ const styles = (theme: any) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  table:{
+    width: '100%'
   }
 })
 
 const NoRecords = ({ classes }: NotFoundInterface) => {
   return (
-    <Table>
+    <Table className={classes.table}>
       <TableHead />
       <TableBody>
         <TableRow>

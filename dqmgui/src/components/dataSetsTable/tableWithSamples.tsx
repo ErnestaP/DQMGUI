@@ -26,7 +26,7 @@ const styles = (theme: any) => ({
   samplesGroupsWrapper: {
   },
   paper: {
-    width: 'calc(100% - 16px)'
+    width: '100%'
   }
 })
 

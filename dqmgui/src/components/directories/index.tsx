@@ -77,7 +77,6 @@ class Directories extends React.Component<DirectoriesProps>{
     this.fetch_directories()
   }
 
-
   render() {
     const { classes, set_path_for_folders, set_subdirectory } = this.props
 
@@ -87,7 +86,7 @@ class Directories extends React.Component<DirectoriesProps>{
           <Grid item container className={classes.wrapper}>
             {
               this.state.directories.map((directory: string) =>
-                <Grid item xs={2} key={directory} className={classes.folder_wrapper}>
+                <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
                   <IconButton className={classes.button}
                     onClick={() => {
                       console.log(history)
