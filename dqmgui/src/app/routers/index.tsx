@@ -6,11 +6,13 @@ import {
   withRouter,
   Redirect
 } from "react-router-dom";
-import Home from '../../components/dataSetsTable'
+
+import Table from '../../components/dataSetsTable'
 import Directories from "../../components/directories";
 import { connect } from "react-redux";
 import { getPath } from "../../components/ducks/header/setPaths";
 import NotFound from "../../../src/components/directories/notFound";
+import Home from "../../../src/components/common/homePage";
 
 const AppRouter = (props) => {
   const { path } = props.match;
@@ -22,6 +24,12 @@ const AppRouter = (props) => {
         exact={true}
         path={path}
         component={Home}
+      />
+       <Route
+        key="table"
+        exact={true}
+        path='/samples'
+        component={Table}
       />
       <Route
         key="directories"

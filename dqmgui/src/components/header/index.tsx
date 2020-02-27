@@ -15,6 +15,7 @@ import SearchByPlotByName from './searchByPlotName'
 import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/header/serchFields';
 import ActiveTabs from './activeTabs';
 import { PinnedSubheaderList } from '../common/subHeadList';
+import { Route } from 'react-router-dom';
 
 const styles = (theme: any) => ({
   header: {
@@ -114,10 +115,13 @@ const Header = ({
 }: HeaderInterface) => {
 
   return (
+    <Route render={({ history }) => (
     <Form
       onSubmit={(formValues: any) => {
         setSearachFieldByDataset(pathOr('', ['searchField'], formValues))
         setSearachFieldByRun(pathOr('', ['searchFieldByRun'], formValues))
+        console.log('dd')
+        history.push('samples')
       }}
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}
@@ -155,9 +159,9 @@ const Header = ({
                     <SearchByPlotByName />
                   </Grid>
                   <Grid item className={classes.submitButtonWrapper}>
-                    <Button type="submit" className={classes.sumbitButton}>
-                      <Search />
-                      Search
+                      <Button type="submit" className={classes.sumbitButton}>
+                        <Search />
+                        Search
                       </Button>
                   </Grid>
                 </Grid>
@@ -169,7 +173,7 @@ const Header = ({
             </Grid>
           </Grid>
         </form>
-      )} />);
+      )} />)}></Route>)
 }
 
 export default compose<any, any, any>(

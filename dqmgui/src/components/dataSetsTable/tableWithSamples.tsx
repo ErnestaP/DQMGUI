@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Paper, withStyles } from '@material-ui/core'
 import { pathOr, isEmpty, path } from 'ramda'
+import { withSnackbar } from 'notistack';
 
 import { SearchResultTable as ContentTable } from './table'
 import { SampleDataInerface } from '../ducks/header/interfaces'
@@ -56,9 +57,13 @@ class Tables extends React.Component<TablesProps>{
           this.props.setLoader(false)
           const samples = pathOr([], ['data', 'samples'], response)
           this.setSemplesGroup(formatDataset(samples))
+          this.props.enqueueSnackbar('Successfully fetched the data.')
+
         },
         error => {
+          this.props.enqueueSnackbar('Failed fetching data.', { variant: 'error' })
           this.props.setLoader(false)
+          this.setSemplesGroup([])
           console.log(error)
         }
       );
@@ -68,11 +73,13 @@ class Tables extends React.Component<TablesProps>{
     const { classes } = this.props
     return (<React.Fragment>
       {
-        this.state.samplesGroup.map((samplesGroup: SampleDataInerface) => (
-          <Paper className={path(['paper'], classes)}>
-            <ContentTable samplesGroup={samplesGroup} />
-          </Paper>
-        ))
+        isEmpty(this.state.samplesGroup) ?
+          <NoRecords /> :
+          this.state.samplesGroup.map((samplesGroup: SampleDataInerface) => (
+            <Paper className={path(['paper'], classes)}>
+              <ContentTable samplesGroup={samplesGroup} />
+            </Paper>
+          ))
       }
     </React.Fragment>)
   }
@@ -84,5 +91,6 @@ export default compose(
     undefined,
     { setLoader }
   ),
-  withStyles(styles)
+  withStyles(styles),
+  withSnackbar,
 )(Tables)
