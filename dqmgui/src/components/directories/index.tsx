@@ -3,7 +3,7 @@ import { Grid, IconButton, Icon, withStyles, Typography, Paper } from '@material
 import FolderIcon from '@material-ui/icons/Folder';
 import { compose } from 'ramda';
 
-import { request } from './api'
+import { requestForDirectories } from './api'
 import { getRun, getDataset, set_path_for_folders, set_subdirectory, getPath, get_subdirectories } from '../ducks/header/setPaths'
 import { connect } from 'react-redux'
 import { setLoader } from '../ducks/loader/loaderActions'
@@ -46,7 +46,8 @@ const styles = (theme: any) => ({
 
 class Directories extends React.Component<DirectoriesProps>{
   state = ({
-    directories: []
+    directories: [],
+    images_names: [],
   })
 
   set_directories = (dirs: any) => {
@@ -55,22 +56,37 @@ class Directories extends React.Component<DirectoriesProps>{
     })
   }
 
+  set_images_name = (images: any) => {
+    this.setState({
+      images_names: images
+    })
+  }
+
   fetch_directories() {
     console.log(this.props.selected_directory)
     this.props.setLoader(true)
-    request(this.props.run, this.props.dataset, this.props.selected_directory)
+    requestForDirectories(this.props.run, this.props.dataset, this.props.selected_directory)
       .then(
         response => {
           this.props.setLoader(false)
           const directories = cleanDeep(pathOr([], ['data', 'contents'], response).map((dir_object: Object) =>
             pathOr('', ['subdir'], dir_object)))
+          const images_names = cleanDeep(pathOr([], ['data', 'contents'], response).map((images_object: Object) =>
+            pathOr('', ['obj'], images_object)))
+
           this.set_directories(directories)
+          this.set_images_name(images_names)
+
         },
         error => {
           this.props.setLoader(false)
           console.log(error)
         }
       );
+  }
+
+  fetchImages() {
+
   }
 
   componentDidMount() {
