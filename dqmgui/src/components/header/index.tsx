@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Grid, withStyles, Button, Paper } from '@material-ui/core'
 import Search from '@material-ui/icons/Search';
-import { compose } from 'ramda'
+import { compose, pathOr } from 'ramda'
 import { connect } from 'react-redux'
 import { Form } from 'react-final-form'
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { setMenuState, getMenuStatus, setMenuContent } from '../ducks/sideNav/setMenuStatus'
-import { getPath } from '../ducks/header/setPaths'
+import { path_for_header } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
-import { fetchSamples } from '../ducks/header/fetchSamples';
+import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/header/serchFields';
 import ActiveTabs from './activeTabs';
 import { PinnedSubheaderList } from '../common/subHeadList';
 
@@ -98,31 +98,24 @@ interface HeaderInterface {
   setMenuContent(type: string): void;
   menuState: boolean;
   workplace: string;
-  fetchSamples(formValues: any[]): string[];
+  setSearachFieldByRun(formValues: string): void;
+  setSearachFieldByDataset(formValues: string): void;
   path: string;
 }
 
 const Header = ({
   classes,
-  setMenuState,
-  menuState,
-  service,
-  setMenuContent,
-  workplace,
+  setSearachFieldByRun,
+  setSearachFieldByDataset,
   path,
-  fetchSamples
 }: HeaderInterface) => {
 
   return (
     <Form
       onSubmit={(formValues: any) => {
-        fetchSamples(formValues)
-        // localStorage.setItem("searchFields", JSON.stringify(formValues)) //leave or not saving to local s.????
+        setSearachFieldByDataset(pathOr('', ['searchField'], formValues))
+        setSearachFieldByRun(pathOr('', ['searchFieldByRun'], formValues))
       }}
-      // initialValues={{
-      //   searchField: path(['searchField'], JSON.parse(localStorage.getItem('searchFields') as string)),
-      //   searchFieldByRun: path(['searchFieldByRun'], JSON.parse(localStorage.getItem('searchFields') as string))
-      // }}
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
           <Grid item container className={classes.wrapper}>
@@ -171,21 +164,9 @@ export default compose<any, any, any>(
   connect(
     (state: any) => ({
       menuState: getMenuStatus(state),
-      path: getPath(state)
+      path: path_for_header(state)
     }),
-    ((dispatch: any, props: any) => ({
-      setMenuState(state: boolean) {
-        dispatch(setMenuState(state));
-      },
-      setMenuContent(type: string) {
-        dispatch(setMenuContent(type));
-        dispatch(setMenuState(!props.menuState));
-      },
-      fetchSamples(data: any) {
-        dispatch(fetchSamples(data))
-      }
-    })
-    )
+    { setSearachFieldByDataset, setSearachFieldByRun }
   ),
   withStyles(styles))
   (Header)

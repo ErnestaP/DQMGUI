@@ -1,50 +1,35 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { Paper, withStyles } from '@material-ui/core'
-import { pathOr, isEmpty, path } from 'ramda'
 
-import { SearchResultTable as ContentTable } from './table'
-import { getSamplesByDataset } from '../ducks/header/fetchSamples'
-import { SampleDataInerface } from '../ducks/header/interfaces'
-import NoRecords from '../../components/common/noRecords'
+import { getSearchFieldByRun, getSearchFieldByDataset } from '../ducks/header/serchFields'
+import { setLoader } from '../ducks/loader/loaderActions'
+import TableWithSamples from './tableWithSamples'
+import NoRecords from '../common/noRecords'
 
 interface TablesProps {
-  samplesGroups?: SampleDataInerface[];
-  classes?: {
-    samplesGroupsWrapper: string;
-    paper: string;
+  searchByDataset: string;
+  searchByRun: string;
+}
+
+const Tables = ({ searchByDataset, searchByRun }: TablesProps) => {
+  if (searchByDataset || searchByRun) {
+    return (<TableWithSamples
+      searchByDataset={searchByDataset}
+      searchByRun={searchByRun} />)
+  } else {
+    return (<NoRecords />)
   }
 }
 
-const styles = (theme: any) => ({
-  samplesGroupsWrapper: {
-  },
-  paper: {
-    width: 'calc(100% - 16px)'
-  }
-})
-
-const Tables = ({ classes, ...props }: TablesProps) => {
-  const samples = pathOr([], ['samplesGroups'], props)
-
-  return (<React.Fragment>
-    {isEmpty(samples) ? <NoRecords /> :
-      samples.map((samplesGroup: SampleDataInerface) => (
-        <Paper className={path(['paper'], classes)}>
-          <ContentTable samplesGroup={samplesGroup} />
-        </Paper>
-      ))
-    }
-  </React.Fragment>)
-}
 
 export default compose(
   connect(
     (state: any) => ({
-      samplesGroups: getSamplesByDataset(state),
+      searchByDataset: getSearchFieldByDataset(state),
+      searchByRun: getSearchFieldByRun(state),
     }),
-    undefined
+    { setLoader }
   ),
-  withStyles(styles)
+  // withStyles(styles)
 )(Tables)

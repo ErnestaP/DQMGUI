@@ -2,9 +2,11 @@ import * as React from 'react'
 import { withStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import qs from 'qs'
 
-import { setPath } from '../ducks/header/setPaths'
+import { setPath, setDataset, setRun } from '../ducks/header/setPaths'
 import { Route } from 'react-router-dom'
+import { make_a_path } from './utils'
 
 interface RenderRows {
   setPath(path: string): void,
@@ -12,7 +14,8 @@ interface RenderRows {
   classes: {
     runs: string
   },
-  dataSetName: string
+  dataSetName: string,
+  set_dataset_and_run(dataset: string, run: string): void,
 }
 
 const styles = () => ({
@@ -26,16 +29,15 @@ const styles = () => ({
   }
 })
 
-
-const make_a_path = (dataset: string, run: string) => [dataset, run].join('/')
-
-const RenderRuns = ({ setPath, runs, dataSetName, classes }: RenderRows) => {
+const RenderRuns = ({ setPath, runs, dataSetName, classes, setDataset, setRun }: RenderRows) => {
   return (
     <Route render={({ history }) => (
       Object.keys(runs).map(run =>
         <p
           onClick={(e) => {
             setPath(make_a_path(dataSetName, run))
+            setDataset(dataSetName)
+            setRun(run)
             history.replace(make_a_path(dataSetName, run))
             console.log(make_a_path(dataSetName, run))
           }}
@@ -53,7 +55,7 @@ const RenderRuns = ({ setPath, runs, dataSetName, classes }: RenderRows) => {
 export default compose(
   connect(
     undefined,
-    { setPath }
+    { setPath, setRun, setDataset }
   ),
   withStyles(styles)
 )(RenderRuns)
