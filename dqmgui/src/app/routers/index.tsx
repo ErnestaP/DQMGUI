@@ -12,7 +12,6 @@ import Directories from "../../components/directories";
 import { connect } from "react-redux";
 import { getPath } from "../../components/ducks/header/setPaths";
 import NotFound from "../../../src/components/directories/notFound";
-import Home from "../../../src/components/common/homePage";
 
 const AppRouter = (props) => {
   const { path } = props.match;
@@ -20,15 +19,9 @@ const AppRouter = (props) => {
   return (
     <Switch>
       <Route
-        key="home"
-        exact={true}
-        path={path}
-        component={Home}
-      />
-       <Route
         key="table"
         exact={true}
-        path='/samples'
+        path={path}
         component={Table}
       />
       <Route

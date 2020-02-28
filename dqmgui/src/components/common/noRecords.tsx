@@ -15,7 +15,7 @@ const styles = (theme: any) => ({
     alignItems: 'center',
   },
   table:{
-    width: '100%'
+    width: '100%',
   }
 })
 

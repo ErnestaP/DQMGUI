@@ -115,13 +115,10 @@ const Header = ({
 }: HeaderInterface) => {
 
   return (
-    <Route render={({ history }) => (
     <Form
       onSubmit={(formValues: any) => {
         setSearachFieldByDataset(pathOr('', ['searchField'], formValues))
         setSearachFieldByRun(pathOr('', ['searchFieldByRun'], formValues))
-        console.log('dd')
-        history.push('samples')
       }}
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}
@@ -159,9 +156,9 @@ const Header = ({
                     <SearchByPlotByName />
                   </Grid>
                   <Grid item className={classes.submitButtonWrapper}>
-                      <Button type="submit" className={classes.sumbitButton}>
-                        <Search />
-                        Search
+                    <Button type="submit" className={classes.sumbitButton}>
+                      <Search />
+                      Search
                       </Button>
                   </Grid>
                 </Grid>
@@ -173,7 +170,7 @@ const Header = ({
             </Grid>
           </Grid>
         </form>
-      )} />)}></Route>)
+      )} />)
 }
 
 export default compose<any, any, any>(
