@@ -94,7 +94,6 @@ class Tables extends React.Component<TablesProps>{
   }
 }
 
-
 export default compose(
   connect(
     (state: any) => ({

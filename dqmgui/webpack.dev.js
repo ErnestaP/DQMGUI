@@ -8,10 +8,14 @@ module.exports = merge(common, {
   devServer: {
     port: 8084,
     proxy: [
-    {
-      context: ['/archive', '/samples'],
-      target: 'http://localhost:8081/dqm/offline/data/json',
-    }
+      {
+        context: ['/archive', '/samples'],
+        target: 'http://localhost:8081/dqm/offline/data/json',
+      },
+      {
+        context: ['/plotfairy'],
+        target: 'http://localhost:8081/dqm/offline',
+      }
     ],
   }
 });
