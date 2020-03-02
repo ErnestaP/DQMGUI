@@ -39,7 +39,6 @@ const RenderRuns = ({ setPath, runs, dataSetName, classes, setDataset, setRun }:
             setDataset(dataSetName)
             setRun(run)
             history.replace(make_a_path(dataSetName, run))
-            console.log(make_a_path(dataSetName, run))
           }}
           className={classes.runs}
           key={run}>

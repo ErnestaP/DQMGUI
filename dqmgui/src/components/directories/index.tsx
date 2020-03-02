@@ -83,19 +83,20 @@ class Directories extends React.Component<DirectoriesProps>{
             pathOr('', ['obj'], images_object)))
           this.set_directories(directories)
           this.set_images_name(images_names_from_api)
+          if(!isEmpty(this.state.images_names)){
+            console.log('immagesss')
+            this.fetchImages()
+          }
         },
-        // error => {
-        //   this.props.setLoader(false)
-        //   console.log(error)
-        // }
+        error => {
+          this.props.setLoader(false)
+          console.log(error)
+        }
       );
-    console.log(this.state.images_names)
-    if (!isEmpty(this.state.images_names)) {
-      this.fetchImages()
-    }
   }
 
   fetchImages() {
+    console.log('fetchh')
     this.state.images_names.map(name =>
       request_for_images(this.props.run, this.props.dataset, this.props.selected_directory, name)
         .then((response) => {
@@ -116,6 +117,9 @@ class Directories extends React.Component<DirectoriesProps>{
     // if (!isEmpty(this.state.images_names)) {
     //   this.fetchImages()
     // }
+    // if (!isEmpty(this.state.images_names)) {
+    //   this.fetchImages()
+    // }
     return (
       <Route render={({ history }) => (
         <Paper className={classes.papper}>
@@ -129,8 +133,8 @@ class Directories extends React.Component<DirectoriesProps>{
                       set_subdirectory(directory)
                       history.push(`${directory}`)
                       this.fetch_directories()
-                    }
-                    }>
+                      console.log(this.state.images_names)
+                    }}>
                     <Icon color="primary">
                       <FolderIcon />
                     </Icon>

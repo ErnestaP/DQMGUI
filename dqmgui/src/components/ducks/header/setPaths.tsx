@@ -89,7 +89,6 @@ export const setPath = (data: any) => (dispatch, getState) => {
 
 export const set_path_for_folders = (data: any) => (dispatch, getState) => {
   const setted_path = getPath(getState())
-  console.log(setted_path, 'sksjdk', getState())
   const new_path = [setted_path, data].join('/')
   return ({
     type: SET_PATH,

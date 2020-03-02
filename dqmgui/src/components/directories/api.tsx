@@ -26,7 +26,7 @@ export const request_for_images = (searchFieldByRun: string,
   // return names_of_images.map((name_of_image: string) =>
    return axios({
       method: 'GET',
-      url: `/archive/${searchFieldByRun}${searchFieldByDataset}${joined_directories}/${name_of_image}?w=${image_width};h=${image_height}`,
+      url: `plotfairy/archive/${searchFieldByRun}/dataset${searchFieldByDataset}${joined_directories}/${name_of_image}?w=${image_width};h=${image_height}`,
       headers: []
     })
   // )

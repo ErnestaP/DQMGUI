@@ -11,7 +11,6 @@ import NoRecords from '../common/noRecords'
 import { request, formatDataset } from './utils/forFetchingSamples'
 import { getSearchFieldByRun, getSearchFieldByDataset } from '../ducks/header/serchFields'
 import { setLoader } from '../ducks/loader/loaderActions'
-import EventEmmiter from '../../common/events';
 
 interface TablesProps {
   samplesGroups?: SampleDataInerface[];
