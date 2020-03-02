@@ -4,6 +4,7 @@ import Search from '@material-ui/icons/Search';
 import { compose, pathOr } from 'ramda'
 import { connect } from 'react-redux'
 import { Form } from 'react-final-form'
+import { Route } from 'react-router-dom';
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
 import { getMenuStatus } from '../ducks/sideNav/setMenuStatus'
@@ -112,62 +113,67 @@ const Header = ({
 }: HeaderInterface) => {
 
   return (
-    <Form
-      onSubmit={(formValues: any) => {
-        setSearachFieldByDataset(pathOr('', ['searchField'], formValues))
-        setSearachFieldByRun(pathOr('', ['searchFieldByRun'], formValues))
-      }}
-      render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}
-          style={{ display: 'flex', justifyContent: 'flex-end' }}
-        >
-          <Grid item container className={classes.wrapper}>
-            <Grid item container xs={12} className={classes.header}>
-              <Grid container xs={4} item >
-                <Grid item xs={2}>
-                  <img src={Logo} className={classes.logo}
-                  ></img>
-                </Grid>
-                {/* <Grid item className={classes.activeTabs}>
+    <Route render={({ history }) => (
+      <Form
+        onSubmit={(formValues: any) => {
+          setSearachFieldByDataset(pathOr('', ['searchField'], formValues))
+          setSearachFieldByRun(pathOr('', ['searchFieldByRun'], formValues))
+          history.replace('/')
+        }}
+        render={({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}
+            style={{ display: 'flex', justifyContent: 'flex-end' }}
+          >
+            <Grid item container className={classes.wrapper}>
+              <Grid item container xs={12} className={classes.header}>
+                <Grid container xs={4} item >
+                  <Grid item xs={2}>
+                    <img src={Logo} className={classes.logo}
+                    ></img>
+                  </Grid>
+                  {/* <Grid item className={classes.activeTabs}>
                   <ActiveTabs />
                 </Grid> */}
-              </Grid>
-              <Grid item xs={8} className={classes.timeWrapper} >
-                <Time classes={classes.time} />
-              </Grid>
-            </Grid>
-            <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
-              {/* <Paper className={classes.paper}> */}
-              {/* <Grid item xs={6}>
-                  <PinnedSubheaderList />
-                </Grid> */}
-              <Grid item xs={12} justify="flex-start">
-                <Grid container item justify="flex-end">
-                  <Grid item xs={2}>
-                    <SearchByDatasetField />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <SearchByRunField />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <SearchByPlotByName />
-                  </Grid>
-                  <Grid item className={classes.submitButtonWrapper}>
-                    <Button type="submit" className={classes.sumbitButton}>
-                      <Search />
-                      Search
-                      </Button>
-                  </Grid>
+                </Grid>
+                <Grid item xs={8} className={classes.timeWrapper} >
+                  <Time classes={classes.time} />
                 </Grid>
               </Grid>
-              {/* <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
+              <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
+                {/* <Paper className={classes.paper}> */}
+                {/* <Grid item xs={6}>
+                  <PinnedSubheaderList />
+                </Grid> */}
+                <Grid item xs={12} justify="flex-start">
+                  <Grid container item justify="flex-end">
+                    <Grid item xs={2}>
+                      <SearchByDatasetField />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <SearchByRunField />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <SearchByPlotByName />
+                    </Grid>
+                    <Grid item className={classes.submitButtonWrapper}>
+                      <Button type="submit" className={classes.sumbitButton} id="search_button">
+                        <Search />
+                        Search
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {/* <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
                   {path}
                 </Grid> */}
-              {/* </Paper> */}
+                {/* </Paper> */}
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      )} />)
+          </form>
+        )} />)
+    }
+    />
+  )
 }
 
 export default compose<any, any, any>(

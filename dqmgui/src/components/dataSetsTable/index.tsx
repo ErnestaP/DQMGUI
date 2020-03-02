@@ -11,6 +11,7 @@ import NoRecords from '../common/noRecords'
 import { request, formatDataset } from './utils/forFetchingSamples'
 import { getSearchFieldByRun, getSearchFieldByDataset } from '../ducks/header/serchFields'
 import { setLoader } from '../ducks/loader/loaderActions'
+import EventEmmiter from '../../common/events';
 
 interface TablesProps {
   samplesGroups?: SampleDataInerface[];
@@ -32,15 +33,19 @@ const styles = (theme: any) => ({
 })
 
 class Tables extends React.Component<TablesProps>{
-  state = ({
+  state = {
     samplesGroup: [],
     fetching: false,
-  })
+  }
 
   setSemplesGroup = (samples: any) => {
     this.setState({
       samplesGroup: samples
     })
+  }
+
+  componentDidMount() {
+    document.getElementById("search_button").addEventListener("click", () => this.fetchData());
   }
 
   setFetching = (isFetching: boolean) => {
@@ -78,8 +83,7 @@ class Tables extends React.Component<TablesProps>{
   }
 
   render() {
-    const { classes} = this.props
-
+    const { classes } = this.props
     return (<React.Fragment>
       {
         isEmpty(this.state.samplesGroup) ?
