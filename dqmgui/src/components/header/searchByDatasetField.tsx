@@ -19,7 +19,7 @@ const SearchByDataset = ({ classes }: SearchByDatasetProps) => {
   return (
     <Field
       name="searchField"
-      placeholder="Search by Data set"
+      placeholder="Search by Dataset"
       fullWidth
       component={TextField}
     />

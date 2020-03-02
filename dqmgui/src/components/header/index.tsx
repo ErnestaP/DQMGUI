@@ -7,13 +7,12 @@ import { Form } from 'react-final-form'
 import { Route } from 'react-router-dom';
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
-import { getMenuStatus } from '../ducks/sideNav/setMenuStatus'
 import { path_for_header } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
 import SearchByPlotByName from './searchByPlotName'
-import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/header/serchFields';
+import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/submitForm';
 
 const styles = (theme: any) => ({
   header: {
@@ -98,7 +97,6 @@ interface HeaderInterface {
   classes: any;
   setMenuState(state: boolean): void;
   setMenuContent(type: string): void;
-  menuState: boolean;
   workplace: string;
   setSearachFieldByRun(formValues: string): void;
   setSearachFieldByDataset(formValues: string): void;
@@ -131,21 +129,14 @@ const Header = ({
                     <img src={Logo} className={classes.logo}
                     ></img>
                   </Grid>
-                  {/* <Grid item className={classes.activeTabs}>
-                  <ActiveTabs />
-                </Grid> */}
                 </Grid>
                 <Grid item xs={8} className={classes.timeWrapper} >
                   <Time classes={classes.time} />
                 </Grid>
               </Grid>
               <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
-                {/* <Paper className={classes.paper}> */}
-                {/* <Grid item xs={6}>
-                  <PinnedSubheaderList />
-                </Grid> */}
-                <Grid item xs={12} justify="flex-start">
-                  <Grid container item justify="flex-end">
+                {/* <Grid item xs={12}> */}
+                  <Grid container xs={8} item justify="flex-end">
                     <Grid item xs={2}>
                       <SearchByDatasetField />
                     </Grid>
@@ -155,18 +146,17 @@ const Header = ({
                     <Grid item xs={2}>
                       <SearchByPlotByName />
                     </Grid>
-                    <Grid item className={classes.submitButtonWrapper}>
+                    <Grid item xs={1} className={classes.submitButtonWrapper}>
                       <Button type="submit" className={classes.sumbitButton} id="search_button">
                         <Search />
                         Search
                       </Button>
                     </Grid>
-                  </Grid>
+                  {/* </Grid> */}
                 </Grid>
-                {/* <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
+                <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
                   {path}
-                </Grid> */}
-                {/* </Paper> */}
+                </Grid>
               </Grid>
             </Grid>
           </form>
@@ -179,7 +169,6 @@ const Header = ({
 export default compose<any, any, any>(
   connect(
     (state: any) => ({
-      menuState: getMenuStatus(state),
       path: path_for_header(state)
     }),
     { setSearachFieldByDataset, setSearachFieldByRun }

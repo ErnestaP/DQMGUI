@@ -18,14 +18,16 @@ interface RenderRows {
   set_dataset_and_run(dataset: string, run: string): void,
 }
 
-const styles = () => ({
+const styles = (theme) => ({
   runs: {
     color: 'white',
-    background: 'grey',
+    background: theme.palette.common.lightGrey,
     borderRadius: '15px',
     display: "flex",
     cursor: 'pointer',
     justifyContent: 'center',
+    // width: 'fit-content',
+    // padding: '8px'
   }
 })
 

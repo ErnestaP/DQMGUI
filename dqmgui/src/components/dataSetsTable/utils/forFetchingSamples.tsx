@@ -21,6 +21,6 @@ export const formatDataset = (sampleList: any[]) => {
 
 export const request = (searchFieldByDataset: string, searchFieldByRun: string) => axios({
   method: 'GET',
-  url: `/samples?match=${searchFieldByDataset}&run=${searchFieldByRun}`,
+  url: `/data/json/samples?match=${searchFieldByDataset}&run=${searchFieldByRun}`,
   headers: []
 });

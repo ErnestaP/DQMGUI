@@ -9,7 +9,7 @@ import ContentTable from './table'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import NoRecords from '../common/noRecords'
 import { request, formatDataset } from './utils/forFetchingSamples'
-import { getSearchFieldByRun, getSearchFieldByDataset } from '../ducks/header/serchFields'
+import { getSearchFieldByRun, getSearchFieldByDataset } from '../ducks/table/submitForm'
 import { setLoader } from '../ducks/loader/loaderActions'
 
 interface TablesProps {
@@ -44,21 +44,13 @@ class Tables extends React.Component<TablesProps>{
   }
 
   componentDidMount() {
-    document.getElementById("search_button").addEventListener("click", () => this.fetchData());
+    document.getElementById("search_button").addEventListener("click", (e) => this.fetchData(), true);
   }
 
   setFetching = (isFetching: boolean) => {
     this.setState({
       fetching: isFetching
     })
-  }
-
-  componentDidUpdate(prevProps: any, prevState: any) {
-    const searchByDataset = prevProps.datasetSearchField !== this.props.datasetSearchField
-    const searchByRun = prevProps.runSearchField !== this.props.runSearchField
-    if (searchByDataset || searchByRun) {
-      this.fetchData()
-    }
   }
 
   fetchData() {
