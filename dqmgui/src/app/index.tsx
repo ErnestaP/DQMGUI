@@ -7,6 +7,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import { SnackbarProvider } from 'notistack';
 
 import theme from './theme'
 import './styles.scss';
@@ -21,15 +22,22 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <Provider store={store}>
-        <Router>
-          <Route path="/">
-            <Switch>
-              <Route
-                component={() => <DQMGUI />}
-              />
-            </Switch>
-          </Route>
-        </Router>
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          <Router>
+            <Route path="/">
+              <Switch>
+                <Route
+                  component={() => <DQMGUI />}
+                />
+              </Switch>
+            </Route>
+          </Router>
+        </SnackbarProvider>
       </Provider>
     </MuiThemeProvider>
   )

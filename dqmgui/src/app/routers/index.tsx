@@ -6,7 +6,8 @@ import {
   withRouter,
   Redirect
 } from "react-router-dom";
-import Home from '../../components/dataSetsTable'
+
+import Table from '../../components/dataSetsTable'
 import Directories from "../../components/directories";
 import { connect } from "react-redux";
 import { getPath } from "../../components/ducks/header/setPaths";
@@ -14,14 +15,14 @@ import NotFound from "../../../src/components/directories/notFound";
 
 const AppRouter = (props) => {
   const { path } = props.match;
-  console.log(props.pathOfDirectories)
+
   return (
     <Switch>
       <Route
-        key="home"
+        key="table"
         exact={true}
         path={path}
-        component={Home}
+        component={Table}
       />
       <Route
         key="directories"

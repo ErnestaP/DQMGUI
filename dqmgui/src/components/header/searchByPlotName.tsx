@@ -11,19 +11,19 @@ const styles = (theme: any) => ({
   },
 })
 
-interface SearchByRunProps {
+interface SearchByPlotByNameProps {
   classes: any
 }
 
-const SearchByRun = ({ classes }: SearchByRunProps) => {
+const SearchByPlotByName = ({ classes }: SearchByPlotByNameProps) => {
   return (
     <Field
-      name="searchFieldByRun"
-      placeholder="Search by Run"
+      name="searchFieldByPlotName"
+      placeholder="Search by Plot name"
       fullWidth
       component={TextField}
     />
   )
 }
 
-export default withStyles(styles)(SearchByRun)
+export default withStyles(styles)(SearchByPlotByName)
