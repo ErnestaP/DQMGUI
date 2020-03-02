@@ -7,13 +7,13 @@ module.exports = merge(common, {
   devtool: 'inline-source-map',
   devServer: {
     port: 8084,
+    compress: true,
+    historyApiFallback: true,
+    overlay: true,
     proxy: [
       {
-        context: ['/archive', '/samples'],
-        target: 'http://localhost:8081/dqm/offline/data/json',
-      },
-      {
-        context: ['/plotfairy'],
+        context: ['/plotfairy', '/data'],
+        changeOrigin: true,
         target: 'http://localhost:8081/dqm/offline',
       }
     ],

@@ -1,6 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import lightBlue from '@material-ui/core/colors/lightBlue';
 import blueGrey from '@material-ui/core/colors/blueGrey';
+import grey from '@material-ui/core/colors/grey';
 
 declare module '@material-ui/core/styles/transitions' {
   interface Transitions {
@@ -56,6 +57,7 @@ const createTheme = () => {
         lightBlack: lightBlue[500],
         lightWhite: blueGrey[500],
         fullBlack: blueGrey[500],
+        lightGrey: grey[500],
         white: '#FFF',
       },
       background: {

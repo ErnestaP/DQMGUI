@@ -84,7 +84,6 @@ class Directories extends React.Component<DirectoriesProps>{
           this.set_directories(directories)
           this.set_images_name(images_names_from_api)
           if(!isEmpty(this.state.images_names)){
-            console.log('immagesss')
             this.fetchImages()
           }
         },
@@ -96,7 +95,6 @@ class Directories extends React.Component<DirectoriesProps>{
   }
 
   fetchImages() {
-    console.log('fetchh')
     this.state.images_names.map(name =>
       request_for_images(this.props.run, this.props.dataset, this.props.selected_directory, name)
         .then((response) => {

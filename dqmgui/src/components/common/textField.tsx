@@ -4,7 +4,7 @@ import { pathOr } from 'ramda';
 
 const TexField = ({ input, meta, onChange, ...props }: any) => {
   return (
-    <FormControl>
+    <FormControl >
       <Input
         fullWidth={true}
         {...input}
