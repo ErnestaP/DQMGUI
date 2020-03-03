@@ -132,6 +132,7 @@ const Header = ({
         }}
         render={({ handleSubmit }) => (
           <form onSubmit={handleSubmit}
+            id="searchForm"
             className={classes.form}
           >
             <Grid item container className={classes.wrapper}>

@@ -45,7 +45,7 @@ class Tables extends React.Component<TablesProps>{
   }
 
   componentDidMount() {
-    document.getElementById("search_button").addEventListener("click", (e) => this.fetchData(), true);
+    document.getElementById("searchForm").addEventListener("submit", (e) => this.fetchData(), true);
   }
 
   setFetching = (isFetching: boolean) => {
