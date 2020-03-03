@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { Paper, withStyles } from '@material-ui/core'
+import { Paper, withStyles, Grid } from '@material-ui/core'
 import { pathOr, isEmpty, path } from 'ramda'
 import { withSnackbar } from 'notistack';
 
@@ -76,7 +76,7 @@ class Tables extends React.Component<TablesProps>{
 
   render() {
     const { classes } = this.props
-    return (<React.Fragment>
+    return (<Grid container>
       {
         isEmpty(this.state.samplesGroup) ?
           <NoRecords /> :
@@ -86,7 +86,7 @@ class Tables extends React.Component<TablesProps>{
             </Paper>
           ))
       }
-    </React.Fragment>)
+    </Grid>)
   }
 }
 

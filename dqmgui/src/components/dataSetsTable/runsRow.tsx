@@ -1,20 +1,30 @@
 import * as React from 'react'
-import { Grid, TableRow, TableCell } from '@material-ui/core'
+import { Grid, TableRow, TableCell, withStyles } from '@material-ui/core'
 
 import RenderRuns from './renderedRuns'
 
 interface RunRowsProps {
-  samplesGroup: any
-  name: string
+  samplesGroup: any;
+  name: string;
+  classes: {
+    datasetRow: string;
+  }
 }
+
+const styles = (theme) => ({
+  datasetRow: {
+    width: '90%'
+  }
+})
 
 const runs_length = (runs: any[]) => Object.keys(runs).length
 
-const RunsRow = ({ samplesGroup, name }: RunRowsProps) => {
+const RunsRow = ({ samplesGroup, name, classes }: RunRowsProps) => {
   const [settedDataset, setDataset] = React.useState('')
+
   return (
     <TableRow >
-      <TableCell>
+      <TableCell className={classes.datasetRow}>
         {name}
         <Grid item id={name} className="grid-container">
           {settedDataset === name &&
@@ -40,4 +50,4 @@ const RunsRow = ({ samplesGroup, name }: RunRowsProps) => {
   )
 }
 
-export default RunsRow
+export default withStyles(styles)(RunsRow)

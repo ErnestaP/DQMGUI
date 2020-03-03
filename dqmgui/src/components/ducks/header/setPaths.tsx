@@ -101,9 +101,7 @@ export const getWorkplace = (state: any): string => pathOr('', ['ACTIVE_TABS', '
 export const getRun = (state: any): string => pathOr('', ['ACTIVE_TABS', 'run'], state);
 export const getDataset = (state: any): string => pathOr('', ['ACTIVE_TABS', 'dataset'], state);
 export const getPath = (state: any): string => pathOr('', ['ACTIVE_TABS', 'path'], state);
-export const get_subdirectories = (state: any): string[] => {
-  console.log(state)
-  return pathOr([], ['ACTIVE_TABS', 'subdirectories'], state)};
+export const get_subdirectories = (state: any): string[] => pathOr([], ['ACTIVE_TABS', 'subdirectories'], state);
 
 export const path_for_header = createSelector(
   getDataset,

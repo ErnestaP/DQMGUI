@@ -7,13 +7,16 @@ import { Form } from 'react-final-form'
 import { Route } from 'react-router-dom';
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
-import { path_for_header } from '../ducks/header/setPaths'
+import { get_subdirectories, getRun, getDataset } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
 import SearchByPlotByName from './searchByPlotName'
 import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/submitForm';
-import { format_search_field_string } from '../utils'
+import { format_search_field_string, format_header_path } from '../utils'
+import SizeChanger from '../directories/plots/sizeChanger';
+import { getSize } from '../ducks/header/sizeChanger';
+import { SizeProps } from 'src/app/interfaces';
 
 const styles = (theme: any) => ({
   header: {
@@ -95,7 +98,6 @@ const styles = (theme: any) => ({
 interface HeaderInterface {
   service: string;
   worskpace: any;
-  run: number;
   ls: number;
   event: string;
   date: Date;
@@ -105,14 +107,19 @@ interface HeaderInterface {
   workplace: string;
   setSearachFieldByRun(formValues: string): void;
   setSearachFieldByDataset(formValues: string): void;
-  path: string;
+  dataset: string;
+  run: string;
+  directories: string[];
+  settedSize: SizeProps;
 }
 
 const Header = ({
   classes,
   setSearachFieldByRun,
   setSearachFieldByDataset,
-  path,
+  dataset,
+  run,
+  directories,
 }: HeaderInterface) => {
 
   return (
@@ -140,7 +147,6 @@ const Header = ({
                 </Grid>
               </Grid>
               <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
-                {/* <Grid item xs={12}> */}
                 <Grid container xs={8} item justify="flex-end">
                   <Grid item xs={2}>
                     <SearchByDatasetField />
@@ -157,10 +163,12 @@ const Header = ({
                       Search
                       </Button>
                   </Grid>
-                  {/* </Grid> */}
                 </Grid>
-                <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
-                  {path}
+                <Grid item xs={12} className={classes.pathContainer}>
+                  {format_header_path(dataset, run, directories)}
+                </Grid>
+                <Grid item xs={12} className={classes.pathContainer}>
+                  <SizeChanger />
                 </Grid>
               </Grid>
             </Grid>
@@ -174,7 +182,9 @@ const Header = ({
 export default compose<any, any, any>(
   connect(
     (state: any) => ({
-      path: path_for_header(state)
+      run: getRun(state),
+      dataset: getDataset(state),
+      directories: get_subdirectories(state),
     }),
     { setSearachFieldByDataset, setSearachFieldByRun }
   ),

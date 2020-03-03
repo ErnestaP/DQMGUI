@@ -10,6 +10,8 @@ import { setLoader } from '../ducks/loader/loaderActions'
 import { pathOr } from 'ramda'
 import cleanDeep from 'clean-deep'
 import { Route } from 'react-router-dom';
+import { getSize } from '../ducks/header/sizeChanger';
+import Plots from './plots';
 
 interface DirectoriesProps {
   setLoader(value: boolean): void;
@@ -23,8 +25,8 @@ interface DirectoriesProps {
     papper: string,
   },
   selected_directory: string[],
-  set_path_for_folders(folders: string[]): void,
-  set_subdirectory(subdirectory: srting): void,
+  set_path_for_folders(folders: string): void,
+  set_subdirectory(subdirectory: string): void,
 }
 
 const styles = (theme: any) => ({
@@ -50,7 +52,6 @@ class Directories extends React.Component<DirectoriesProps>{
   state = ({
     directories: [],
     images_names: [],
-    image: null,
   })
 
   set_directories = (dirs: any) => {
@@ -65,27 +66,22 @@ class Directories extends React.Component<DirectoriesProps>{
     })
   }
 
-  set_image = (img: any) => {
-    this.setState({
-      image: img
-    })
-  }
-
   fetch_directories() {
     this.props.setLoader(true)
     requestForDirectories(this.props.run, this.props.dataset, this.props.selected_directory)
       .then(
         response => {
           this.props.setLoader(false)
+
           const directories = cleanDeep(pathOr([], ['data', 'contents'], response).map((dir_object: Object) =>
             pathOr('', ['subdir'], dir_object)))
+
           const images_names_from_api = cleanDeep(pathOr([], ['data', 'contents'], response).map((images_object: Object) =>
             pathOr('', ['obj'], images_object)))
+
           this.set_directories(directories)
+
           this.set_images_name(images_names_from_api)
-          // if (!isEmpty(this.state.images_names)) {
-          //   this.fetchImages()
-          // }
         },
         error => {
           this.props.setLoader(false)
@@ -94,30 +90,19 @@ class Directories extends React.Component<DirectoriesProps>{
       );
   }
 
-  fetchImages() {
-    this.state.images_names.map(name =>
-      request_for_images(this.props.run, this.props.dataset, this.props.selected_directory, name)
-        .then((response) => {
-          this.set_image(pathOr('', ['config', 'url'], response))
-          console.log(response)
-          // this.set_image(response.url)
-        })
-    )
-    // console.log(this.state.images_names)
-  }
-
   componentDidMount() {
     this.fetch_directories()
   }
 
   render() {
-    const { classes, set_path_for_folders, set_subdirectory } = this.props
-    // if (!isEmpty(this.state.images_names)) {
-    //   this.fetchImages()
-    // }
-    // if (!isEmpty(this.state.images_names)) {
-    //   this.fetchImages()
-    // }
+    const { classes,
+      set_path_for_folders,
+      set_subdirectory,
+      dataset,
+      run,
+      selected_directory,
+      size } = this.props
+ 
     return (
       <Route render={({ history }) => (
         <Paper className={classes.papper}>
@@ -131,7 +116,6 @@ class Directories extends React.Component<DirectoriesProps>{
                       set_subdirectory(directory)
                       history.push(`${directory}`)
                       this.fetch_directories()
-                      console.log(this.state.images_names)
                     }}>
                     <Icon color="primary">
                       <FolderIcon />
@@ -143,9 +127,18 @@ class Directories extends React.Component<DirectoriesProps>{
                 </Grid>
               )
             }
-            {this.state.images_names.map(name => 
-              <img src={request_for_images(this.props.run, this.props.dataset, this.props.selected_directory, name)} />
-            )}
+            <Grid container direction="row">
+              {!isEmpty(this.state.images_names) &&
+
+                <Plots
+                  names={this.state.images_names}
+                  dataset={dataset}
+                  run={run}
+                  selected_directory={selected_directory}
+                  size={size}
+                />
+              }
+            </Grid >
           </Grid >
         </Paper>
       )} />
@@ -153,12 +146,13 @@ class Directories extends React.Component<DirectoriesProps>{
   }
 }
 
-export default compose(
+export default compose<any, any, any>(
   connect(
     (state: any) => ({
       dataset: getDataset(state),
       run: getRun(state),
       path: getPath(state),
+      size: getSize(state),
       selected_directory: get_subdirectories(state)
     }),
     { setLoader, set_path_for_folders, set_subdirectory }

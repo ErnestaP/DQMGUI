@@ -1,5 +1,6 @@
 import * as React from 'React';
 import { InputLabel, FormControl, FormHelperText, Select } from '@material-ui/core';
+import { path } from 'ramda';
 
 interface SelectFieldProps {
   options: any[];
@@ -14,32 +15,32 @@ interface SelectFieldProps {
 }
 
 
-const SelectField = ({ label, input, meta, options, getOptionLabel, getOptionValue,dropdownStyle,  selectClass, formControlClass, inputFieldClass }: SelectFieldProps) => {
+const SelectField = ({ label, input, onChange, meta, options, getOptionLabel, getOptionValue, dropdownStyle, selectClass, formControlClass, inputFieldClass, ...props }: SelectFieldProps) => {
 
   return (
-    <FormControl variant="outlined" 
-    className={formControlClass}
+    <FormControl variant="outlined"
+      className={formControlClass}
     >
       <InputLabel className={inputFieldClass}>
         {label}
       </InputLabel>
       <Select
+        defaultValue={path(['default'], props)}
         native
         variant="outlined"
-        value={input.value}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => input.onChange(event.target.value)}
+        onChange={onChange ?
+          onChange
+          :
+          (event: React.ChangeEvent<HTMLInputElement>) => input.onChange(event.target.value)}
         inputProps={{
           name: 'selectField',
           id: 'select-field-for-active-tabs',
           className: inputFieldClass,
         }}
-        MenuProps={{ classes: { paper: dropdownStyle } }}
-        classes={{
-          // root: inputFieldClass,
-          // filled: inputFieldClass,
-          // icon: inputFieldClass,
-          // outlined: inputFieldClass,
-          // selectMenu: selectClass
+        MenuProps={{
+          classes: {
+            paper: dropdownStyle
+          }
         }}
       >
         {options.map((option: any) => (
