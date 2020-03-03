@@ -1,7 +1,9 @@
+import { SampleDataInerface } from "../ducks/header/interfaces"
 
-import axios from "axios";
-
-import { SampleDataInerface } from './interfaces';
+export const make_a_path = (dataset: string, run: string) => {
+  const dataset_without_slash = dataset.substring(1, dataset.length)
+  return `/data:/dataset${dataset_without_slash}&run=${run}`
+}
 
 export const formatDataset = (sampleList: any[]) => {
   const results: any = []
@@ -18,9 +20,3 @@ export const formatDataset = (sampleList: any[]) => {
 
   return (results)
 }
-
-export const request = (searchFieldByDataset: string, searchFieldByRun: string) => axios({
-  method: 'GET',
-  url: `/data/json/samples?match=${searchFieldByDataset}&run=${searchFieldByRun}`,
-  headers: []
-});

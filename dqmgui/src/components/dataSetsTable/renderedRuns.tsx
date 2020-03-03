@@ -2,7 +2,6 @@ import * as React from 'react'
 import { withStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import qs from 'qs'
 
 import { setPath, setDataset, setRun } from '../ducks/header/setPaths'
 import { Route } from 'react-router-dom'
@@ -16,9 +15,11 @@ interface RenderRows {
   },
   dataSetName: string,
   set_dataset_and_run(dataset: string, run: string): void,
+  setDataset(data_set: string): void,
+  setRun(run: string): void,
 }
 
-const styles = (theme) => ({
+const styles = (theme: any) => ({
   runs: {
     color: 'white',
     background: theme.palette.common.lightGrey,
@@ -26,8 +27,6 @@ const styles = (theme) => ({
     display: "flex",
     cursor: 'pointer',
     justifyContent: 'center',
-    // width: 'fit-content',
-    // padding: '8px'
   }
 })
 

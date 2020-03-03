@@ -83,9 +83,9 @@ class Directories extends React.Component<DirectoriesProps>{
             pathOr('', ['obj'], images_object)))
           this.set_directories(directories)
           this.set_images_name(images_names_from_api)
-          if(!isEmpty(this.state.images_names)){
-            this.fetchImages()
-          }
+          // if (!isEmpty(this.state.images_names)) {
+          //   this.fetchImages()
+          // }
         },
         error => {
           this.props.setLoader(false)
@@ -140,10 +140,12 @@ class Directories extends React.Component<DirectoriesProps>{
                       {directory}
                     </Typography>
                   </IconButton>
-                  <img src={this.state.image} />
                 </Grid>
               )
             }
+            {this.state.images_names.map(name => 
+              <img src={request_for_images(this.props.run, this.props.dataset, this.props.selected_directory, name)} />
+            )}
           </Grid >
         </Paper>
       )} />

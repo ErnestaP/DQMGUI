@@ -8,7 +8,8 @@ import { withSnackbar } from 'notistack';
 import ContentTable from './table'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import NoRecords from '../common/noRecords'
-import { request, formatDataset } from './utils/forFetchingSamples'
+import { request } from './api'
+import { formatDataset } from './utils'
 import { getSearchFieldByRun, getSearchFieldByDataset } from '../ducks/table/submitForm'
 import { setLoader } from '../ducks/loader/loaderActions'
 
