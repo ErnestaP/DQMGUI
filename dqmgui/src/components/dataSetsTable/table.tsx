@@ -15,20 +15,12 @@ export const SearchResultTable = ({ samplesGroup }: SearchResultTableProps) =>
   <Grid item>
     <Table>
       <TableHead>
-        <TableRow style={{background: 'lightgrey'}}>
-          <TableCell>
+        <TableRow style={{ background: 'lightgrey' }}>
+          <TableCell style={{ fontWeight: 'bold' }}>
             {typesTranlsation(pathOr('', ['type'], samplesGroup))}
           </TableCell>
           <TableCell />
         </TableRow>
-        {/* <TableRow hover={true}>
-          {datasetParts.map((part: string) =>
-            <TableCell
-              key={part}>
-              {part}
-            </TableCell>
-          )}
-        </TableRow> */}
       </TableHead>
       <SearchResultTableBody
         samplesGroup={pathOr([], ['items'], samplesGroup)}

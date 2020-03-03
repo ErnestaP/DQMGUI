@@ -27,7 +27,7 @@ const SelectField = ({ label, input, onChange, meta, options, getOptionLabel, ge
       <Select
         defaultValue={path(['default'], props)}
         native
-        variant="outlined"
+        variant="standard"
         onChange={onChange ?
           onChange
           :

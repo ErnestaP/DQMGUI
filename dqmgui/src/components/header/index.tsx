@@ -148,7 +148,10 @@ const Header = ({
                 </Grid>
               </Grid>
               <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
-                <Grid container xs={8} item justify="flex-end">
+                <Grid container xs={12} item justify="flex-end">
+                <Grid item xs={5} className={classes.pathContainer}>
+                    {format_header_path(dataset, run, directories)}
+                  </Grid>
                   <Grid item xs={2}>
                     <SearchByDatasetField />
                   </Grid>
@@ -165,12 +168,9 @@ const Header = ({
                       </Button>
                   </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.pathContainer}>
-                  {format_header_path(dataset, run, directories)}
-                </Grid>
-                <Grid item xs={12} className={classes.pathContainer}>
-                  <SizeChanger />
-                </Grid>
+              </Grid>
+              <Grid item xs={12} className={classes.pathContainer}>
+                <SizeChanger />
               </Grid>
             </Grid>
           </form>

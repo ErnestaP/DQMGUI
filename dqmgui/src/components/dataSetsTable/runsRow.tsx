@@ -14,6 +14,9 @@ interface RunRowsProps {
 const styles = (theme) => ({
   datasetRow: {
     width: '90%'
+  },
+  clicked: {
+    fontWeght: 'bold'
   }
 })
 
@@ -24,7 +27,7 @@ const RunsRow = ({ samplesGroup, name, classes }: RunRowsProps) => {
 
   return (
     <TableRow >
-      <TableCell className={classes.datasetRow}>
+      <TableCell className={`${classes.datasetRow}`}>
         {name}
         <Grid item id={name} className="grid-container">
           {settedDataset === name &&
