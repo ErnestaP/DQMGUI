@@ -1,6 +1,6 @@
 import * as React from 'React';
 import { InputLabel, FormControl, FormHelperText, Select } from '@material-ui/core';
-import { path } from 'ramda';
+import { path, pathOr } from 'ramda';
 
 interface SelectFieldProps {
   options: any[];
@@ -15,7 +15,7 @@ interface SelectFieldProps {
 }
 
 
-const SelectField = ({ label, input, onChange, meta, options, getOptionLabel, getOptionValue, dropdownStyle, selectClass, formControlClass, inputFieldClass, ...props }: SelectFieldProps) => {
+const SelectField = ({ label, input, onChange, options, getOptionLabel, getOptionValue, dropdownStyle, selectClass, formControlClass, inputFieldClass, ...props }: SelectFieldProps) => {
 
   return (
     <FormControl variant="outlined"
@@ -49,8 +49,8 @@ const SelectField = ({ label, input, onChange, meta, options, getOptionLabel, ge
           </option>
         ))}
       </Select>
-      {meta.error &&
-        <FormHelperText>{meta.error}</FormHelperText>
+      {pathOr('', ['meta', 'error'], props) &&
+        <FormHelperText>{props.meta.error}</FormHelperText>
       }
     </FormControl>
   )

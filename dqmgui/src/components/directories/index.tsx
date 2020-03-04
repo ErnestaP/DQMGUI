@@ -12,6 +12,7 @@ import cleanDeep from 'clean-deep'
 import { Route } from 'react-router-dom';
 import { getSize } from '../ducks/header/sizeChanger';
 import Plots from './plots';
+import SizeChanger from './plots/sizeChanger';
 
 interface DirectoriesProps {
   setLoader(value: boolean): void;
@@ -45,6 +46,10 @@ const styles = (theme: any) => ({
   },
   papper: {
     width: '100vw'
+  },
+  sizeChanger: {
+    paddingLeft: 16,
+    paddingBottom: 4
   }
 })
 
@@ -102,11 +107,14 @@ class Directories extends React.Component<DirectoriesProps>{
       run,
       selected_directory,
       size } = this.props
- 
+
     return (
       <Route render={({ history }) => (
         <Paper className={classes.papper}>
           <Grid item container className={classes.wrapper}>
+            <Grid item xs={12} className={classes.sizeChanger}>
+              <SizeChanger />
+            </Grid>
             {
               this.state.directories.map((directory: string) =>
                 <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
@@ -127,7 +135,7 @@ class Directories extends React.Component<DirectoriesProps>{
                 </Grid>
               )
             }
-            <Grid container direction="row">
+            <Grid container direction="row" spacing={0}>
               {!isEmpty(this.state.images_names) &&
                 <Plots
                   names={this.state.images_names}

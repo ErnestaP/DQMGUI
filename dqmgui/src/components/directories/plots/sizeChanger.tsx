@@ -13,9 +13,7 @@ interface SizeChangerProps {
 }
 
 const SizeChanger = ({ setSize, settedSize }: SizeChangerProps) =>
-  <Field
-    name="sizeChanger"
-    fullWidth
+  <SelectField
     default={JSON.stringify(settedSize)}
     component={SelectField}
     options={sizes}
@@ -23,6 +21,7 @@ const SizeChanger = ({ setSize, settedSize }: SizeChangerProps) =>
     getOptionValue={(option: any) => JSON.stringify(option.size)}
     onChange={(e: any) => setSize(JSON.parse(e.target.value))}
   />
+
 
 
 export default connect(

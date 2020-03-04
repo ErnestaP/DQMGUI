@@ -20,9 +20,6 @@ const styles = (theme) => ({
     height: '100vh',
     overflowY: 'scroll'
   },
-  wrapper: {
-    // height: '100vh'
-  },
   add: {
     display: 'flex',
     justifyContent: 'flex-end'
@@ -64,8 +61,8 @@ class Plots extends React.Component<PlotsProps> {
     const { dataset, run, selected_directory, names, size, classes } = this.props
     console.log()
     return (
-      <Grid item container direction="row" className={classes.wrapper}>
-        <Grid spacing={4} item container direction="row" className={`${!isEmpty(this.state.selectedImages) && classes.biggerPlot}`} >
+      <Grid item container direction="row">
+        <Grid item container direction="row" className={`${!isEmpty(this.state.selectedImages) && classes.biggerPlot}`} >
           {names.map((name) => {
             return <Grid container direction="column"
               item
@@ -83,14 +80,14 @@ class Plots extends React.Component<PlotsProps> {
                 <Grid item className={classes.add}>
                   <IconButton>
                     <AddCircleOutlineIcon onClick={() =>
-                      this.addImage(request_for_images(run, dataset, selected_directory, name, { w: 931, h: 800 }))
+                      this.addImage(request_for_images(run, dataset, selected_directory, name, { w: 931, h: 600 }))
                     } />
                   </IconButton>
                 </Grid>
               </Grid>
               <Grid item
                 onClick={(e) => {
-                  this.showOneImage(request_for_images(run, dataset, selected_directory, name, { w: 931, h: 800 }))
+                  this.showOneImage(request_for_images(run, dataset, selected_directory, name, { w: 931, h: 600 }))
                 }}
                 style={{
                   width: `${Object.values(size)[0] + 32}px`,
