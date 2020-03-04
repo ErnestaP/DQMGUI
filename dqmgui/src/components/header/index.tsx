@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Grid, withStyles, Button, Paper } from '@material-ui/core'
+import { Grid, withStyles, Button, IconButton, Icon } from '@material-ui/core'
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Search from '@material-ui/icons/Search';
 import { compose, pathOr } from 'ramda'
 import { connect } from 'react-redux'
@@ -7,13 +8,16 @@ import { Form } from 'react-final-form'
 import { Route } from 'react-router-dom';
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
-import { path_for_header } from '../ducks/header/setPaths'
+import { get_subdirectories, getRun, getDataset } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
 import SearchByPlotByName from './searchByPlotName'
-import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/submitForm';
-import { format_search_field_string } from '../utils'
+import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/form';
+import { format_search_field_string, format_header_path } from '../utils'
+import SizeChanger from '../directories/plots/sizeChanger';
+import { getSize } from '../ducks/header/sizeChanger';
+import { SizeProps } from 'src/app/interfaces';
 
 const styles = (theme: any) => ({
   header: {
@@ -64,6 +68,8 @@ const styles = (theme: any) => ({
   },
   pathContainer: {
     padding: 8,
+    display: 'flex',
+    justifyContent: 'flex-start'
   },
   submitButtonWrapper: {
     paddingRight: 32,
@@ -89,13 +95,22 @@ const styles = (theme: any) => ({
   form: {
     display: 'flex',
     justifyContent: 'flex-end'
+  },
+  expandMore: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  sizeChanger: {
+    paddingBottom: 24,
+  },
+  additionalMenu: {
+    background: '#eeeeee'
   }
 })
 
 interface HeaderInterface {
   service: string;
   worskpace: any;
-  run: number;
   ls: number;
   event: string;
   date: Date;
@@ -105,15 +120,21 @@ interface HeaderInterface {
   workplace: string;
   setSearachFieldByRun(formValues: string): void;
   setSearachFieldByDataset(formValues: string): void;
-  path: string;
+  dataset: string;
+  run: string;
+  directories: string[];
+  settedSize: SizeProps;
 }
 
 const Header = ({
   classes,
   setSearachFieldByRun,
   setSearachFieldByDataset,
-  path,
+  dataset,
+  run,
+  directories,
 }: HeaderInterface) => {
+  const [open, toggleMenu] = React.useState(false)
 
   return (
     <Route render={({ history }) => (
@@ -125,6 +146,7 @@ const Header = ({
         }}
         render={({ handleSubmit }) => (
           <form onSubmit={handleSubmit}
+            id="searchForm"
             className={classes.form}
           >
             <Grid item container className={classes.wrapper}>
@@ -140,29 +162,44 @@ const Header = ({
                 </Grid>
               </Grid>
               <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
-                {/* <Grid item xs={12}> */}
-                <Grid container xs={8} item justify="flex-end">
-                  <Grid item xs={2}>
-                    <SearchByDatasetField />
+                <Grid container xs={12} item justify="space-between">
+                  <Grid item>
+                    <IconButton onClick={() => toggleMenu(!open)}>
+                      <Icon>
+                        <MoreVertIcon />
+                      </Icon>
+                    </IconButton>
                   </Grid>
-                  <Grid item xs={2}>
-                    <SearchByRunField />
+                  <Grid item xs={7} className={classes.pathContainer}>
+                    {format_header_path(dataset, run, directories)}
                   </Grid>
-                  <Grid item xs={2}>
-                    <SearchByPlotByName />
-                  </Grid>
-                  <Grid item xs={1} className={classes.submitButtonWrapper}>
-                    <Button type="submit" className={classes.sumbitButton} id="search_button">
-                      <Search />
-                      Search
+                  <Grid container item xs={4} justify="space-around">
+                    <Grid item>
+                      <SearchByDatasetField />
+                    </Grid>
+                    <Grid item>
+                      <SearchByRunField />
+                    </Grid>
+                    <Grid item className={classes.submitButtonWrapper}>
+                      <Button type="submit" className={classes.sumbitButton} id="search_button">
+                        <Search />
+                        Search
                       </Button>
+                    </Grid>
                   </Grid>
-                  {/* </Grid> */}
-                </Grid>
-                <Grid item xs={12} justify="flex-start" className={classes.pathContainer}>
-                  {path}
                 </Grid>
               </Grid>
+              {
+                open &&
+                <Grid container item xs={12} className={classes.additionalMenu}>
+                  {/* <Grid item className={`${classes.pathContainer} ${classes.sizeChanger}`}>
+                    <SizeChanger />
+                  </Grid> */}
+                  <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                    <SearchByPlotByName />
+                  </Grid>
+                </Grid>
+              }
             </Grid>
           </form>
         )} />)
@@ -174,7 +211,9 @@ const Header = ({
 export default compose<any, any, any>(
   connect(
     (state: any) => ({
-      path: path_for_header(state)
+      run: getRun(state),
+      dataset: getDataset(state),
+      directories: get_subdirectories(state),
     }),
     { setSearachFieldByDataset, setSearachFieldByRun }
   ),

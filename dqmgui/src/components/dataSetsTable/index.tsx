@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { Paper, withStyles } from '@material-ui/core'
+import { Paper, withStyles, Grid } from '@material-ui/core'
 import { pathOr, isEmpty, path } from 'ramda'
 import { withSnackbar } from 'notistack';
 
@@ -10,8 +10,9 @@ import { SampleDataInerface } from '../ducks/header/interfaces'
 import NoRecords from '../common/noRecords'
 import { request } from './api'
 import { formatDataset } from './utils'
-import { getSearchFieldByRun, getSearchFieldByDataset } from '../ducks/table/submitForm'
+import { getSearchFieldByRun, getSearchFieldByDataset } from '../ducks/table/form'
 import { setLoader } from '../ducks/loader/loaderActions'
+import { setRun, setDataset, cleanSubdirectories } from '../ducks/header/setPaths'
 
 interface TablesProps {
   samplesGroups?: SampleDataInerface[];
@@ -45,49 +46,55 @@ class Tables extends React.Component<TablesProps>{
   }
 
   componentDidMount() {
-    document.getElementById("search_button").addEventListener("click", (e) => this.fetchData(), true);
-  }
+    document.getElementById("searchForm").addEventListener("submit", (e) => {
+      this.props.setRun(''),
+      this.props.setDataset(''),
+      this.props.cleanSubdirectories(),
+      this.fetchData()
+  }, true)
 
-  setFetching = (isFetching: boolean) => {
-    this.setState({
-      fetching: isFetching
-    })
-  }
+}
 
-  fetchData() {
-    this.props.setLoader(true)
-    request(this.props.datasetSearchField, this.props.runSearchField)
-      .then(
-        response => {
-          this.props.setLoader(false)
-          const samples = pathOr([], ['data', 'samples'], response)
-          this.setSemplesGroup(formatDataset(samples))
-          this.props.enqueueSnackbar('Successfully fetched the data.', { variant: 'success' })
+setFetching = (isFetching: boolean) => {
+  this.setState({
+    fetching: isFetching
+  })
+}
 
-        },
-        error => {
-          this.props.enqueueSnackbar('Failed fetching data.', { variant: 'error' })
-          this.props.setLoader(false)
-          this.setSemplesGroup([])
-          console.log(error)
-        }
-      );
-  }
+fetchData() {
+  this.props.setLoader(true)
+  request(this.props.datasetSearchField, this.props.runSearchField)
+    .then(
+      response => {
+        this.props.setLoader(false)
+        const samples = pathOr([], ['data', 'samples'], response)
+        this.setSemplesGroup(formatDataset(samples))
+        this.props.enqueueSnackbar('Successfully fetched the data.', { variant: 'success' })
 
-  render() {
-    const { classes } = this.props
-    return (<React.Fragment>
-      {
-        isEmpty(this.state.samplesGroup) ?
-          <NoRecords /> :
-          this.state.samplesGroup.map((samplesGroup: SampleDataInerface) => (
-            <Paper className={path(['paper'], classes)}>
-              <ContentTable samplesGroup={samplesGroup} />
-            </Paper>
-          ))
+      },
+      error => {
+        this.props.enqueueSnackbar('Failed fetching data.', { variant: 'error' })
+        this.props.setLoader(false)
+        this.setSemplesGroup([])
+        console.log(error)
       }
-    </React.Fragment>)
-  }
+    );
+}
+
+render() {
+  const { classes } = this.props
+  return (<Grid container>
+    {
+      isEmpty(this.state.samplesGroup) ?
+        <NoRecords /> :
+        this.state.samplesGroup.map((samplesGroup: SampleDataInerface) => (
+          <Paper className={path(['paper'], classes)}>
+            <ContentTable samplesGroup={samplesGroup} />
+          </Paper>
+        ))
+    }
+  </Grid>)
+}
 }
 
 export default compose(
@@ -96,7 +103,7 @@ export default compose(
       datasetSearchField: getSearchFieldByDataset(state),
       runSearchField: getSearchFieldByRun(state),
     }),
-    { setLoader }
+    { setLoader, setRun, setDataset, cleanSubdirectories }
   ),
   withStyles(styles),
   withSnackbar,

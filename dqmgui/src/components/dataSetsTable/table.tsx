@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Table, TableHead, TableCell, TableRow } from '@material-ui/core'
+import { Table, TableHead, TableCell, TableRow, Grid } from '@material-ui/core'
 import { pathOr } from 'ramda'
 
 import SearchResultTableBody from './body'
@@ -12,27 +12,21 @@ interface SearchResultTableProps {
 }
 
 export const SearchResultTable = ({ samplesGroup }: SearchResultTableProps) =>
-  <Table>
-    <TableHead>
-      <TableRow >
-        <TableCell>
-          {typesTranlsation(pathOr('', ['type'], samplesGroup))}
-        </TableCell>
-        <TableCell />
-      </TableRow>
-      <TableRow hover={true}>
-        {datasetParts.map((part: string) =>
-          <TableCell
-            key={part}>
-            {part}
+  <Grid item>
+    <Table>
+      <TableHead>
+        <TableRow style={{ background: 'lightgrey' }}>
+          <TableCell style={{ fontWeight: 'bold' }}>
+            {typesTranlsation(pathOr('', ['type'], samplesGroup))}
           </TableCell>
-        )}
-      </TableRow>
-    </TableHead>
-    <SearchResultTableBody
-      samplesGroup={pathOr([], ['items'], samplesGroup)}
-    />
-  </Table>
+          <TableCell />
+        </TableRow>
+      </TableHead>
+      <SearchResultTableBody
+        samplesGroup={pathOr([], ['items'], samplesGroup)}
+      />
+    </Table>
+  </Grid>
 
 
 export default SearchResultTable

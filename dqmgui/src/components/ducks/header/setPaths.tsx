@@ -26,6 +26,7 @@ const SET_RUN = "SET_RUN"
 const SET_DATA_SET = "SET_DATA_SET"
 const SET_PATH = "SET_PATH"
 const SET_SUBDIRECTORY = "SET_SUBDIRECTORY"
+const CLEAN_SUBDIRECTORIES = "CLEAN_SUBDIRECTORIES"
 
 export default function serviceSetReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
@@ -40,6 +41,8 @@ export default function serviceSetReducer(state = defaultState, { type, payload 
     case SET_PATH:
       return { ...state, path: payload };
     case SET_SUBDIRECTORY:
+      return { ...state, subdirectories: payload };
+    case CLEAN_SUBDIRECTORIES:
       return { ...state, subdirectories: payload }
     default:
       return state;
@@ -80,6 +83,11 @@ export const set_subdirectory = (data: any) => (dispatch, getState) => {
   })
 }
 
+export const cleanSubdirectories = () => ({
+  type: CLEAN_SUBDIRECTORIES,
+  payload: [],
+})
+
 export const setPath = (data: any) => (dispatch, getState) => {
   return ({
     type: SET_PATH,
@@ -101,9 +109,7 @@ export const getWorkplace = (state: any): string => pathOr('', ['ACTIVE_TABS', '
 export const getRun = (state: any): string => pathOr('', ['ACTIVE_TABS', 'run'], state);
 export const getDataset = (state: any): string => pathOr('', ['ACTIVE_TABS', 'dataset'], state);
 export const getPath = (state: any): string => pathOr('', ['ACTIVE_TABS', 'path'], state);
-export const get_subdirectories = (state: any): string[] => {
-  console.log(state)
-  return pathOr([], ['ACTIVE_TABS', 'subdirectories'], state)};
+export const get_subdirectories = (state: any): string[] => pathOr([], ['ACTIVE_TABS', 'subdirectories'], state);
 
 export const path_for_header = createSelector(
   getDataset,
