@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, CircularProgress } from '@material-ui/core'
 
 import { SizeProps } from 'src/app/interfaces'
 import { request_for_images } from '../api'
@@ -14,10 +14,11 @@ interface PlotsProps {
 
 const Plots = ({ dataset, run, selected_directory, names, size }: PlotsProps) =>
   <Grid container>
-    {names.map(name =>
-      <Grid item key={name} id={name}>
+    {names.map((name) => {
+      return <Grid item key={name} id={name} style={{ width: `${Object.values(size)[0]}px`, height: `${Object.values(size)[1]}px` }}>
         <img src={request_for_images(run, dataset, selected_directory, name, size)} />
       </Grid>
+    }
     )}
   </Grid>
 

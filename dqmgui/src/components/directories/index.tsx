@@ -129,7 +129,6 @@ class Directories extends React.Component<DirectoriesProps>{
             }
             <Grid container direction="row">
               {!isEmpty(this.state.images_names) &&
-
                 <Plots
                   names={this.state.images_names}
                   dataset={dataset}

@@ -26,6 +26,7 @@ const SET_RUN = "SET_RUN"
 const SET_DATA_SET = "SET_DATA_SET"
 const SET_PATH = "SET_PATH"
 const SET_SUBDIRECTORY = "SET_SUBDIRECTORY"
+const CLEAN_SUBDIRECTORIES = "CLEAN_SUBDIRECTORIES"
 
 export default function serviceSetReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
@@ -40,6 +41,8 @@ export default function serviceSetReducer(state = defaultState, { type, payload 
     case SET_PATH:
       return { ...state, path: payload };
     case SET_SUBDIRECTORY:
+      return { ...state, subdirectories: payload };
+    case CLEAN_SUBDIRECTORIES:
       return { ...state, subdirectories: payload }
     default:
       return state;
@@ -79,6 +82,11 @@ export const set_subdirectory = (data: any) => (dispatch, getState) => {
     payload: setted_subdirectories,
   })
 }
+
+export const cleanSubdirectories = () => ({
+  type: CLEAN_SUBDIRECTORIES,
+  payload: [],
+})
 
 export const setPath = (data: any) => (dispatch, getState) => {
   return ({

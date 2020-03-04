@@ -12,7 +12,7 @@ import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
 import SearchByPlotByName from './searchByPlotName'
-import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/submitForm';
+import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/form';
 import { format_search_field_string, format_header_path } from '../utils'
 import SizeChanger from '../directories/plots/sizeChanger';
 import { getSize } from '../ducks/header/sizeChanger';
