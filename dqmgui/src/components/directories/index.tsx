@@ -3,7 +3,7 @@ import { Grid, IconButton, Icon, withStyles, Typography, Paper, Divider } from '
 import FolderIcon from '@material-ui/icons/Folder';
 import { compose, isEmpty } from 'ramda';
 
-import { requestForDirectories, request_for_images } from './api'
+import { requestForDirectories } from './api'
 import { getRun, getDataset, set_path_for_folders, set_subdirectory, getPath, get_subdirectories } from '../ducks/header/setPaths'
 import { connect } from 'react-redux'
 import { setLoader } from '../ducks/loader/loaderActions'
@@ -12,7 +12,6 @@ import cleanDeep from 'clean-deep'
 import { Route } from 'react-router-dom';
 import { getSize } from '../ducks/plots/sizeChanger';
 import Plots from './plots';
-import SizeChanger from './plots/sizeChanger';
 
 interface DirectoriesProps {
   setLoader(value: boolean): void;

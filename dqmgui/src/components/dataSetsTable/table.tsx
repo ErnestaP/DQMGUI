@@ -3,7 +3,6 @@ import { Table, TableHead, TableCell, TableRow, Grid } from '@material-ui/core'
 import { pathOr } from 'ramda'
 
 import SearchResultTableBody from './body'
-import { datasetParts } from '../constants'
 import { SampleDataInerface } from '../ducks/header/interfaces'
 import { typesTranlsation } from '../../translation/typesTranslation'
 

@@ -8,7 +8,7 @@ import { Form } from 'react-final-form'
 import { Route } from 'react-router-dom';
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
-import { get_subdirectories, getRun, getDataset } from '../ducks/header/setPaths'
+import { get_subdirectories, getRun, getDataset, back_subdirectory } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
@@ -16,6 +16,7 @@ import SearchByPlotByName from './searchByPlotName'
 import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/form';
 import { format_search_field_string, format_header_path } from '../utils'
 import { SizeProps } from 'src/app/interfaces';
+import DirectoriesPath from '../directories/directoriesPath';
 
 const styles = (theme: any) => ({
   header: {
@@ -122,6 +123,7 @@ interface HeaderInterface {
   run: string;
   directories: string[];
   settedSize: SizeProps;
+  back_subdirectory(directory: string): void;
 }
 
 const Header = ({
@@ -131,6 +133,7 @@ const Header = ({
   dataset,
   run,
   directories,
+  back_subdirectory,
 }: HeaderInterface) => {
   const [open, toggleMenu] = React.useState(false)
 
@@ -168,10 +171,14 @@ const Header = ({
                       </Icon>
                     </IconButton>
                   </Grid>
-                  <Grid item xs={7} className={classes.pathContainer}>
-                    {format_header_path(dataset, run, directories)}
+                  <Grid item xs={6} sm={6} md={6} lg={6} xl={7} className={classes.pathContainer}>
+                    <DirectoriesPath
+                      directories={directories}
+                      dataset={dataset}
+                      run={run}
+                      back_subdirectory={back_subdirectory} />
                   </Grid>
-                  <Grid container item xs={4} justify="space-around">
+                  <Grid container item xs={5} sm={5} md={5} lg={5} xl={4} justify="space-around">
                     <Grid item>
                       <SearchByDatasetField />
                     </Grid>
@@ -210,7 +217,7 @@ export default compose<any, any, any>(
       dataset: getDataset(state),
       directories: get_subdirectories(state),
     }),
-    { setSearachFieldByDataset, setSearachFieldByRun }
+    { setSearachFieldByDataset, setSearachFieldByRun, back_subdirectory }
   ),
   withStyles(styles))
   (Header)
