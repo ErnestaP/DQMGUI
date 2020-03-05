@@ -14,7 +14,8 @@ module.exports = merge(common, {
       {
         context: ['/plotfairy', '/data'],
         changeOrigin: true,
-        target: 'http://localhost:8081/dqm/online-test',
+        target: 'http://localhost:8081/dqm/offline',
+        // target: 'http://localhost:8081/dqm/online-test',
       }
     ],
   }

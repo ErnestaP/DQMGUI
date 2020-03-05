@@ -5,7 +5,7 @@ import ServicesReducer from '../components/ducks/header/setPaths'
 import FormReducer from '../components/ducks/table/form'
 import LoaderReducer from '../components/ducks/loader/loaderActions';
 import SelectedDataReducer from '../components/ducks/table/selectedData';
-import DisplayReducer from '../components/ducks/header/sizeChanger';
+import DisplayReducer from '../components/ducks/plots/sizeChanger';
 
 const appReducer = combineReducers({
     'MENU': SideMenuReducer,

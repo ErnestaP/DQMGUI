@@ -5,6 +5,8 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { SizeProps } from 'src/app/interfaces'
 import { request_for_images } from '../api'
 import { isEmpty } from 'ramda'
+import AdditionalPlots from './additionalPlots';
+import SizeChanger from './sizeChanger';
 
 interface PlotsProps {
   dataset: string;
@@ -18,7 +20,11 @@ const styles = (theme) => ({
   biggerPlot: {
     width: '50%',
     height: '100vh',
-    overflowY: 'scroll'
+    overflowY: 'scroll',
+    dipslay: 'flex',
+    justifyContent: 'center',
+    display: 'block'
+
   },
   add: {
     display: 'flex',
@@ -28,30 +34,55 @@ const styles = (theme) => ({
     display: 'flex',
     justifyContent: 'space-between'
   },
+  sizeChanger: {
+    paddingLeft: 16,
+    paddingBottom: 4
+  },
+  plotWrapper: {
+    width: 'fit-content',
+    padding: '2px',
+  },
+  selectedPlot: {
+    border: `2px solid ${theme.palette.primary.light}`
+  },
+  image: {
+    '&:hover': {
+      border: `2px solid ${theme.palette.grey[300]}`
+    },
+  }
 })
+
+const isSelectedPlot = (plotsList, plotName) => {
+  const names = plotsList.map(plot => plot.name)
+  if (names.indexOf(plotName) > -1) {
+    return true
+  }
+  return false
+}
 
 class Plots extends React.Component<PlotsProps> {
   state = ({
     selectedImages: []
   })
 
-  addImage = (imageUrl: string) => {
-    const copy: string[] = [...this.state.selectedImages]
-    copy.push(imageUrl)
+  addImage = (imageProps: any) => {
+    const copy: any[] = [...this.state.selectedImages]
+    copy.push(imageProps)
     this.setState({
       selectedImages: copy
     })
   }
 
-  showOneImage = (imageUrl: string) => {
+  showOneImage = (imageProps: any) => {
     this.setState({
-      selectedImages: [imageUrl]
+      selectedImages: [imageProps]
     })
   }
 
   removeImage = (imageUrl: string) => {
     let copy: string[] = [...this.state.selectedImages]
-    copy = copy.filter(item => item !== imageUrl)
+    console.log(copy, imageUrl)
+    copy = copy.filter(item => item.name !== imageUrl)
     this.setState({
       selectedImages: copy
     })
@@ -59,56 +90,68 @@ class Plots extends React.Component<PlotsProps> {
 
   render() {
     const { dataset, run, selected_directory, names, size, classes } = this.props
-    console.log()
+
     return (
       <Grid item container direction="row">
         <Grid item container direction="row" className={`${!isEmpty(this.state.selectedImages) && classes.biggerPlot}`} >
-          {names.map((name) => {
-            return <Grid container direction="column"
-              item
-              key={name}
-              id={name}
-              style={{ width: 'fit-content' }}
-            >
-              <Grid item container className={classes.name}>
+          <Grid item xs={12} className={classes.sizeChanger}>
+            <SizeChanger />
+          </Grid>
+          <Grid item container justify="space-evenly">
+            {names.map((name) => {
+              return <Grid container direction="column"
+                item
+                key={name}
+                id={name}
+                className={`${classes.plotWrapper} `}
+              >
+                <Grid item container className={classes.name}>
+                  <Grid item
+                    style={{
+                      width: `${Object.values(size)[0]}px`, textDecoration: 'underline',
+                      wordBreak: 'break-word'
+                    }}
+                  >{name}</Grid>
+                  <Grid item className={classes.add}>
+                    <IconButton>
+                      <AddCircleOutlineIcon onClick={() =>
+                        this.addImage({
+                          run: run,
+                          dataset: dataset,
+                          selected_directory: selected_directory,
+                          name: name
+                        })
+                      } />
+                    </IconButton>
+                  </Grid>
+                </Grid>
                 <Grid item
-                  style={{
-                    width: `${Object.values(size)[0]}px`, textDecoration: 'underline',
-                    wordBreak: 'break-word'
+                  onClick={(e) => {
+                    this.showOneImage({
+                      run: run,
+                      dataset: dataset,
+                      selected_directory: selected_directory,
+                      name: name
+                    })
                   }}
-                >{name}</Grid>
-                <Grid item className={classes.add}>
-                  <IconButton>
-                    <AddCircleOutlineIcon onClick={() =>
-                      this.addImage(request_for_images(run, dataset, selected_directory, name, { w: 931, h: 600 }))
-                    } />
-                  </IconButton>
+                  style={{
+                    width: `${Object.values(size)[0] + 32}px`,
+                    height: `${Object.values(size)[1] + 32}px`,
+                  }}
+                >
+                  <img className={`${classes.image} ${isSelectedPlot(this.state.selectedImages, name) && classes.selectedPlot}`} src={request_for_images(run, dataset, selected_directory, name, size)} />
                 </Grid>
               </Grid>
-              <Grid item
-                onClick={(e) => {
-                  this.showOneImage(request_for_images(run, dataset, selected_directory, name, { w: 931, h: 600 }))
-                }}
-                style={{
-                  width: `${Object.values(size)[0] + 32}px`,
-                  height: `${Object.values(size)[1] + 32}px`,
-                }}>
-                <img src={request_for_images(run, dataset, selected_directory, name, size)} />
-              </Grid>
-            </Grid>
-          }
-          )}
+            }
+            )}
+          </Grid>
         </Grid>
         {
           !isEmpty(this.state.selectedImages) &&
-          <Grid item className={classes.biggerPlot}
-          >
-            {this.state.selectedImages.map(image =>
-              <Grid item onClick={() => this.removeImage(image)}>
-                <img src={image} />
-              </Grid>
-            )}
-          </Grid>
+          <AdditionalPlots
+            selectedImages={this.state.selectedImages}
+            removeImage={this.removeImage}
+          />
         }
       </Grid >
     )

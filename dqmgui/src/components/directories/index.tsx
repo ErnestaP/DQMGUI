@@ -10,7 +10,7 @@ import { setLoader } from '../ducks/loader/loaderActions'
 import { pathOr } from 'ramda'
 import cleanDeep from 'clean-deep'
 import { Route } from 'react-router-dom';
-import { getSize } from '../ducks/header/sizeChanger';
+import { getSize } from '../ducks/plots/sizeChanger';
 import Plots from './plots';
 import SizeChanger from './plots/sizeChanger';
 
@@ -50,7 +50,7 @@ const styles = (theme: any) => ({
   sizeChanger: {
     paddingLeft: 16,
     paddingBottom: 4
-  }
+  },
 })
 
 class Directories extends React.Component<DirectoriesProps>{
@@ -112,9 +112,9 @@ class Directories extends React.Component<DirectoriesProps>{
       <Route render={({ history }) => (
         <Paper className={classes.papper}>
           <Grid item container className={classes.wrapper}>
-            <Grid item xs={12} className={classes.sizeChanger}>
+            {/* <Grid item xs={12} className={classes.sizeChanger}>
               <SizeChanger />
-            </Grid>
+            </Grid> */}
             {
               this.state.directories.map((directory: string) =>
                 <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
@@ -135,7 +135,7 @@ class Directories extends React.Component<DirectoriesProps>{
                 </Grid>
               )
             }
-            <Grid container direction="row" spacing={0}>
+            <Grid container direction="row" spacing={0} className={classes.plots}>
               {!isEmpty(this.state.images_names) &&
                 <Plots
                   names={this.state.images_names}

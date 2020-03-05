@@ -15,8 +15,6 @@ import SearchByRunField from './searchBuRunField'
 import SearchByPlotByName from './searchByPlotName'
 import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/form';
 import { format_search_field_string, format_header_path } from '../utils'
-import SizeChanger from '../directories/plots/sizeChanger';
-import { getSize } from '../ducks/header/sizeChanger';
 import { SizeProps } from 'src/app/interfaces';
 
 const styles = (theme: any) => ({
@@ -192,9 +190,6 @@ const Header = ({
               {
                 open &&
                 <Grid container item xs={12} className={classes.additionalMenu}>
-                  {/* <Grid item className={`${classes.pathContainer} ${classes.sizeChanger}`}>
-                    <SizeChanger />
-                  </Grid> */}
                   <Grid item style={{ display: 'flex', alignItems: 'center' }}>
                     <SearchByPlotByName />
                   </Grid>
