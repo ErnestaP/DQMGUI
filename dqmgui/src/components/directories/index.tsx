@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Grid, IconButton, Icon, withStyles, Typography, Paper } from '@material-ui/core'
+import { Grid, IconButton, Icon, withStyles, Typography, Paper, Divider } from '@material-ui/core'
 import FolderIcon from '@material-ui/icons/Folder';
 import { compose, isEmpty } from 'ramda';
 
@@ -45,7 +45,7 @@ const styles = (theme: any) => ({
     borderRadius: 8,
   },
   papper: {
-    width: '100vw'
+    width: '100%'
   },
   sizeChanger: {
     paddingLeft: 16,
@@ -112,11 +112,8 @@ class Directories extends React.Component<DirectoriesProps>{
       <Route render={({ history }) => (
         <Paper className={classes.papper}>
           <Grid item container className={classes.wrapper}>
-            {/* <Grid item xs={12} className={classes.sizeChanger}>
-              <SizeChanger />
-            </Grid> */}
-            {
-              this.state.directories.map((directory: string) =>
+            <Grid container item id="directoriesGrid">
+              {this.state.directories.map((directory: string) =>
                 <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
                   <IconButton className={classes.button}
                     onClick={() => {
@@ -134,7 +131,8 @@ class Directories extends React.Component<DirectoriesProps>{
                   </IconButton>
                 </Grid>
               )
-            }
+              }
+            </Grid>
             <Grid container direction="row" spacing={0} className={classes.plots}>
               {!isEmpty(this.state.images_names) &&
                 <Plots
