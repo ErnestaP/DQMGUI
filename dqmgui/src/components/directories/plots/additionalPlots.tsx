@@ -60,6 +60,7 @@ class AdditionalPlots extends React.Component<AdditionalPlotsProps>{
             return (<Grid
               className={classes.onePlot}
               item
+              key={image.name}
               onClick={() => removeImage(image.name)}>
               <img src={request_for_images(
                 image.run,

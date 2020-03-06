@@ -16,7 +16,6 @@ import SearchByPlotByName from './searchByPlotName'
 import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/form';
 import { format_search_field_string, format_header_path } from '../utils'
 import { SizeProps } from 'src/app/interfaces';
-import DirectoriesPath from '../directories/directoriesPath';
 
 const styles = (theme: any) => ({
   header: {
@@ -104,6 +103,13 @@ const styles = (theme: any) => ({
   },
   additionalMenu: {
     background: '#eeeeee'
+  },
+  directories: {
+    '&:hover': {
+      color: theme.palette.primary.contrastText
+    },
+    color: theme.palette.primary.main,
+    cursor: 'pointer'
   }
 })
 
@@ -172,11 +178,19 @@ const Header = ({
                     </IconButton>
                   </Grid>
                   <Grid item xs={6} sm={6} md={6} lg={6} xl={7} className={classes.pathContainer}>
-                    <DirectoriesPath
-                      directories={directories}
-                      dataset={dataset}
-                      run={run}
-                      back_subdirectory={back_subdirectory} />
+                    <Grid container item>
+                      <Grid item>{format_header_path(dataset, run)}/</Grid>
+                      {directories.map((directory: string) =>
+                        <Grid item
+                          key={directory}
+                          className={classes.directories}
+                          onClick={() => {
+                            back_subdirectory(directory)
+                          }}
+                        >
+                          {directory}/</Grid>
+                      )}
+                    </Grid>
                   </Grid>
                   <Grid container item xs={5} sm={5} md={5} lg={5} xl={4} justify="space-around">
                     <Grid item>

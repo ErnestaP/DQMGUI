@@ -158,13 +158,13 @@ class Plots extends React.Component<PlotsProps> {
                     }}
                   >{name}</Grid>
                   <Grid item className={classes.add}>
-                    <IconButton>
-                      <MoreVertIcon onClick={(event) => {
-                        this.openMenu()
-                        this.setAnchorEl(event.currentTarget);
-                        this.setName(name)
-                      }
-                      } />
+                    <IconButton onClick={(event) => {
+                      this.openMenu()
+                      this.setAnchorEl(event.currentTarget);
+                      this.setName(name)
+                    }
+                    } >
+                      <MoreVertIcon />
                     </IconButton>
                   </Grid>
                 </Grid>
