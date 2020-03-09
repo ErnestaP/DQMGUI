@@ -8,6 +8,7 @@ import { isEmpty, assoc } from 'ramda'
 import AdditionalPlots from './additionalPlots';
 import SizeChanger from './sizeChanger';
 import { PlotMenu } from './menu'
+import AdditionalMenu from './additionalMenu';
 
 interface PlotsProps {
   dataset: string;
@@ -87,12 +88,19 @@ class Plots extends React.Component<PlotsProps> {
     anchorElMenu: null,
     name: '',
     imagesWithRemovedStats: [],
-    selectedImagesNames: []
+    selectedImagesNames: [],
+    openAdditionalMenu: false,
   })
 
   openMenu = () => {
     this.setState({
       openMenu: true
+    })
+  }
+
+  toggleAdditionalMenu = () => {
+    this.setState({
+      openAdditionalMenu: !this.state.openAdditionalMenu
     })
   }
 
@@ -162,8 +170,22 @@ class Plots extends React.Component<PlotsProps> {
     return (
       <Grid item container direction="row">
         <Grid item container direction="row" className={`${!isEmpty(this.state.selectedImages) && classes.biggerPlot}`} >
-          <Grid item xs={12} className={classes.sizeChanger}>
-            <SizeChanger />
+          <Grid item xs={12} className={classes.sizeChanger} container spacing={4}>
+            <Grid item>
+              <IconButton onClick={() => {
+                this.toggleAdditionalMenu()
+              }} >
+                <MoreVertIcon />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <SizeChanger />
+            </Grid>
+            <Grid item container xs={12}>
+              {this.state.openAdditionalMenu &&
+                <AdditionalMenu />
+              }
+            </Grid>
           </Grid>
           <Grid item container justify="space-evenly">
             <PlotMenu

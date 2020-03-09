@@ -1,0 +1,1 @@
+export const postions = ['Overlay', 'On side', 'Overlay+ratio', 'Stacked']

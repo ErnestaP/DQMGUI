@@ -43,5 +43,5 @@ export const setSizeOnAdditionalPlots = (data: any) => ({
   payload: data,
 })
 
-export const getSize = (state: any): string => pathOr('', ['DISPLAY', 'size'], state);
-export const getAdditionalPlotsSize = (state: any): string => pathOr('', ['DISPLAY', 'additionalSize'], state);
+export const getSize = (state: any): string => pathOr('', ['PLOTS','SIZES', 'size'], state);
+export const getAdditionalPlotsSize = (state: any): string => pathOr('', ['PLOTS', 'SIZES', 'additionalSize'], state);

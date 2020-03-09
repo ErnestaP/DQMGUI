@@ -6,6 +6,7 @@ import FormReducer from '../components/ducks/table/form'
 import LoaderReducer from '../components/ducks/loader/loaderActions';
 import SelectedDataReducer from '../components/ducks/table/selectedData';
 import DisplayReducer from '../components/ducks/plots/sizeChanger';
+import ReferenceReducer from '../components/ducks/plots/reference';
 
 const appReducer = combineReducers({
     'MENU': SideMenuReducer,
@@ -15,7 +16,10 @@ const appReducer = combineReducers({
     'TABLE': combineReducers({
         'SELECTED_DATA': SelectedDataReducer,
     }),
-    'DISPLAY': DisplayReducer,
+    'PLOTS': combineReducers({
+        'REFERENCE': ReferenceReducer,
+        'SIZES': DisplayReducer,
+    }),
 })
 
 export default function createReducer() {

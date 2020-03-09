@@ -160,8 +160,7 @@ const Header = ({
               <Grid item container xs={12} className={classes.header}>
                 <Grid container xs={4} item >
                   <Grid item xs={2}>
-                    <img src={Logo} className={classes.logo}
-                    ></img>
+                    <img src={Logo} className={classes.logo}></img>
                   </Grid>
                 </Grid>
                 <Grid item xs={8} className={classes.timeWrapper} >
@@ -170,13 +169,13 @@ const Header = ({
               </Grid>
               <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
                 <Grid container xs={12} item justify="space-between">
-                  <Grid item>
+                  {/* <Grid item>
                     <IconButton onClick={() => toggleMenu(!open)}>
                       <Icon>
                         <MoreVertIcon />
                       </Icon>
                     </IconButton>
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={6} sm={6} md={6} lg={6} xl={7} className={classes.pathContainer}>
                     <Grid container item>
                       <Grid item>{format_header_path(dataset, run)}/</Grid>

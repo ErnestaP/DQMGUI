@@ -54,6 +54,7 @@ const createTheme = () => {
         fullBlack: blueGrey[500],
         lightGrey: grey[500],
         white: '#FFF',
+        addtionalTable: ' #FFF9C4'
       },
       background: {
         lightBlue: '#e3f2fd'

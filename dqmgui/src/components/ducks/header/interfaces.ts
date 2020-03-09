@@ -21,3 +21,10 @@ export interface RunInterface {
     importversion: string,
     version: string;
 }
+
+export interface ReferenceRowInterface {
+    id?: number,
+    run: string;
+    dataset: string;
+    label: string;
+}
