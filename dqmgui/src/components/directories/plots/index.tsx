@@ -4,7 +4,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { SizeProps } from 'src/app/interfaces'
 import { request_for_images } from '../api'
-import { isEmpty } from 'ramda'
+import { isEmpty, assoc } from 'ramda'
 import AdditionalPlots from './additionalPlots';
 import SizeChanger from './sizeChanger';
 import { PlotMenu } from './menu'
@@ -24,13 +24,10 @@ const styles = (theme) => {
   return ({
     biggerPlot: {
       maxWidth: '50%',
-      // height: '100vh',
       height: `calc(100vh - ${headerHeight}px - 24px - ${directoriesHeight}px)`,
       overflowY: 'scroll',
-      display: 'flex',
       justifyContent: 'center',
       display: 'block'
-
     },
     add: {
       display: 'flex',
@@ -67,12 +64,30 @@ const isSelectedPlot = (plotsList, plotName) => {
   return false
 }
 
+const formUrlPropsObject = (run: string,
+  dataset: string,
+  selected_directory: string[],
+  name: string,
+  size: SizeProps,
+  removestats = false) => (
+    {
+      run: run,
+      dataset: dataset,
+      selected_directory: selected_directory,
+      name: name,
+      size: size,
+      removestats: removestats
+    }
+  )
+
 class Plots extends React.Component<PlotsProps> {
   state = ({
     selectedImages: [],
     openMenu: false,
     anchorElMenu: null,
     name: '',
+    imagesWithRemovedStats: [],
+    selectedImagesNames: []
   })
 
   openMenu = () => {
@@ -81,7 +96,7 @@ class Plots extends React.Component<PlotsProps> {
     })
   }
 
-  setAnchorEl = (anchor) => {
+  setAnchorEl = (anchor: any) => {
     this.setState({
       anchorElMenu: anchor
     })
@@ -94,23 +109,25 @@ class Plots extends React.Component<PlotsProps> {
   }
 
   addImage = (imageProps: any) => {
-    console.log(imageProps)
     const copy: any[] = [...this.state.selectedImages]
+    const copyOfNames = [...this.state.selectedImagesNames]
+    copyOfNames.push(imageProps.name)
     copy.push(imageProps)
     this.setState({
-      selectedImages: copy
+      selectedImages: copy,
+      selectedImagesNames: copyOfNames,
     })
   }
 
   showOneImage = (imageProps: any) => {
     this.setState({
-      selectedImages: [imageProps]
+      selectedImages: [imageProps],
+      selectedImagesNames: [imageProps.name]
     })
   }
 
   removeImage = (imageUrl: string) => {
     let copy: string[] = [...this.state.selectedImages]
-    console.log(copy, imageUrl)
     copy = copy.filter(item => item.name !== imageUrl)
     this.setState({
       selectedImages: copy
@@ -120,6 +137,22 @@ class Plots extends React.Component<PlotsProps> {
   setName = (name: string) => {
     this.setState({
       name: name
+    })
+  }
+
+  removeStats = (nameOfPlot: string) => {
+    const copy: string[] = [...this.state.imagesWithRemovedStats]
+    copy.push(nameOfPlot)
+    this.setState({
+      imagesWithRemovedStats: copy
+    })
+  }
+
+  addStats = (nameOfPlot: string) => {
+    let copy: string[] = [...this.state.imagesWithRemovedStats]
+    copy = copy.filter(item => item !== nameOfPlot)
+    this.setState({
+      imagesWithRemovedStats: copy
     })
   }
 
@@ -134,16 +167,28 @@ class Plots extends React.Component<PlotsProps> {
           </Grid>
           <Grid item container justify="space-evenly">
             <PlotMenu
-              name={this.state.name}
+              imageUrlPropsObject={
+                formUrlPropsObject(
+                  run,
+                  dataset,
+                  selected_directory,
+                  this.state.name,
+                  null,
+                  this.removeStats)}
               open={this.state.openMenu}
               handleClose={this.closeMenu}
               anchor={this.state.anchorElMenu}
-              run={run}
-              dataset={dataset}
-              selected_directory={selected_directory}
               addImage={this.addImage}
+              removeImage={this.removeImage}
+              removeStats={this.removeStats}
+              removedStats={this.state.imagesWithRemovedStats}
+              addStats={this.addStats}
+              selectedImagesNames={this.state.selectedImagesNames}
             />
             {names.map((name) => {
+              const removeStats = this.state.imagesWithRemovedStats.indexOf(name) > -1 ? true : false
+              const imageUrlPropsObject = formUrlPropsObject(run, dataset, selected_directory, name, size, removeStats)
+
               return <Grid container direction="column"
                 item
                 key={name}
@@ -156,33 +201,31 @@ class Plots extends React.Component<PlotsProps> {
                       width: `${Object.values(size)[0]}px`, textDecoration: 'underline',
                       wordBreak: 'break-word'
                     }}
-                  >{name}</Grid>
+                  >
+                    {name}
+                  </Grid>
                   <Grid item className={classes.add}>
                     <IconButton onClick={(event) => {
                       this.openMenu()
                       this.setAnchorEl(event.currentTarget);
                       this.setName(name)
-                    }
-                    } >
+                    }} >
                       <MoreVertIcon />
                     </IconButton>
                   </Grid>
                 </Grid>
                 <Grid item
                   onClick={(e) => {
-                    this.showOneImage({
-                      run: run,
-                      dataset: dataset,
-                      selected_directory: selected_directory,
-                      name: name
-                    })
+                    this.showOneImage(imageUrlPropsObject)
                   }}
                   style={{
                     width: `${Object.values(size)[0] + 32}px`,
                     height: `${Object.values(size)[1] + 32}px`,
                   }}
                 >
-                  <img className={`${classes.image} ${isSelectedPlot(this.state.selectedImages, name) && classes.selectedPlot}`} src={request_for_images(run, dataset, selected_directory, name, size)} />
+                  <img className={`${classes.image} ${isSelectedPlot(this.state.selectedImages, name)
+                    && classes.selectedPlot}`}
+                    src={request_for_images(imageUrlPropsObject)} />
                 </Grid>
               </Grid>
             }

@@ -2,27 +2,43 @@ import React from 'react';
 import { List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
 import Popover from '@material-ui/core/Popover';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import { pathOr } from 'ramda';
 
 interface PlotPopoverProps {
-  name: string;
   open: boolean;
   handleClose: any;
   anchor: any;
-  run: string;
-  dataset: string;
-  selected_directory: string[];
   addImage(image: any): string;
+  removeImage(name: string): void;
+  removeStats(name: string): void;
+  removedStats: string[];
+  addStats(name: string): void;
+  selectedImagesNames: string[];
+  imageUrlPropsObject: any;
 }
 
+const getName = (imageUrlPropsObject: any) => pathOr('', ['name'], imageUrlPropsObject)
+const isStatsRemoved = (removedStats: any, name: string) => removedStats.indexOf(name) > -1 ? true : false
+const isPlotAddedToList = (selectedImagesNames: any, name: string) => selectedImagesNames.indexOf(name) > -1 ? true : false
+
 export const PlotMenu = ({
-  name,
   open,
   handleClose,
   anchor,
-  run,
-  dataset,
-  selected_directory,
-  addImage }: PlotPopoverProps) => {
+  addImage,
+  removeImage,
+  removeStats,
+  removedStats,
+  selectedImagesNames,
+  imageUrlPropsObject,
+  addStats }: PlotPopoverProps) => {
+
+  const name: string = getName(imageUrlPropsObject)
+  const isItRemoved = isStatsRemoved(removedStats, name)
+  const isItAddedToList = isPlotAddedToList(selectedImagesNames, name)
 
   return (
     <Popover
@@ -40,20 +56,49 @@ export const PlotMenu = ({
       }}
     >
       <List>
-        <ListItem button onClick={() => {
-          addImage({
-            run: run,
-            dataset: dataset,
-            selected_directory: selected_directory,
-            name: name
-          })
-          handleClose()
-        }}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          <ListItemText primary="Add" />
-        </ListItem>
+        {isItAddedToList ?
+          <ListItem button onClick={() => {
+            removeImage(name)
+            handleClose()
+          }}>
+            <ListItemIcon>
+              <RemoveIcon />
+            </ListItemIcon>
+            <ListItemText primary="Remove" />
+          </ListItem>
+          :
+          <ListItem button onClick={() => {
+            addImage(imageUrlPropsObject)
+            handleClose()
+          }}>
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText primary="Add" />
+          </ListItem>
+        }
+        {
+          isItRemoved ?
+            <ListItem button onClick={() => {
+              addStats(name)
+              handleClose()
+            }}>
+              <ListItemIcon>
+                <AddCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Add stats" />
+            </ListItem>
+            :
+            <ListItem button onClick={() => {
+              removeStats(name)
+              handleClose()
+            }}>
+              <ListItemIcon>
+                <RemoveCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Remove stats" />
+            </ListItem>
+        }
       </List>
     </Popover>)
 }

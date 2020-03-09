@@ -111,48 +111,45 @@ class Directories extends React.Component<DirectoriesProps>{
 
     return (
       <Route render={({ history }) => (
-        <React.Fragment>
-          {isEmpty(this.state.directories) && isEmpty(this.state.images_names) ?
-            <NoRecords />
-            :
-            <Paper className={classes.papper}>
-              <Grid item container className={classes.wrapper}>
-                <Grid container item id="directoriesGrid">
-                  {this.state.directories && this.state.directories.map((directory: string) =>
-                    <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
-                      <IconButton className={classes.button}
-                        onClick={() => {
-                          set_path_for_folders(directory)
-                          set_subdirectory(directory)
-                          history.push(`${directory}`)
-                          this.fetch_directories()
-                        }}>
-                        <Icon color="primary">
-                          <FolderIcon />
-                        </Icon>
-                        <Typography variant="button" className={classes.folder}>
-                          {directory}
-                        </Typography>
-                      </IconButton>
-                    </Grid>
-                  )
-                  }
+        <Paper className={classes.papper}>
+          <Grid item container className={classes.wrapper}>
+            <Grid container item id="directoriesGrid">
+              {this.state.directories && this.state.directories.map((directory: string) =>
+                <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
+                  <IconButton className={classes.button}
+                    onClick={() => {
+                      set_path_for_folders(directory)
+                      set_subdirectory(directory)
+                      history.push(`${directory}`)
+                      this.fetch_directories()
+                    }}>
+                    <Icon color="primary">
+                      <FolderIcon />
+                    </Icon>
+                    <Typography variant="button" className={classes.folder}>
+                      {directory}
+                    </Typography>
+                  </IconButton>
                 </Grid>
-                <Grid container direction="row" spacing={0} className={classes.plots}>
-                  {!isEmpty(this.state.images_names) &&
-                    <Plots
-                      names={this.state.images_names}
-                      dataset={dataset}
-                      run={run}
-                      selected_directory={selected_directory}
-                      size={size}
-                    />
-                  }
-                </Grid >
-              </Grid >
-            </Paper>
+              )
+              }
+            </Grid>
+            <Grid container direction="row" spacing={0} className={classes.plots}>
+              {!isEmpty(this.state.images_names) &&
+                <Plots
+                  names={this.state.images_names}
+                  dataset={dataset}
+                  run={run}
+                  selected_directory={selected_directory}
+                  size={size}
+                />
+              }
+            </Grid >
+          </Grid >
+          {isEmpty(this.state.directories) && isEmpty(this.state.images_names) &&
+            <NoRecords />
           }
-        </React.Fragment>
+        </Paper>
       )} />
     )
   }

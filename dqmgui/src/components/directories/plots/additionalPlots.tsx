@@ -57,18 +57,14 @@ class AdditionalPlots extends React.Component<AdditionalPlotsProps>{
         </Grid>
         <Grid item container justify="center">
           {imageWithSize.map(image => {
-            return (<Grid
-              className={classes.onePlot}
-              item
-              key={image.name}
-              onClick={() => removeImage(image.name)}>
-              <img src={request_for_images(
-                image.run,
-                image.dataset,
-                image.selected_directory,
-                image.name,
-                image.size)} />
-            </Grid>)
+            return (
+              <Grid
+                className={classes.onePlot}
+                item
+                key={image.name}
+                onClick={() => removeImage(image.name)}>
+                <img src={request_for_images(image)} />
+              </Grid>)
           }
           )}
         </Grid>
