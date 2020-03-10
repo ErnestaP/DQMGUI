@@ -50,12 +50,28 @@ export const setShowReferenceForAll = (data: any) => ({
   payload: data,
 })
 
-export const selectRunInReference = (data: any) => ({
-  type: SET_SHOW_REFERENCE_FOR_ALL,
-  payload: data,
-})
+export const selectRunsInReference = (data: any) => (dispatch, getState) => {
+  const allSelectedRuns: string[] = [...getSettedRunsInReference(getState())]
+  allSelectedRuns.push(data)
+  
+  dispatch({
+    type: SET_RUNS_IN_REFERENCE,
+    payload: allSelectedRuns
+  })
+}
+
+export const removeRunsInReference = (data: any) => (dispatch, getState) => {
+  const allSelectedRuns: string[] = getSettedRunsInReference(getState())
+  allSelectedRuns.filter(run => run.id !== data.id)
+
+  dispatch({
+    type: SET_RUNS_IN_REFERENCE,
+    payload: allSelectedRuns
+  })
+}
+
 
 export const getPosition = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'position'], state);
 export const getNormalization = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'normalize'], state);
 export const getShowReferenceForAll = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'showReferenceForAll'], state);
-export const getSettedRunsInReference = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'runsInReference'], state);
+export const getSettedRunsInReference = (state: any): string[] => pathOr([], ['PLOTS', 'REFERENCE', 'runsInReference'], state);
