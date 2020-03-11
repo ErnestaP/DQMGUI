@@ -1,11 +1,14 @@
 import { AnyAction } from 'redux';
 import { pathOr } from 'ramda';
+import { RunInterface } from '../header/interfaces';
 
 interface DefaultState {
   position: string,
   normalize: boolean,
   showReferenceForAll: boolean,
   runsInReference: string[],
+  names: string[];
+  dataForOverlay: any[]
 }
 
 const defaultState: DefaultState = {
@@ -13,12 +16,16 @@ const defaultState: DefaultState = {
   normalize: false,
   showReferenceForAll: false,
   runsInReference: [],
+  names: [],
+  dataForOverlay: []
 }
 
 const SET_POSITION = "SET_POSITION"
 const SET_NORMALIZATION = "SET_NORMALIZATION"
 const SET_SHOW_REFERENCE_FOR_ALL = "SET_SHOW_REFERENCE_FOR_ALL"
 const SET_RUNS_IN_REFERENCE = "SET_RUNS_IN_REFERENCE"
+const SET_ALL_NAMES = "SET_ALL_NAMES"
+const SET_DATA_FOR_OVERLAY = "SET_DATA_FOR_OVERLAY"
 
 export default function positionReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
@@ -30,6 +37,10 @@ export default function positionReducer(state = defaultState, { type, payload }:
       return { ...state, showReferenceForAll: payload }
     case SET_RUNS_IN_REFERENCE:
       return { ...state, runsInReference: payload }
+    case SET_ALL_NAMES:
+      return { ...state, names: payload }
+    case SET_DATA_FOR_OVERLAY:
+      return { ...state, dataForOverlay: payload }
     default:
       return state;
   }
@@ -45,24 +56,20 @@ export const setNormalization = (data: any) => ({
   payload: data,
 })
 
+export const setDataForOverlay = (data: any) => ({
+  type: SET_DATA_FOR_OVERLAY,
+  payload: data,
+})
+
 export const setShowReferenceForAll = (data: any) => ({
   type: SET_SHOW_REFERENCE_FOR_ALL,
   payload: data,
 })
 
-export const selectRunsInReference = (data: any) => (dispatch, getState) => {
-  const allSelectedRuns: string[] = [...getSettedRunsInReference(getState())]
+
+export const selectRunsInReference = (data: RunInterface) => (dispatch: any, getState: any) => {
+  const allSelectedRuns: RunInterface[] = [...getSettedRunsInReference(getState())]
   allSelectedRuns.push(data)
-  
-  dispatch({
-    type: SET_RUNS_IN_REFERENCE,
-    payload: allSelectedRuns
-  })
-}
-
-export const removeRunsInReference = (data: any) => (dispatch, getState) => {
-  const allSelectedRuns: string[] = getSettedRunsInReference(getState())
-  allSelectedRuns.filter(run => run.id !== data.id)
 
   dispatch({
     type: SET_RUNS_IN_REFERENCE,
@@ -70,8 +77,25 @@ export const removeRunsInReference = (data: any) => (dispatch, getState) => {
   })
 }
 
+export const removeRunsInReference = (data: RunInterface) => (dispatch: any, getState: any) => {
+  const allSelectedRuns: RunInterface[] = getSettedRunsInReference(getState())
+  const filtered = allSelectedRuns.filter((run: RunInterface) => run.id !== data.id)
+
+  dispatch({
+    type: SET_RUNS_IN_REFERENCE,
+    payload: filtered
+  })
+}
+
+
+export const setAllNames = (data: any) => ({
+  type: SET_ALL_NAMES,
+  payload: data,
+})
 
 export const getPosition = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'position'], state);
 export const getNormalization = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'normalize'], state);
 export const getShowReferenceForAll = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'showReferenceForAll'], state);
-export const getSettedRunsInReference = (state: any): string[] => pathOr([], ['PLOTS', 'REFERENCE', 'runsInReference'], state);
+export const getSettedRunsInReference = (state: any): RunInterface[] => pathOr([], ['PLOTS', 'REFERENCE', 'runsInReference'], state);
+export const getNames = (state: any): string[] => pathOr([], ['PLOTS', 'REFERENCE', 'names'], state);
+export const getDataForOverlay = (state: any): string[] => pathOr([], ['PLOTS', 'REFERENCE', 'dataForOverlay'], state);

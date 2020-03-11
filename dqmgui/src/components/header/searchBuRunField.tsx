@@ -19,6 +19,7 @@ const SearchByRun = ({ classes }: SearchByRunProps) => {
   return (
     <Field
       name="searchFieldByRun"
+      // subscription={{ data: true }}
       placeholder="Search by Run"
       fullWidth
       component={TextField}

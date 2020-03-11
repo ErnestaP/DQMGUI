@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Grid, withStyles, IconButton, Icon } from '@material-ui/core'
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { compose } from 'ramda'
 
 import { SizeProps } from 'src/app/interfaces'
 import { request_for_images } from '../api'
@@ -9,6 +10,8 @@ import AdditionalPlots from './additionalPlots';
 import SizeChanger from './sizeChanger';
 import { PlotMenu } from './menu'
 import AdditionalMenu from './additionalMenu';
+import { connect } from 'react-redux';
+import { getDataForOverlay } from '../../ducks/plots/reference';
 
 interface PlotsProps {
   dataset: string;
@@ -70,14 +73,23 @@ const formUrlPropsObject = (run: string,
   selected_directory: string[],
   name: string,
   size: SizeProps,
-  removestats = false) => (
+  removestats = false,
+  overlay = undefined,
+  label = undefined,
+  secondRun = undefined,
+  secondDataset = dataset
+) => (
     {
       run: run,
       dataset: dataset,
       selected_directory: selected_directory,
       name: name,
       size: size,
-      removestats: removestats
+      removestats: removestats,
+      overlay: overlay,
+      label: label,
+      secondRun: secondRun,
+      secondDataset: secondDataset
     }
   )
 
@@ -165,8 +177,8 @@ class Plots extends React.Component<PlotsProps> {
   }
 
   render() {
-    const { dataset, run, selected_directory, names, size, classes } = this.props
-
+    const { dataset, run, selected_directory, names, size, classes, runsForOverlay } = this.props
+console.log(runsForOverlay)
     return (
       <Grid item container direction="row">
         <Grid item container direction="row" className={`${!isEmpty(this.state.selectedImages) && classes.biggerPlot}`} >
@@ -266,4 +278,11 @@ class Plots extends React.Component<PlotsProps> {
   }
 }
 
-export default withStyles(styles)(Plots)
+export default compose(
+  connect(
+    (state: any) => ({
+      runsForOverlay: getDataForOverlay(state)
+    }),
+    undefined,
+  ), withStyles(styles))
+  (Plots)
