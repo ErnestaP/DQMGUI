@@ -6,7 +6,7 @@ const chooseOnChange = (onChange: any, input: any) => onChange ? onChange : inpu
 
 const CheckBox = ({ input, meta, onChange, checkboxProps, ...props }: any) => {
   const onChangeMethod = chooseOnChange(onChange, input)
-  console.log(onChangeMethod)
+
   return (
     <FormControl >
       <Checkbox
@@ -14,7 +14,6 @@ const CheckBox = ({ input, meta, onChange, checkboxProps, ...props }: any) => {
         {...props}
         {...checkboxProps}
         onChange={onChangeMethod}
-      // value={input.value} 
       />
       {path(['error', 'meta'], props) && path(['error', 'visited'], props) &&
         <FormHelperText error>{path(['error', 'meta'], props)}</FormHelperText>

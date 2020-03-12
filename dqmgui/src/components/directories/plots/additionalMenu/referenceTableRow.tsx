@@ -9,8 +9,7 @@ import TextField from '../../../common/textField'
 import CheckBox from '../../../common/checkBox'
 import { compose } from 'ramda';
 import { connect } from 'react-redux';
-import { selectRunsInReference, removeRunsInReference, setDataForOverlay } from '../../../ducks/plots/reference'
-import { getDataset } from '../../../ducks/header/setPaths';
+import { selectRunsInReference, removeRunsInReference, setDataForOverlay, getShowReferenceForAll } from '../../../ducks/plots/reference'
 
 interface ReferenceTableRowProps {
   classes: {
@@ -31,7 +30,7 @@ const generateId = () => uuidv4()
 class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
 
   state = ({
-    rows: { 1: { run: '', dataset: '', label: '' } },
+    rows: { 1: { selected: false, run: '', dataset: '', label: '' } },
     checked: [],
   })
 
@@ -66,6 +65,23 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
     })
   }
 
+  setSelected = (id, selected) => {
+    let copy = this.state.rows
+    copy[id].selected = selected
+    this.setState({
+      rows: copy
+    })
+  }
+
+  // setAllSelected = () => {
+  //   let copy = this.state.rows
+  //   const keys = Object.keys(this.state.rows)
+  //   keys.map(key => this.state.rows[key].selected = this.props.selectAll)
+  //   this.setState({
+  //     rows: copy
+  //   })
+  // }
+
   setRun = (id, run) => {
     let copy = this.state.rows
     copy[id].run = run
@@ -86,24 +102,26 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
     const { classes, setDataForOverlay } = this.props;
     const ids: string[] = Object.keys(this.state.rows)
     setDataForOverlay(this.state.rows)
-
+    // this.setAllSelected()
     return (
       <React.Fragment>
         {ids.map((row, index) =>
           <TableRow key={row}>
             <TableCell className={classes.noPadding}>
               <Grid item>
-                <CheckBox onChange={() => { }} />
+                <CheckBox onChange={(e: any) => {
+                  this.setSelected(row, e.target.checked)
+                }} />
               </Grid>
             </TableCell>
             <TableCell className={classes.noPadding}>
-              <TextField onChange={(e) => { this.setRun(row, e) }} />
+              <TextField onChange={(e: any) => { this.setRun(row, e) }} />
             </TableCell>
             <TableCell className={classes.noPadding}>
-              <TextField onChange={(e) => { this.setDataset(row, e) }} />
+              <TextField onChange={(e: any) => { this.setDataset(row, e) }} />
             </TableCell>
             <TableCell className={classes.noPadding}>
-              <TextField onChange={(e) => { this.setLabel(row, e) }} />
+              <TextField onChange={(e: any) => { this.setLabel(row, e) }} />
             </TableCell>
             <TableCell className={classes.noPadding}>
               <IconButton onClick={() =>
@@ -131,17 +149,9 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
 
 export default compose<any, any, any>(
   connect(
-    undefined,
-    (dispatch) => ({
-      selectRunsInReference(data: RunInterface) {
-        dispatch(selectRunsInReference(data))
-      },
-      removeRunsInReference(data: RunInterface) {
-        dispatch(removeRunsInReference(data))
-      },
-      setDataForOverlay(data) {
-        dispatch(setDataForOverlay(data))
-      }
-    })
+    (state: any) => ({
+      selectAll: getShowReferenceForAll(state)
+    }),
+    { selectRunsInReference, removeRunsInReference, setDataForOverlay }
   ), withStyles(styles)
 )(ReferenceTableRow)

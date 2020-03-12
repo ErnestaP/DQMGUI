@@ -30,7 +30,6 @@ const SET_SUBDIRECTORY = "SET_SUBDIRECTORY"
 const CLEAN_SUBDIRECTORIES = "CLEAN_SUBDIRECTORIES"
 
 export default function serviceSetReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
-  console.log(type)
   switch (type) {
     case SET_SERVICE:
       return { ...state, service: payload };

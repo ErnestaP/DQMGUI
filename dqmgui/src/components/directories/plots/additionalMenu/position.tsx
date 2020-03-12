@@ -15,8 +15,8 @@ const PositionsSelectField = ({ settedPosition, setPosition }: SizeChangerProps)
     default={settedPosition}
     component={SelectField}
     options={postions}
-    getOptionLabel={(option: any) => option}
-    getOptionValue={(option: any) => option}
+    getOptionLabel={(option: any) => option.label}
+    getOptionValue={(option: any) => option.value}
     onChange={(e: any) => setPosition(e.target.value)}
   />
 

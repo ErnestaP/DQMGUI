@@ -7,7 +7,7 @@ interface ReferenceTableProps {
 
 }
 
-export const ReferenceTable = ({ ...props }: ReferenceTableProps) => {
+export const ReferenceTable = ({ selectAll, ...props }: ReferenceTableProps) => {
   return (
     <Table>
       <TableRow>
@@ -27,6 +27,6 @@ export const ReferenceTable = ({ ...props }: ReferenceTableProps) => {
           Actions
         </TableCell>
       </TableRow>
-      <ReferenceTableRow />
+      <ReferenceTableRow selectAll={selectAll}/>
     </Table>)
 }

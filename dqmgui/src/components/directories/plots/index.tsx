@@ -11,7 +11,7 @@ import SizeChanger from './sizeChanger';
 import { PlotMenu } from './menu'
 import AdditionalMenu from './additionalMenu';
 import { connect } from 'react-redux';
-import { getDataForOverlay } from '../../ducks/plots/reference';
+import { getDataForOverlay, getPosition, getNormalization } from '../../ducks/plots/reference';
 
 interface PlotsProps {
   dataset: string;
@@ -75,9 +75,8 @@ const formUrlPropsObject = (run: string,
   size: SizeProps,
   removestats = false,
   overlay = undefined,
-  label = undefined,
-  secondRun = undefined,
-  secondDataset = dataset
+  runsForOverlay = {},
+  normalization = false,
 ) => (
     {
       run: run,
@@ -87,9 +86,8 @@ const formUrlPropsObject = (run: string,
       size: size,
       removestats: removestats,
       overlay: overlay,
-      label: label,
-      secondRun: secondRun,
-      secondDataset: secondDataset
+      runsForOverlay: runsForOverlay,
+      normalization: normalization
     }
   )
 
@@ -177,8 +175,17 @@ class Plots extends React.Component<PlotsProps> {
   }
 
   render() {
-    const { dataset, run, selected_directory, names, size, classes, runsForOverlay } = this.props
-console.log(runsForOverlay)
+    const {
+      dataset,
+      run,
+      selected_directory,
+      names,
+      size,
+      classes,
+      runsForOverlay,
+      overlay,
+      normalization, } = this.props
+
     return (
       <Grid item container direction="row">
         <Grid item container direction="row" className={`${!isEmpty(this.state.selectedImages) && classes.biggerPlot}`} >
@@ -221,8 +228,16 @@ console.log(runsForOverlay)
             />
             {names.map((name) => {
               const removeStats = this.state.imagesWithRemovedStats.indexOf(name) > -1 ? true : false
-              const imageUrlPropsObject = formUrlPropsObject(run, dataset, selected_directory, name, size, removeStats)
-
+              const imageUrlPropsObject =
+                formUrlPropsObject(run,
+                  dataset,
+                  selected_directory,
+                  name,
+                  size,
+                  removeStats,
+                  overlay,
+                  runsForOverlay,
+                  normalization)
               return <Grid container direction="column"
                 item
                 key={name}
@@ -281,7 +296,9 @@ console.log(runsForOverlay)
 export default compose(
   connect(
     (state: any) => ({
-      runsForOverlay: getDataForOverlay(state)
+      runsForOverlay: getDataForOverlay(state),
+      overlay: getPosition(state),
+      normalization: getNormalization(state),
     }),
     undefined,
   ), withStyles(styles))

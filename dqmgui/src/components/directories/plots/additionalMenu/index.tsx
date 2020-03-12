@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Grid, FormGroup, Checkbox, FormControlLabel, FormControl, FormLabel, withStyles } from '@material-ui/core';
-import { debounce } from "debounce";
 
 import { ReferenceTable } from './referenceTable'
 import PositionsSelectField from './position'
@@ -40,12 +39,19 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
   state = ({
     normalize: false,
     showReferenceForAllState: false,
-    names: []
+    names: [],
+    selectAll: false,
   })
 
   setNormalize = (state: boolean) => {
     this.setState({
       normalize: state
+    })
+  }
+
+  setSelected = (state: boolean) => {
+    this.setState({
+      selected: state
     })
   }
 
@@ -59,6 +65,7 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
     this.setState({
       names: this.props.allPlotsNames
     })
+    this.props.setDataForOverlay('Overlay')
   }
 
   render() {
@@ -82,9 +89,8 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
                 control={
                   <Checkbox
                     checked={checkedAllReference}
-                    onChange={() => {
-                      setShowingReferenceForAllState(!showReferenceForAllState)
-                      setShowReferenceForAll(!showReferenceForAllState)
+                    onChange={(e) => {
+                      this.setSelected(e.target.checked)
                     }}
                   />
                 }
@@ -94,10 +100,10 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
             <Grid item className={classes.separator}>
               <FormControlLabel
                 control={
-                  <Checkbox checked={checkedNormalization} onChange={() => {
-                    setNormalize(!normalize)
-                    setNormalization(!normalize)
-                  }}
+                  <Checkbox checked={checkedNormalization}
+                    onChange={(e) => {
+                      setNormalization(e.target.checked)
+                    }}
                   />
                 }
                 label="Normalize"
@@ -105,7 +111,7 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
             </Grid>
           </FormGroup>
         </FormControl>
-        <ReferenceTable />
+        <ReferenceTable selectAll={this.state.selectAll} />
       </Grid>
     )
   }
@@ -117,7 +123,17 @@ export default compose<any, any, any>(
       checkedAllReference: getShowReferenceForAll(state),
       allPlotsNames: getNames(state),
     }),
-    { setNormalization, setShowReferenceForAll, setDataForOverlay },
+    (dispatch: any) => ({
+      setNormalization(value: boolean) {
+        dispatch(setNormalization(value))
+      },
+      setShowReferenceForAll(data) {
+        dispatch(setShowReferenceForAll(data))
+      },
+      setDataForOverlay(data) {
+        dispatch(setDataForOverlay(data))
+      }
+    })
   ),
   withStyles(styles),
 )(AdditionalMenu)

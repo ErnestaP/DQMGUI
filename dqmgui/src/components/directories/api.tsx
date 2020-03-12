@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { pathOr } from "ramda";
+import { pathOr, isEmpty, path } from "ramda";
 
 export const requestForDirectories = (searchFieldByRun: string,
   searchFieldByDataset: string,
@@ -22,23 +22,29 @@ export const request_for_images = (imagePropsObject: any) => {
   const run = pathOr('', ['run'], imagePropsObject)
   const name = pathOr('', ['name'], imagePropsObject)
   const dataset = pathOr('', ['dataset'], imagePropsObject)
-  const secondDataset = pathOr([], ['secondDataset'], imagePropsObject)
   const removestats = pathOr(false, ['removestats'], imagePropsObject)
   const overlay = pathOr(undefined, ['overlay'], imagePropsObject)
-  const secondRun = pathOr([], ['secondRun'], imagePropsObject)
-  const label = pathOr(secondRun, ['label'], imagePropsObject)
+  const runsForOverlay = pathOr(undefined, ['runsForOverlay'], imagePropsObject)
+  const normalize = path(['normalization'], imagePropsObject) ? 'True' : 'False'
 
-  if (overlay && secondRun) {
-    const secondRuns = secondRun.map(runForOner, index => {
-      const labelForRun =  label[index]
-      const datasetForRun =  secondDataset[index]
+  console.log(runsForOverlay)
+  if (overlay && runsForOverlay) {
+    const ids = Object.keys(runsForOverlay)
+    const overlayPlots = ids.map(id => {
+      const run = runsForOverlay[id].run
+      const selected = runsForOverlay[id].selected
+      const datasetO = isEmpty(runsForOverlay[id].dataset) ? dataset : runsForOverlay[id].dataset
+      const label = isEmpty(runsForOverlay[id].label) ? run : runsForOverlay[id].label
+      
+      if (selected) {
+        return `;obj=archive/${run}${datasetO}${joined_directories}/${name};reflabel=${label}`
+      }
+    })
 
-      return `obj=archive/${runForOner}${datasetForRun}${joined_directories}/${name};reflabel=${labelForRun}`
-    }
-      )
-    return (`/plotfairy/overlay?ref=${overlay};obj=archive/${run}${dataset}${joined_directories}/${name};${secondRuns};w=${sizeArray[0]};h=${sizeArray[1]}`)
+    const joinedOverlaysImages = overlayPlots.join('')
+    return `/plotfairy/overlay?ref=${overlay};obj=archive/${run}${dataset}${joined_directories}/${name}${joinedOverlaysImages};norm=${normalize};w=${sizeArray[0]};h=${sizeArray[1]}`
   }
-  else if (removestats) {
+  if (removestats) {
     return `/plotfairy/archive/${run}${dataset}${joined_directories}/${name}?showstats=0;w=${sizeArray[0]};h=${sizeArray[1]}`
   }
   return `/plotfairy/archive/${run}${dataset}${joined_directories}/${name}?w=${sizeArray[0]};h=${sizeArray[1]}`
