@@ -23,11 +23,11 @@ export const request_for_images = (imagePropsObject: any) => {
   const name = pathOr('', ['name'], imagePropsObject)
   const dataset = pathOr('', ['dataset'], imagePropsObject)
   const removestats = pathOr(false, ['removestats'], imagePropsObject)
+  
   const overlay = pathOr(undefined, ['overlay'], imagePropsObject)
   const runsForOverlay = pathOr(undefined, ['runsForOverlay'], imagePropsObject)
   const normalize = path(['normalization'], imagePropsObject) ? 'True' : 'False'
 
-  console.log(runsForOverlay)
   if (overlay && runsForOverlay) {
     const ids = Object.keys(runsForOverlay)
     const overlayPlots = ids.map(id => {

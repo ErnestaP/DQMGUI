@@ -12,6 +12,7 @@ import { PlotMenu } from './menu'
 import AdditionalMenu from './additionalMenu';
 import { connect } from 'react-redux';
 import { getDataForOverlay, getPosition, getNormalization } from '../../ducks/plots/reference';
+import { Plot } from './plot'
 
 interface PlotsProps {
   dataset: string;
@@ -238,47 +239,29 @@ class Plots extends React.Component<PlotsProps> {
                   overlay,
                   runsForOverlay,
                   normalization)
+
               return <Grid container direction="column"
                 item
                 key={name}
                 id={name}
                 className={`${classes.plotWrapper} `}
               >
-                <Grid item container className={classes.name}>
-                  <Grid item
-                    style={{
-                      width: `${Object.values(size)[0]}px`, textDecoration: 'underline',
-                      wordBreak: 'break-word'
-                    }}
-                  >
-                    {name}
-                  </Grid>
-                  <Grid item className={classes.add}>
-                    <IconButton onClick={(event) => {
-                      this.openMenu()
-                      this.setAnchorEl(event.currentTarget);
-                      this.setName(name)
-                    }} >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-                <Grid item
-                  onClick={(e) => {
-                    this.showOneImage(imageUrlPropsObject)
-                  }}
-                  style={{
-                    width: `${Object.values(size)[0] + 32}px`,
-                    height: `${Object.values(size)[1] + 32}px`,
-                  }}
-                >
-                  <img className={`${classes.image} ${isSelectedPlot(this.state.selectedImages, name)
-                    && classes.selectedPlot}`}
-                    src={request_for_images(imageUrlPropsObject)} />
-                </Grid>
+                <Plot
+                  openMenu={this.openMenu}
+                  setAnchorEl={this.setAnchorEl}
+                  setName={this.setName}
+                  showOneImage={this.showOneImage}
+                  isSelectedPlot={isSelectedPlot}
+                  classes={classes}
+                  size={size}
+                  name={name}
+                  imageUrlPropsObject={imageUrlPropsObject}
+                  selectedImages={this.state.selectedImages}
+                />
               </Grid>
             }
             )}
+
           </Grid>
         </Grid>
         {

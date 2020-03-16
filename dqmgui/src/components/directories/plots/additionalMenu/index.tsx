@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Grid, FormGroup, Checkbox, FormControlLabel, FormControl, FormLabel, withStyles } from '@material-ui/core';
 
-import { ReferenceTable } from './referenceTable'
+import ReferenceTable from './referenceTable'
 import PositionsSelectField from './position'
 import { connect } from 'react-redux';
 import {
@@ -65,7 +65,7 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
     this.setState({
       names: this.props.allPlotsNames
     })
-    this.props.setDataForOverlay('Overlay')
+    // this.props.setDataForOverlay('Overlay')
   }
 
   render() {
@@ -77,7 +77,7 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
     } = this.props
 
     return (
-      <Grid container item className={classes.viewDetailsMenu}>
+      <Grid container item xs={12} className={classes.viewDetailsMenu}>
         <FormControl component="fieldset">
           <FormLabel component="legend">Reference</FormLabel>
           <FormGroup row>
@@ -111,7 +111,9 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
             </Grid>
           </FormGroup>
         </FormControl>
-        <ReferenceTable selectAll={this.state.selectAll} />
+        <Grid container item xs={12} >
+          <ReferenceTable selectAll={this.state.selectAll} />
+        </Grid>
       </Grid>
     )
   }
@@ -130,9 +132,9 @@ export default compose<any, any, any>(
       setShowReferenceForAll(data) {
         dispatch(setShowReferenceForAll(data))
       },
-      setDataForOverlay(data) {
-        dispatch(setDataForOverlay(data))
-      }
+      // setDataForOverlay(data) {
+      //   dispatch(setDataForOverlay(data))
+      // }
     })
   ),
   withStyles(styles),

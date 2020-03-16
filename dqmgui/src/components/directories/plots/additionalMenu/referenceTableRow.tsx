@@ -3,19 +3,18 @@ import { Input, TableRow, TableCell, Icon, IconButton, Grid, withStyles, LinearP
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { v4 as uuidv4 } from 'uuid';
+import { Field } from 'react-final-form';
 
-import { RunInterface } from '../../../ducks/header/interfaces'
 import TextField from '../../../common/textField'
 import CheckBox from '../../../common/checkBox'
-import { compose } from 'ramda';
 import { connect } from 'react-redux';
-import { selectRunsInReference, removeRunsInReference, setDataForOverlay, getShowReferenceForAll } from '../../../ducks/plots/reference'
+import { compose } from 'ramda';
+import { deleteDataForOverlay } from '../../../ducks/plots/reference';
 
 interface ReferenceTableRowProps {
   classes: {
     noPadding: string,
   },
-  setDataForOverlay(data: any): void;
   selectedDataset: string;
 }
 
@@ -30,102 +29,65 @@ const generateId = () => uuidv4()
 class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
 
   state = ({
-    rows: { 1: { selected: false, run: '', dataset: '', label: '' } },
+    rows: [1],
     checked: [],
   })
 
-  addRow = (id, data) => {
-    let copy = this.state.rows
-    copy[id] = data
+  addRow = (id) => {
+    let copy = [...this.state.rows]
+    copy.push(id)
     this.setState({
       rows: copy
-    })
-  }
-
-  setID = () => {
-    const id = generateId()
-    this.setState({
-      id: id
     })
   }
 
   removeRow = (id: string) => {
-    let copy = this.state.rows
-    delete copy[id]
+    let copy = [...this.state.rows]
+    const filtered = copy.filter(rowID => rowID !== id)
     this.setState({
-      rows: copy
-    })
-  }
-
-  setDataset = (id, dataset) => {
-    let copy = this.state.rows
-    copy[id].dataset = dataset
-    this.setState({
-      rows: copy
-    })
-  }
-
-  setSelected = (id, selected) => {
-    let copy = this.state.rows
-    copy[id].selected = selected
-    this.setState({
-      rows: copy
-    })
-  }
-
-  // setAllSelected = () => {
-  //   let copy = this.state.rows
-  //   const keys = Object.keys(this.state.rows)
-  //   keys.map(key => this.state.rows[key].selected = this.props.selectAll)
-  //   this.setState({
-  //     rows: copy
-  //   })
-  // }
-
-  setRun = (id, run) => {
-    let copy = this.state.rows
-    copy[id].run = run
-    this.setState({
-      rows: copy
-    })
-  }
-
-  setLabel = (id, label) => {
-    let copy = this.state.rows
-    copy[id].label = label
-    this.setState({
-      rows: copy
+      rows: filtered
     })
   }
 
   render() {
-    const { classes, setDataForOverlay } = this.props;
-    const ids: string[] = Object.keys(this.state.rows)
-    setDataForOverlay(this.state.rows)
-    // this.setAllSelected()
+    const { classes, deleteDataForOverlay } = this.props;
+    
     return (
       <React.Fragment>
-        {ids.map((row, index) =>
+        {this.state.rows.map((row, index) =>
           <TableRow key={row}>
             <TableCell className={classes.noPadding}>
               <Grid item>
-                <CheckBox onChange={(e: any) => {
-                  this.setSelected(row, e.target.checked)
-                }} />
+                <Field
+                  name={`selected_${row}`}
+                  component={CheckBox}
+                  type="checkbox"
+                />
               </Grid>
             </TableCell>
             <TableCell className={classes.noPadding}>
-              <TextField onChange={(e: any) => { this.setRun(row, e) }} />
+              <Field
+                name={`run_${row}`}
+                component={TextField}
+              />
             </TableCell>
             <TableCell className={classes.noPadding}>
-              <TextField onChange={(e: any) => { this.setDataset(row, e) }} />
+              <Field
+                name={`dataset_${row}`}
+                component={TextField}
+              />
             </TableCell>
             <TableCell className={classes.noPadding}>
-              <TextField onChange={(e: any) => { this.setLabel(row, e) }} />
+              <Field
+                name={`label_${row}`}
+                component={TextField}
+              />
             </TableCell>
             <TableCell className={classes.noPadding}>
-              <IconButton onClick={() =>
-                this.removeRow(row)}>
+              <IconButton onClick={() => {
+                this.removeRow(row)
+                deleteDataForOverlay(row)
+              }}>
                 <Icon>
                   <RemoveIcon />
                 </Icon>
@@ -135,8 +97,7 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
         }
         <IconButton onClick={() => {
           const id = generateId()
-          this.setID();
-          this.addRow(id, { run: '', dataset: '', label: '' })
+          this.addRow(id)
         }}>
           <Icon>
             <AddIcon />
@@ -147,11 +108,16 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
   }
 }
 
-export default compose<any, any, any>(
+export default compose(
   connect(
-    (state: any) => ({
-      selectAll: getShowReferenceForAll(state)
-    }),
-    { selectRunsInReference, removeRunsInReference, setDataForOverlay }
-  ), withStyles(styles)
-)(ReferenceTableRow)
+    undefined,
+    (dispatch: any) => ({
+      deleteDataForOverlay(id) {
+        dispatch(deleteDataForOverlay(id))
+      }
+    })
+  ),
+  withStyles(styles))
+  (ReferenceTableRow)
+
+

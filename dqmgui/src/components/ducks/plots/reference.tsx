@@ -8,7 +8,7 @@ interface DefaultState {
   showReferenceForAll: boolean,
   runsInReference: string[],
   names: string[];
-  dataForOverlay: any[]
+  dataForOverlay: {}
 }
 
 const defaultState: DefaultState = {
@@ -17,7 +17,7 @@ const defaultState: DefaultState = {
   showReferenceForAll: false,
   runsInReference: [],
   names: [],
-  dataForOverlay: []
+  dataForOverlay: { 1: { run: '', dataset: '', label: '', selected: false } }
 }
 
 const SET_POSITION = "SET_POSITION"
@@ -56,10 +56,37 @@ export const setNormalization = (data: any) => ({
   payload: data,
 })
 
-export const setDataForOverlay = (data: any) => ({
-  type: SET_DATA_FOR_OVERLAY,
-  payload: data,
-})
+export const setDataForOverlay = (data: any) => (dispatch, getState) => {
+  const propsNames = Object.keys(data)
+  const propsValues = Object.values(data)
+  const dataForOverlay = getDataForOverlay(getState())
+
+  propsNames.map((propName, index) => {
+    const splittedName = propName.split('_')
+    const id = splittedName[1]
+    if (!dataForOverlay[id]) {
+      dataForOverlay[id] = { run: '', dataset: '', label: '', selected: false }
+    }
+    dataForOverlay[id][splittedName[0]] = propsValues[index]
+    return dataForOverlay
+  })
+
+  dispatch({
+    type: SET_DATA_FOR_OVERLAY,
+    payload: dataForOverlay,
+  })
+}
+export const deleteDataForOverlay = (id: any) => (dispatch, getState) => {
+  const dataForOverlay = getDataForOverlay(getState())
+  if (dataForOverlay[id]) {
+    delete dataForOverlay[id]
+  }
+
+  dispatch({
+    type: SET_DATA_FOR_OVERLAY,
+    payload: dataForOverlay,
+  })
+}
 
 export const setShowReferenceForAll = (data: any) => ({
   type: SET_SHOW_REFERENCE_FOR_ALL,
