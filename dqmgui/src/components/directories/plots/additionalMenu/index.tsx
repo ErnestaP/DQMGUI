@@ -7,10 +7,7 @@ import { connect } from 'react-redux';
 import {
   getNormalization,
   setNormalization,
-  setShowReferenceForAll,
-  getShowReferenceForAll,
   getNames,
-  setDataForOverlay
 } from '../../../ducks/plots/reference';
 import { compose } from 'ramda';
 
@@ -65,14 +62,12 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
     this.setState({
       names: this.props.allPlotsNames
     })
-    // this.props.setDataForOverlay('Overlay')
   }
 
   render() {
     const { setNormalization,
       checkedAllReference,
       checkedNormalization,
-      setShowReferenceForAll,
       classes,
     } = this.props
 
@@ -88,7 +83,6 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={checkedAllReference}
                     onChange={(e) => {
                       this.setSelected(e.target.checked)
                     }}
@@ -122,7 +116,6 @@ export default compose<any, any, any>(
   connect(
     (state: any) => ({
       checkedNormalization: getNormalization(state),
-      checkedAllReference: getShowReferenceForAll(state),
       allPlotsNames: getNames(state),
     }),
     (dispatch: any) => ({
@@ -132,9 +125,6 @@ export default compose<any, any, any>(
       setShowReferenceForAll(data) {
         dispatch(setShowReferenceForAll(data))
       },
-      // setDataForOverlay(data) {
-      //   dispatch(setDataForOverlay(data))
-      // }
     })
   ),
   withStyles(styles),

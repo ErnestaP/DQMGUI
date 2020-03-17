@@ -8,7 +8,6 @@ import { Route } from 'react-router-dom';
 
 import { requestForDirectories } from './api'
 import { getRun, getDataset, set_path_for_folders, set_subdirectory, getPath, get_subdirectories } from '../ducks/header/setPaths'
-import { setAllNames } from '../ducks/plots/reference'
 import { connect } from 'react-redux'
 import { setLoader } from '../ducks/loader/loaderActions'
 import { getSize } from '../ducks/plots/sizeChanger';
@@ -111,9 +110,8 @@ class Directories extends React.Component<DirectoriesProps>{
       run,
       selected_directory,
       size,
-      setAllNames } = this.props
+    } = this.props
 
-    setAllNames(this.state.images_names)
     return (
       <Route render={({ history }) => (
         <Paper className={classes.papper}>
@@ -169,7 +167,7 @@ export default compose<any, any, any>(
       size: getSize(state),
       selected_directory: get_subdirectories(state)
     }),
-    { setLoader, set_path_for_folders, set_subdirectory, setAllNames }
+    { setLoader, set_path_for_folders, set_subdirectory }
   ),
   withStyles(styles)
 )(Directories)

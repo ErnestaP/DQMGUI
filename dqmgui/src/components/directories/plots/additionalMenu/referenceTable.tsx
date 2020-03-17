@@ -7,20 +7,23 @@ import { connect } from 'react-redux';
 import { setDataForOverlay } from '../../../ducks/plots/reference';
 
 interface ReferenceTableProps {
-
+  setDataForOverlay(data: any): void;
 }
 
 const ReferenceTable = ({ selectAll, setDataForOverlay, ...props }: ReferenceTableProps) => {
+
   return (
     <Form
       onSubmit={() => { }}
       render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}
           id='viewDetailsMenu'
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
         >
           <FormSpy subscription={{ values: true }}
-            onChange={(e) => setDataForOverlay(e.values)} />
+            onChange={(e) => {
+              setDataForOverlay(e.values)
+              }} />
           <Grid item xs={12} container>
             <Table>
               <TableRow>

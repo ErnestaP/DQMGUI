@@ -8,14 +8,22 @@ import { Field } from 'react-final-form';
 import TextField from '../../../common/textField'
 import CheckBox from '../../../common/checkBox'
 import { connect } from 'react-redux';
-import { compose } from 'ramda';
-import { deleteDataForOverlay } from '../../../ducks/plots/reference';
+import { compose, path, pathOr } from 'ramda';
+import { deleteDataForOverlay, getDataForOverlay } from '../../../ducks/plots/reference';
+
+const isItChecked = (rowId, dataForOverlay) => dataForOverlay.find(data => {
+  if (pathOr('', ['id'], data) === rowId) {
+    return pathOr('', ['selected'], data)
+  }
+  return false
+})
 
 interface ReferenceTableRowProps {
   classes: {
     noPadding: string,
   },
   selectedDataset: string;
+  deleteDataForOverlay(data: any): any
 }
 
 const styles = (theme: any) => ({
@@ -50,8 +58,8 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
   }
 
   render() {
-    const { classes, deleteDataForOverlay } = this.props;
-    
+    const { classes, deleteDataForOverlay, dataForOverlay } = this.props;
+
     return (
       <React.Fragment>
         {this.state.rows.map((row, index) =>
@@ -62,6 +70,10 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
                   name={`selected_${row}`}
                   component={CheckBox}
                   type="checkbox"
+                  // onChange= {{}}
+                  // checkboxProps={{
+                  //   checked: isItChecked(row, dataForOverlay)
+                  // }}
                 />
               </Grid>
             </TableCell>
@@ -110,7 +122,9 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
 
 export default compose(
   connect(
-    undefined,
+    (state: any) => ({
+      dataForOverlay: getDataForOverlay(state)
+    }),
     (dispatch: any) => ({
       deleteDataForOverlay(id) {
         dispatch(deleteDataForOverlay(id))

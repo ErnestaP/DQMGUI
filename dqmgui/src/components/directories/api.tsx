@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { pathOr, isEmpty, path } from "ramda";
+import { pathOr, isEmpty, path, find, propEq } from "ramda";
 
 export const requestForDirectories = (searchFieldByRun: string,
   searchFieldByDataset: string,
@@ -23,19 +23,21 @@ export const request_for_images = (imagePropsObject: any) => {
   const name = pathOr('', ['name'], imagePropsObject)
   const dataset = pathOr('', ['dataset'], imagePropsObject)
   const removestats = pathOr(false, ['removestats'], imagePropsObject)
-  
+
   const overlay = pathOr(undefined, ['overlay'], imagePropsObject)
   const runsForOverlay = pathOr(undefined, ['runsForOverlay'], imagePropsObject)
   const normalize = path(['normalization'], imagePropsObject) ? 'True' : 'False'
 
-  if (overlay && runsForOverlay) {
-    const ids = Object.keys(runsForOverlay)
+  if (overlay && overlay !== 'onSide' && runsForOverlay) {
+    const ids = runsForOverlay.map(run => run.id)
+
     const overlayPlots = ids.map(id => {
-      const run = runsForOverlay[id].run
-      const selected = runsForOverlay[id].selected
-      const datasetO = isEmpty(runsForOverlay[id].dataset) ? dataset : runsForOverlay[id].dataset
-      const label = isEmpty(runsForOverlay[id].label) ? run : runsForOverlay[id].label
-      
+      const currentRunObject = runsForOverlay.find(obj => obj.id === id)
+      const run = currentRunObject.run
+      const selected = currentRunObject.selected
+      const datasetO = isEmpty(currentRunObject.dataset) ? dataset : currentRunObject.dataset
+      const label = isEmpty(currentRunObject.label) ? run : currentRunObject.label
+
       if (selected) {
         return `;obj=archive/${run}${datasetO}${joined_directories}/${name};reflabel=${label}`
       }
