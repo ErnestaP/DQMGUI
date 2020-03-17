@@ -22,6 +22,7 @@ const ReferenceTable = ({ selectAll, setDataForOverlay, ...props }: ReferenceTab
         >
           <FormSpy subscription={{ values: true }}
             onChange={(e) => {
+              console.log(e)
               setDataForOverlay(e.values)
               }} />
           <Grid item xs={12} container>
@@ -40,7 +41,7 @@ const ReferenceTable = ({ selectAll, setDataForOverlay, ...props }: ReferenceTab
                   Label
               </TableCell>
                 <TableCell>
-                  Actions
+                  Remove
               </TableCell>
               </TableRow>
               <ReferenceTableRow selectAll={selectAll} />

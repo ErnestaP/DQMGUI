@@ -90,10 +90,30 @@ export const setAllNames = (data: any) => ({
   payload: data,
 })
 
-export const checkCheckbox = (id, checkboxValue) => (dispatch, getState) => {
+export const toggleCheckbox = (id: string, checkboxValue: boolean) => (dispatch: any, getState: any) => {
   const dataForOverlay = [...getDataForOverlay(getState())]
-  const getSelectedRow = dataForOverlay.find(data => data.id === id)
+  const index = dataForOverlay.findIndex(data => pathOr(undefined, ['id'], data) === id)
+console.log(index)
+  if (index >= 0) {
+    dataForOverlay[index].selected = checkboxValue
+    dispatch({
+      type: SET_DATA_FOR_OVERLAY,
+      payload: dataForOverlay,
+    })
+  }
+}
 
+export const toggleAllCheckboxes = (checkboxValue: boolean) => (dispatch: any, getState: any) => {
+  const dataForOverlay = [...getDataForOverlay(getState())]
+  const dataForOverlayWithChangedCheckboxes = dataForOverlay.map(data => {
+    data['selected'] = checkboxValue
+    return data
+  })
+
+  dispatch({
+    type: SET_DATA_FOR_OVERLAY,
+    payload: dataForOverlayWithChangedCheckboxes,
+  })
 }
 
 export const getPosition = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'position'], state);

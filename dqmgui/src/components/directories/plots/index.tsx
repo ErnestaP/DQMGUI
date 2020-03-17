@@ -93,10 +93,6 @@ const formUrlPropsObject = (run: string,
   )
 
 class Plots extends React.Component<PlotsProps> {
-
-  componentDidUpdate(){
-    console.log(this.props.runsForOverlay)
-  }
   state = ({
     selectedImages: [],
     openMenu: false,

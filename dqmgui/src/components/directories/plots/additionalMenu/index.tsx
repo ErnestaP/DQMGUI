@@ -8,6 +8,7 @@ import {
   getNormalization,
   setNormalization,
   getNames,
+  toggleAllCheckboxes,
 } from '../../../ducks/plots/reference';
 import { compose } from 'ramda';
 
@@ -25,7 +26,8 @@ interface AdditionalMenuProps {
 
 const styles = (theme: any) => ({
   viewDetailsMenu: {
-    background: theme.palette.common.addtionalTable
+    background: theme.palette.common.addtionalTable,
+    padding: 8,
   },
   separator: {
     padding: 8
@@ -69,6 +71,7 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
       checkedAllReference,
       checkedNormalization,
       classes,
+      toggleAllCheckboxes
     } = this.props
 
     return (
@@ -83,9 +86,9 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
               <FormControlLabel
                 control={
                   <Checkbox
-                    onChange={(e) => {
-                      this.setSelected(e.target.checked)
-                    }}
+                    // onChange={(e) => {
+                    //   toggleAllCheckboxes(e.target.checked)
+                    // }}
                   />
                 }
                 label="Show reference for all"
@@ -125,6 +128,9 @@ export default compose<any, any, any>(
       setShowReferenceForAll(data) {
         dispatch(setShowReferenceForAll(data))
       },
+      toggleAllCheckboxes(value: boolean) {
+        dispatch(toggleAllCheckboxes(value))
+      }
     })
   ),
   withStyles(styles),
