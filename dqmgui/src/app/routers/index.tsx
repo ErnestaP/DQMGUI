@@ -15,7 +15,7 @@ import NotFound from "../../../src/components/directories/notFound";
 
 const AppRouter = (props) => {
   const { path } = props.match;
-
+console.log(props.pathOfDirectories)
   return (
     <Switch>
       <Route
@@ -27,7 +27,8 @@ const AppRouter = (props) => {
       <Route
         key="directories"
         exact={true}
-        path={`${props.pathOfDirectories}`}
+        // path={`${props.pathOfDirectories}`}
+        path=""
         component={Directories} />
       <Route
         key="notFound"

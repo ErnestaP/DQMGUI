@@ -7,7 +7,7 @@ import { pathOr } from 'ramda'
 import { Route } from 'react-router-dom';
 
 import { requestForDirectories } from './api'
-import { getRun, getDataset, set_path_for_folders, set_subdirectory, getPath, get_subdirectories } from '../ducks/header/setPaths'
+import { getRun, getDataset, set_subdirectory, getPath, get_subdirectories } from '../ducks/header/setPaths'
 import { connect } from 'react-redux'
 import { setLoader } from '../ducks/loader/loaderActions'
 import { getSize } from '../ducks/plots/sizeChanger';
@@ -26,7 +26,6 @@ interface DirectoriesProps {
     papper: string,
   },
   selected_directory: string[],
-  set_path_for_folders(folders: string): void,
   set_subdirectory(subdirectory: string): void,
   setAllNames(names: string[]): void,
   size: SizeProps
@@ -104,7 +103,6 @@ class Directories extends React.Component<DirectoriesProps>{
 
   render() {
     const { classes,
-      set_path_for_folders,
       set_subdirectory,
       dataset,
       run,
@@ -121,7 +119,6 @@ class Directories extends React.Component<DirectoriesProps>{
                 <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
                   <IconButton className={classes.button}
                     onClick={() => {
-                      set_path_for_folders(directory)
                       set_subdirectory(directory)
                       history.push(`${directory}`)
                       this.fetch_directories()
@@ -167,7 +164,7 @@ export default compose<any, any, any>(
       size: getSize(state),
       selected_directory: get_subdirectories(state)
     }),
-    { setLoader, set_path_for_folders, set_subdirectory }
+    { setLoader, set_subdirectory }
   ),
   withStyles(styles)
 )(Directories)

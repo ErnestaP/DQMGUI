@@ -36,5 +36,5 @@ export const setMenuContent = (data: any) => ({
   payload: data,
 })
 
-export const getMenuStatus = (state: any) => path(['MENU', 'isOpen'], state);
-export const getMenuContent = (state: any) => path(['MENU', 'content'], state);
+export const getMenuStatus = (state: any) => path(['UI', 'SIDE_MENU', 'isOpen'], state);
+export const getMenuContent = (state: any) => path(['UI', 'SIDE_MENU', 'content'], state);

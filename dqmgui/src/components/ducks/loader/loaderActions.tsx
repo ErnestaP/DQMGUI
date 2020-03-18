@@ -25,4 +25,4 @@ export default function LaoderReducer(state = defaultState, { type, payload }: A
   }
 }
 
-export const getLoaderState = (state: any) => path(['LOADER', 'isLoading'], state);
+export const getLoaderState = (state: any) => path(['UI', 'LOADER', 'isLoading'], state);

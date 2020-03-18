@@ -116,7 +116,7 @@ export const toggleAllCheckboxes = (checkboxValue: boolean) => (dispatch: any, g
   })
 }
 
-export const getPosition = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'position'], state);
-export const getNormalization = (state: any): string => pathOr('', ['PLOTS', 'REFERENCE', 'normalize'], state);
-export const getNames = (state: any): string[] => pathOr([], ['PLOTS', 'REFERENCE', 'names'], state);
-export const getDataForOverlay = (state: any): any[] => pathOr([], ['PLOTS', 'REFERENCE', 'dataForOverlay'], state);
+export const getPosition = (state: any): string => pathOr('', ['DATA', 'PLOTS', 'REFERENCE', 'position'], state);
+export const getNormalization = (state: any): string => pathOr('', ['DATA','PLOTS', 'REFERENCE', 'normalize'], state);
+export const getNames = (state: any): string[] => pathOr([], ['DATA', 'PLOTS', 'REFERENCE', 'names'], state);
+export const getDataForOverlay = (state: any): any[] => pathOr([], ['DATA', 'PLOTS', 'REFERENCE', 'dataForOverlay'], state);

@@ -5,7 +5,7 @@ import cleanDeep from 'clean-deep';
 
 interface DefaultState {
   service: string
-  workplace: string
+  workspace: string
   run: string
   dataset: string
   path: string
@@ -14,7 +14,7 @@ interface DefaultState {
 
 const defaultState: DefaultState = {
   service: '',
-  workplace: '',
+  workspace: '',
   run: '',
   dataset: '',
   path: '',
@@ -34,7 +34,7 @@ export default function serviceSetReducer(state = defaultState, { type, payload 
     case SET_SERVICE:
       return { ...state, service: payload };
     case SET_WORKSPACES:
-      return { ...state, workplace: payload };
+      return { ...state, workspace: payload };
     case SET_RUN:
       return { ...state, run: payload };
     case SET_DATA_SET:
@@ -93,7 +93,7 @@ export const back_subdirectory = (data: any) => (dispatch, getState) => {
     }
   }))
 
-  return ({
+  dispatch ({
     type: SET_SUBDIRECTORY,
     payload: restDirectories,
   })
@@ -104,7 +104,7 @@ export const cleanSubdirectories = () => ({
   payload: [],
 })
 
-export const setPath = (data: any) => (dispatch, getState) => {
+export const setPath = (data: any) => {
   return ({
     type: SET_PATH,
     payload: data,
@@ -114,15 +114,15 @@ export const setPath = (data: any) => (dispatch, getState) => {
 export const set_path_for_folders = (data: any) => (dispatch, getState) => {
   const setted_path = getPath(getState())
   const new_path = [setted_path, data].join('/')
-  return ({
+  dispatch ({
     type: SET_PATH,
     payload: new_path,
   })
 }
 
-export const getService = (state: any): string => pathOr('', ['ACTIVE_TABS', 'service'], state);
-export const getWorkplace = (state: any): string => pathOr('', ['ACTIVE_TABS', 'workplace'], state);
-export const getRun = (state: any): string => pathOr('', ['ACTIVE_TABS', 'run'], state);
-export const getDataset = (state: any): string => pathOr('', ['ACTIVE_TABS', 'dataset'], state);
-export const getPath = (state: any): string => pathOr('', ['ACTIVE_TABS', 'path'], state);
-export const get_subdirectories = (state: any): string[] => pathOr([], ['ACTIVE_TABS', 'subdirectories'], state);
+export const getService = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'service'], state);
+export const getWorkspace = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'workspace'], state);
+export const getRun = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'run'], state);
+export const getDataset = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'dataset'], state);
+export const getPath = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'path'], state);
+export const get_subdirectories = (state: any): string[] => pathOr([], ['DATA', 'FILTER', 'ACTIVE_TABS', 'subdirectories'], state);

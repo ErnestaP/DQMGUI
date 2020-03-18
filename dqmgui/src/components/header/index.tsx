@@ -184,7 +184,7 @@ const Header = ({
                           key={directory}
                           className={classes.directories}
                           onClick={() => {
-                            back_subdirectory(directory)
+                            history.goBack()
                           }}
                         >
                           {directory}/</Grid>
@@ -230,7 +230,17 @@ export default compose<any, any, any>(
       dataset: getDataset(state),
       directories: get_subdirectories(state),
     }),
-    { setSearachFieldByDataset, setSearachFieldByRun, back_subdirectory }
+    (dispatch: any) => ({
+      back_subdirectory(directory: string) {
+        dispatch(back_subdirectory(directory))
+      },
+      setSearachFieldByDataset(searchField: string) {
+        dispatch(setSearachFieldByDataset(searchField))
+      },
+      setSearachFieldByRun(searchField: string) {
+        dispatch(setSearachFieldByRun(searchField))
+      }
+    })
   ),
   withStyles(styles))
   (Header)
