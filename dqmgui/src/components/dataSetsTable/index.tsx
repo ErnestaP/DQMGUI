@@ -87,8 +87,8 @@ render() {
     {
       isEmpty(this.state.samplesGroup) ?
         <NoRecords /> :
-        this.state.samplesGroup.map((samplesGroup: SampleDataInerface) => (
-          <Paper className={path(['paper'], classes)}>
+        this.state.samplesGroup.map((samplesGroup: SampleDataInerface, index:number) => (
+          <Paper key={index} className={path(['paper'], classes)}>
             <ContentTable samplesGroup={samplesGroup} />
           </Paper>
         ))

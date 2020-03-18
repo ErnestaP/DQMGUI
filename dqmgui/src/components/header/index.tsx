@@ -8,15 +8,13 @@ import { Form } from 'react-final-form'
 import { Route } from 'react-router-dom';
 
 import Logo from '../../../images/CMSlogo_color_nolabel_1024_May2014.png';
-import { get_subdirectories, getRun, getDataset } from '../ducks/header/setPaths'
+import { get_subdirectories, getRun, getDataset, back_subdirectory } from '../ducks/header/setPaths'
 import { Time } from './time'
 import SearchByDatasetField from './searchByDatasetField'
 import SearchByRunField from './searchBuRunField'
 import SearchByPlotByName from './searchByPlotName'
 import { setSearachFieldByDataset, setSearachFieldByRun } from '../ducks/table/form';
 import { format_search_field_string, format_header_path } from '../utils'
-import SizeChanger from '../directories/plots/sizeChanger';
-import { getSize } from '../ducks/header/sizeChanger';
 import { SizeProps } from 'src/app/interfaces';
 
 const styles = (theme: any) => ({
@@ -105,6 +103,13 @@ const styles = (theme: any) => ({
   },
   additionalMenu: {
     background: '#eeeeee'
+  },
+  directories: {
+    '&:hover': {
+      color: theme.palette.primary.contrastText
+    },
+    color: theme.palette.primary.main,
+    cursor: 'pointer'
   }
 })
 
@@ -124,6 +129,7 @@ interface HeaderInterface {
   run: string;
   directories: string[];
   settedSize: SizeProps;
+  back_subdirectory(directory: string): void;
 }
 
 const Header = ({
@@ -133,6 +139,7 @@ const Header = ({
   dataset,
   run,
   directories,
+  back_subdirectory,
 }: HeaderInterface) => {
   const [open, toggleMenu] = React.useState(false)
 
@@ -153,8 +160,7 @@ const Header = ({
               <Grid item container xs={12} className={classes.header}>
                 <Grid container xs={4} item >
                   <Grid item xs={2}>
-                    <img src={Logo} className={classes.logo}
-                    ></img>
+                    <img src={Logo} className={classes.logo}></img>
                   </Grid>
                 </Grid>
                 <Grid item xs={8} className={classes.timeWrapper} >
@@ -163,17 +169,29 @@ const Header = ({
               </Grid>
               <Grid container item xs={12} justify="flex-end" className={classes.searchContainer} direction="row">
                 <Grid container xs={12} item justify="space-between">
-                  <Grid item>
+                  {/* <Grid item>
                     <IconButton onClick={() => toggleMenu(!open)}>
                       <Icon>
                         <MoreVertIcon />
                       </Icon>
                     </IconButton>
+                  </Grid> */}
+                  <Grid item xs={6} sm={6} md={6} lg={6} xl={7} className={classes.pathContainer}>
+                    <Grid container item>
+                      <Grid item>{format_header_path(dataset, run)}/</Grid>
+                      {directories.map((directory: string) =>
+                        <Grid item
+                          key={directory}
+                          className={classes.directories}
+                          onClick={() => {
+                            back_subdirectory(directory)
+                          }}
+                        >
+                          {directory}/</Grid>
+                      )}
+                    </Grid>
                   </Grid>
-                  <Grid item xs={7} className={classes.pathContainer}>
-                    {format_header_path(dataset, run, directories)}
-                  </Grid>
-                  <Grid container item xs={4} justify="space-around">
+                  <Grid container item xs={5} sm={5} md={5} lg={5} xl={4} justify="space-around">
                     <Grid item>
                       <SearchByDatasetField />
                     </Grid>
@@ -192,9 +210,6 @@ const Header = ({
               {
                 open &&
                 <Grid container item xs={12} className={classes.additionalMenu}>
-                  {/* <Grid item className={`${classes.pathContainer} ${classes.sizeChanger}`}>
-                    <SizeChanger />
-                  </Grid> */}
                   <Grid item style={{ display: 'flex', alignItems: 'center' }}>
                     <SearchByPlotByName />
                   </Grid>
@@ -215,7 +230,7 @@ export default compose<any, any, any>(
       dataset: getDataset(state),
       directories: get_subdirectories(state),
     }),
-    { setSearachFieldByDataset, setSearachFieldByRun }
+    { setSearachFieldByDataset, setSearachFieldByRun, back_subdirectory }
   ),
   withStyles(styles))
   (Header)

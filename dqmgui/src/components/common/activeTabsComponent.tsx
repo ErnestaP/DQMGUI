@@ -21,9 +21,9 @@ const ActiveTabsSwitching = ({ options }: any) => {
 
   return (
     <Grid container item>
-      <Grid item style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <ArrowBackIosIcon onClick={async() => {
-         await setSelectedIndex(selectedIndex >= 1 && selectedIndex - 1)
+      <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <ArrowBackIosIcon onClick={async () => {
+          await setSelectedIndex(selectedIndex >= 1 && selectedIndex - 1)
           setSelected(options[selectedIndex]);
         }} />
       </Grid>
@@ -32,9 +32,9 @@ const ActiveTabsSwitching = ({ options }: any) => {
           {options[selectedIndex]}
         </Button>
       </Grid>
-      <Grid item style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <ArrowForwardIosIcon onClick={async() => {
-         await setSelectedIndex(selectedIndex < options.length && selectedIndex + 1)
+      <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <ArrowForwardIosIcon onClick={async () => {
+          await setSelectedIndex(selectedIndex < options.length && selectedIndex + 1)
           setSelected(options[selectedIndex]);
         }} />
       </Grid>
@@ -53,14 +53,16 @@ const ActiveTabsSwitching = ({ options }: any) => {
       >        <MenuList>
           {
             options.map((option: any) =>
-              <MenuItem style={{
-                background: `${selected === option ? '#29b6f6' : 'white'}`,
-                color: `${selected === option ? '#fff' : '000'}`
-              }} onClick={(e) => {
-                setSelected(option);
-                setSelectedIndex(options.indexOf(option));
-                closeMenu()
-              }}>
+              <MenuItem
+                key={option}
+                style={{
+                  background: `${selected === option ? '#29b6f6' : 'white'}`,
+                  color: `${selected === option ? '#fff' : '000'}`
+                }} onClick={(e) => {
+                  setSelected(option);
+                  setSelectedIndex(options.indexOf(option));
+                  closeMenu()
+                }}>
                 {option}
               </MenuItem>
             )

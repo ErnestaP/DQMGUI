@@ -9,7 +9,8 @@ export const Runs = ({ runs }: RunsProps) => {
   return (<Grid container spacing={2}>
     {runs.map(
       (run: string) =>
-        <Grid item>
+        <Grid item
+          key={run}>
           {run}
         </Grid>
     )}

@@ -1,18 +1,18 @@
 import * as React from 'react'
-import { Grid, IconButton, Icon, withStyles, Typography, Paper } from '@material-ui/core'
+import { Grid, IconButton, Icon, withStyles, Typography, Paper, Divider } from '@material-ui/core'
 import FolderIcon from '@material-ui/icons/Folder';
 import { compose, isEmpty } from 'ramda';
+import cleanDeep from 'clean-deep'
+import { pathOr } from 'ramda'
+import { Route } from 'react-router-dom';
 
-import { requestForDirectories, request_for_images } from './api'
+import { requestForDirectories } from './api'
 import { getRun, getDataset, set_path_for_folders, set_subdirectory, getPath, get_subdirectories } from '../ducks/header/setPaths'
 import { connect } from 'react-redux'
 import { setLoader } from '../ducks/loader/loaderActions'
-import { pathOr } from 'ramda'
-import cleanDeep from 'clean-deep'
-import { Route } from 'react-router-dom';
-import { getSize } from '../ducks/header/sizeChanger';
+import { getSize } from '../ducks/plots/sizeChanger';
 import Plots from './plots';
-import SizeChanger from './plots/sizeChanger';
+import NoRecords from '../common/noRecords';
 
 interface DirectoriesProps {
   setLoader(value: boolean): void;
@@ -28,6 +28,8 @@ interface DirectoriesProps {
   selected_directory: string[],
   set_path_for_folders(folders: string): void,
   set_subdirectory(subdirectory: string): void,
+  setAllNames(names: string[]): void,
+  size: SizeProps
 }
 
 const styles = (theme: any) => ({
@@ -43,14 +45,15 @@ const styles = (theme: any) => ({
   },
   button: {
     borderRadius: 8,
+    wordBreak: 'break-word',
   },
   papper: {
-    width: '100vw'
+    width: '100%'
   },
   sizeChanger: {
     paddingLeft: 16,
     paddingBottom: 4
-  }
+  },
 })
 
 class Directories extends React.Component<DirectoriesProps>{
@@ -106,17 +109,15 @@ class Directories extends React.Component<DirectoriesProps>{
       dataset,
       run,
       selected_directory,
-      size } = this.props
+      size,
+    } = this.props
 
     return (
       <Route render={({ history }) => (
         <Paper className={classes.papper}>
           <Grid item container className={classes.wrapper}>
-            <Grid item xs={12} className={classes.sizeChanger}>
-              <SizeChanger />
-            </Grid>
-            {
-              this.state.directories.map((directory: string) =>
+            <Grid container item id="directoriesGrid">
+              {this.state.directories && this.state.directories.map((directory: string) =>
                 <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
                   <IconButton className={classes.button}
                     onClick={() => {
@@ -134,8 +135,9 @@ class Directories extends React.Component<DirectoriesProps>{
                   </IconButton>
                 </Grid>
               )
-            }
-            <Grid container direction="row" spacing={0}>
+              }
+            </Grid>
+            <Grid container direction="row" spacing={0} className={classes.plots}>
               {!isEmpty(this.state.images_names) &&
                 <Plots
                   names={this.state.images_names}
@@ -147,6 +149,9 @@ class Directories extends React.Component<DirectoriesProps>{
               }
             </Grid >
           </Grid >
+          {isEmpty(this.state.directories) && isEmpty(this.state.images_names) &&
+            <NoRecords />
+          }
         </Paper>
       )} />
     )

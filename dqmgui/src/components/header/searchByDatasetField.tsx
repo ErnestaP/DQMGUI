@@ -19,6 +19,7 @@ const SearchByDataset = ({ classes }: SearchByDatasetProps) => {
   return (
     <Field
       name="searchField"
+      // subscription={{ data: true }}
       placeholder="Search by Dataset"
       fullWidth
       component={TextField}

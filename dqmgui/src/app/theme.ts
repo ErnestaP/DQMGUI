@@ -30,8 +30,8 @@ const createTheme = () => {
         // ...blue,
         main: '#039be5',
         light: '#29b6f6',
-        dark: '#.277bd',
-        contrastText: '#FFF',
+        dark: '#0277bd',
+        contrastText: '#fbc02d',
       },
       secondary: {
         // ...amber,
@@ -40,11 +40,6 @@ const createTheme = () => {
         dark: '#00838f',
         contrastText: '#9DA6B0',
         [400]: '#000'
-        // main: '#fcd734',
-        // light: '#ffff6b',
-        // dark: '#c5a600',
-        // contrastText: '#9DA6B0',
-        // [400]: '#ffca28'
       },
       text: {
         primary: '#22282D',
@@ -59,6 +54,7 @@ const createTheme = () => {
         fullBlack: blueGrey[500],
         lightGrey: grey[500],
         white: '#FFF',
+        addtionalTable: ' #FFF9C4'
       },
       background: {
         lightBlue: '#e3f2fd'
