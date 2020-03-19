@@ -1,12 +1,12 @@
 import { AnyAction } from 'redux';
-import { pathOr } from 'ramda';
+import { pathOr, assoc } from 'ramda';
 
 interface DefaultState {
-  names: string[];
+  names: any;
 }
 
 const defaultState: DefaultState = {
-  names: [],
+  names: {},
 }
 
 const SET_ALL_NAMES = "SET_ALL_NAMES"
@@ -14,7 +14,8 @@ const SET_ALL_NAMES = "SET_ALL_NAMES"
 export default function plotsNamesReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
     case SET_ALL_NAMES:
-      return { ...state, names: payload }
+      const names = JSON.parse(JSON.stringify(payload));
+      return { ...state, names }
     default:
       return state;
   }
@@ -26,94 +27,60 @@ export const setAllNames = (data: any) => ({
   payload: data,
 })
 
-export const setSelectedPlots = (name: any) => (dispatch, getState) => {
-  const plots: string[] = [...getNames(getState())]
-  const selectPlot = plots.map(plot => {
-    if (plot.name === name) {
-      const copy = plot
-      copy.selected = true
-      return copy
-    }
-    return plot
-  })
+export const setSelectedPlot = (name: any) => (dispatch, getState) => {
+  const plots = getNames(getState())
+  const names = Object.keys(plots)
+
+  plots[name].selected = true
+
+  names.map(nameOfPlot =>
+    plots[nameOfPlot].selected = false
+  )
 
   dispatch({
     type: SET_ALL_NAMES,
-    payload: selectPlot,
+    payload: plots,
   })
 }
 
-export const setSelectedPlot = (name: any) => (dispatch, getState) => {
-  const plots: string[] = [...getNames(getState())]
-  const selectPlot = plots.map(plot => {
-    if (plot.name === name) {
-      const copy = plot
-      copy.selected = true
-      return copy
-    }
-    else {
-      const copy = plot
-      copy.selected = false
-      return plot
-    }
-  })
+export const setSelectedPlots = (name: any) => (dispatch, getState) => {
+  const plots = getNames(getState())
+  plots[name].selected = true
 
   dispatch({
     type: SET_ALL_NAMES,
-    payload: selectPlot,
+    payload: plots,
   })
 }
 
 export const removeSelectedPlot = (name: any) => (dispatch, getState) => {
-  const plots: string[] = [...getNames(getState())]
-  const deselectPlot = plots.map(plot => {
-    if (plot.name === name) {
-      const copy = plot
-      copy.selected = false
-      return copy
-    }
-    return plot
-  })
+  const plots = getNames(getState())
+  plots[name].selected = false
+
   dispatch({
     type: SET_ALL_NAMES,
-    payload: deselectPlot,
+    payload: plots,
   })
 }
 
 export const addStats = (name: any) => (dispatch, getState) => {
-  const selectedPlots: string[] = [...getNames(getState())]
-  const addedStats = selectedPlots.map(plot => {
-    if (plot.name === name) {
-      const copy = plot
-      copy.stats = true
-      return copy
-    }
-    return plot
-  })
+  const plots = getNames(getState())
+  plots[name].stats = true
 
   dispatch({
     type: SET_ALL_NAMES,
-    payload: addedStats,
+    payload: plots,
   })
 }
 
 export const removeStats = (name: any) => (dispatch, getState) => {
-  const selectedPlots: string[] = [...getNames(getState())]
-  const removedStats = selectedPlots.map(plot => {
-    if (plot.name === name) {
-      const copy = plot
-      copy.stats = false
-      return copy
-    }
-    return plot
-  })
-  console.log(removedStats)
+  const plots = getNames(getState())
+  plots[name].stats = false
 
   dispatch({
     type: SET_ALL_NAMES,
-    payload: removedStats,
+    payload: plots,
   })
 }
 
-
-export const getNames = (state: any): string[] => pathOr([], ['DATA', 'PLOTS', 'PLOTS_INFO', 'NAMES', 'names'], state);
+export const getNames = (state: any): any => pathOr([], ['DATA', 'PLOTS', 'PLOTS_INFO', 'PLOTS', 'names'], state);

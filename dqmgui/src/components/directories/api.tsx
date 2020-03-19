@@ -48,7 +48,7 @@ export const request_for_images = (imagePropsObject: any) => {
     return `/plotfairy/overlay?ref=${overlay};obj=archive/${run}${dataset}${joined_directories}/${name}${joinedOverlaysImages};norm=${normalize};w=${sizeArray[0]};h=${sizeArray[1]}`
   }
   if (stats) {
-    console.log('sirasssdfdssttats')
+
     return `/plotfairy/archive/${run}${dataset}${joined_directories}/${name}?w=${sizeArray[0]};h=${sizeArray[1]}`
   }
   return `/plotfairy/archive/${run}${dataset}${joined_directories}/${name}?showstats=0;w=${sizeArray[0]};h=${sizeArray[1]}`

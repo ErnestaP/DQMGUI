@@ -19,7 +19,7 @@ const appReducer = combineReducers({
       'REFERENCE': ReferenceReducer,
       'PLOTS_INFO': combineReducers({
         'SIZES': DisplayReducer,
-        'NAMES': PlotsNamesReducer,
+        'PLOTS': PlotsNamesReducer,
       }),
     }),
     'DIRECTORIES': DirectoriesReducer,

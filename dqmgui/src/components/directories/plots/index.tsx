@@ -120,13 +120,14 @@ class Plots extends React.Component<PlotsProps> {
       runsForOverlay,
     } = this.props
 
-    const selectedPlot = this.state.name &&
-      plots.find(oneRun => oneRun.name === this.state.name)
-    const anySelectedPlots = plots.filter(plot => plot.selected === true)
-    console.log(anySelectedPlots)
+    const selectedPlot = this.state.name && plots[this.state.name]
+    const names = Object.keys(plots)
+    // const anySelectedPlots = names.map()
+    // // plots.filter(plot => plot.selected === true)
+
     return (
       <Grid item container direction="row">
-        <Grid item container direction="row" className={`${!isEmpty(anySelectedPlots) && classes.biggerPlot}`} >
+        <Grid item container direction="row" className={`${!isEmpty(''/*anySelectedPlots*/) && classes.biggerPlot}`} >
           <Grid item xs={12} className={classes.sizeChanger} container spacing={4}>
             <Grid item>
               <IconButton onClick={() => {
@@ -151,11 +152,11 @@ class Plots extends React.Component<PlotsProps> {
               anchor={this.state.anchorElMenu}
               plot={selectedPlot}
             />
-            {plots.map((plot: any) => {
+            {names.map((name: any) => {
               return <Grid container direction="column"
                 item
-                key={name}
-                id={name}
+                key={plots[name].name}
+                id={plots[name].name}
                 className={`${classes.plotWrapper} `}
               >
                 <Plot
@@ -164,7 +165,7 @@ class Plots extends React.Component<PlotsProps> {
                   setName={this.setName}
                   classes={classes}
                   size={size}
-                  plot={plot}
+                  plot={plots[name]}
                   overlay={overlay}
                   runsForOverlay={runsForOverlay}
                 />
@@ -174,14 +175,14 @@ class Plots extends React.Component<PlotsProps> {
 
           </Grid>
         </Grid>
-        {
+        {/* {
           !isEmpty(anySelectedPlots) &&
           <AdditionalPlots
             selectedImages={anySelectedPlots}
             overlay={overlay}
             runsForOverlay={runsForOverlay}
           />
-        }
+        } */}
       </Grid >
     )
   }

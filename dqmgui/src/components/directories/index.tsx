@@ -68,7 +68,7 @@ class Directories extends React.Component<DirectoriesProps>{
 
           const directories = cleanDeep(pathOr([], ['data', 'contents'], response).map((dir_object: Object) =>
             pathOr('', ['subdir'], dir_object)))
-
+          let empty = {}
           const images_names_from_api = cleanDeep(pathOr([], ['data', 'contents'], response).map((images_object: Object) => {
             const name = pathOr('', ['obj'], images_object)
             const imageObject = {
@@ -81,7 +81,7 @@ class Directories extends React.Component<DirectoriesProps>{
               selected: false
             }
             if (name) {
-              return imageObject
+              return empty[name] = imageObject
             }
             else {
               return undefined
@@ -90,7 +90,7 @@ class Directories extends React.Component<DirectoriesProps>{
 
           this.props.setDirectories(directories)
 
-          this.props.setAllNames(images_names_from_api)
+          this.props.setAllNames(empty)
         },
         error => {
           this.props.setLoader(false)
