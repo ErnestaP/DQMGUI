@@ -4,20 +4,25 @@ import SideMenuReducer from '../components/ducks/sideNav/setMenuStatus'
 import ServicesReducer from '../components/ducks/header/setPaths'
 import SearchReducer from '../components/ducks/table/form'
 import LoaderReducer from '../components/ducks/loader/loaderActions';
-import SelectedDataReducer from '../components/ducks/table/selectedData';
+import PlotsNamesReducer from '../components/ducks/plots/setNames';
 import DisplayReducer from '../components/ducks/plots/sizeChanger';
 import ReferenceReducer from '../components/ducks/plots/reference';
+import DirectoriesReducer from '../components/ducks/folders/getDirectories';
 
 const appReducer = combineReducers({
   'DATA': combineReducers({
     'FILTER': combineReducers({
       'SEARH_FIELDS': SearchReducer,
-      'ACTIVE_TABS': ServicesReducer,
+      'SELECTED': ServicesReducer,
     }),
     'PLOTS': combineReducers({
       'REFERENCE': ReferenceReducer,
-      'SIZES': DisplayReducer,
-    })
+      'PLOTS_INFO': combineReducers({
+        'SIZES': DisplayReducer,
+        'NAMES': PlotsNamesReducer,
+      }),
+    }),
+    'DIRECTORIES': DirectoriesReducer,
   }),
   'UI': combineReducers({
     'LOADER': LoaderReducer,

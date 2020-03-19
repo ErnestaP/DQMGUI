@@ -5,20 +5,17 @@ import { createSelector } from 'reselect'
 interface DefaultState {
   position: string,
   normalize: boolean,
-  names: string[];
   dataForOverlay: {}
 }
 
 const defaultState: DefaultState = {
   position: '',
   normalize: false,
-  names: [],
   dataForOverlay: [{ id: '1', run: '', dataset: '', label: '', selected: false }]
 }
 
 const SET_POSITION = "SET_POSITION"
 const SET_NORMALIZATION = "SET_NORMALIZATION"
-const SET_ALL_NAMES = "SET_ALL_NAMES"
 const SET_DATA_FOR_OVERLAY = "SET_DATA_FOR_OVERLAY"
 
 export default function positionReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
@@ -27,8 +24,6 @@ export default function positionReducer(state = defaultState, { type, payload }:
       return { ...state, position: payload }
     case SET_NORMALIZATION:
       return { ...state, normalize: payload }
-    case SET_ALL_NAMES:
-      return { ...state, names: payload }
     case SET_DATA_FOR_OVERLAY:
       return { ...state, dataForOverlay: payload }
     default:
@@ -85,11 +80,6 @@ export const deleteDataForOverlay = (id: any) => (dispatch, getState) => {
   })
 }
 
-export const setAllNames = (data: any) => ({
-  type: SET_ALL_NAMES,
-  payload: data,
-})
-
 export const toggleCheckbox = (id: string, checkboxValue: boolean) => (dispatch: any, getState: any) => {
   const dataForOverlay = [...getDataForOverlay(getState())]
   const index = dataForOverlay.findIndex(data => pathOr(undefined, ['id'], data) === id)
@@ -118,5 +108,4 @@ export const toggleAllCheckboxes = (checkboxValue: boolean) => (dispatch: any, g
 
 export const getPosition = (state: any): string => pathOr('', ['DATA', 'PLOTS', 'REFERENCE', 'position'], state);
 export const getNormalization = (state: any): string => pathOr('', ['DATA','PLOTS', 'REFERENCE', 'normalize'], state);
-export const getNames = (state: any): string[] => pathOr([], ['DATA', 'PLOTS', 'REFERENCE', 'names'], state);
 export const getDataForOverlay = (state: any): any[] => pathOr([], ['DATA', 'PLOTS', 'REFERENCE', 'dataForOverlay'], state);

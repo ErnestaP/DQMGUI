@@ -1,3 +1,5 @@
+import { SizeProps } from "src/app/interfaces";
+
 export interface ServicesProps {
     title: string;
     href: string;
@@ -17,7 +19,7 @@ export interface SampleDataInerface {
 }
 
 export interface RunInterface {
-    id?:string;
+    id?: string;
     run: string,
     importversion?: string,
     version?: string;
@@ -25,15 +27,23 @@ export interface RunInterface {
 }
 
 export interface ReferenceRowInterface {
-    id?: string ,
+    id?: string,
     run: string;
     dataset: string;
     label: string;
 }
 
-export interface OverlayRequestProps{
+export interface OverlayRequestProps {
     run: string;
     dataset: string;
     plotName: string;
     size: string;
+}
+
+export interface plotInterface {
+    name: string;
+    size: SizeProps;
+    normalize: boolean;
+    showStats: boolean;
+    jsonRoot: boolean;
 }

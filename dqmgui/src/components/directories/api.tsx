@@ -16,17 +16,18 @@ export const requestForDirectories = (searchFieldByRun: string,
 }
 
 export const request_for_images = (imagePropsObject: any) => {
-  const selected_direcotories = pathOr([], ['selected_directory'], imagePropsObject)
+  const selected_direcotories = pathOr([], ['plot', 'directories'], imagePropsObject)
   const joined_directories = selected_direcotories ? '/' + selected_direcotories.join('/') : ''
   const sizeArray = Object.values(pathOr('', ['size'], imagePropsObject))
-  const run = pathOr('', ['run'], imagePropsObject)
-  const name = pathOr('', ['name'], imagePropsObject)
-  const dataset = pathOr('', ['dataset'], imagePropsObject)
-  const removestats = pathOr(false, ['removestats'], imagePropsObject)
+
+  const run = pathOr('', ['plot', 'run'], imagePropsObject)
+  const name = pathOr('', ['plot', 'name'], imagePropsObject)
+  const dataset = pathOr('', ['plot', 'dataset'], imagePropsObject)
+  const stats = pathOr(false, ['plot', 'stats'], imagePropsObject)
 
   const overlay = pathOr(undefined, ['overlay'], imagePropsObject)
   const runsForOverlay = pathOr(undefined, ['runsForOverlay'], imagePropsObject)
-  const normalize = path(['normalization'], imagePropsObject) ? 'True' : 'False'
+  const normalize = path(['plot', 'normalize'], imagePropsObject) ? 'True' : 'False'
 
   if (overlay && overlay !== 'onSide' && runsForOverlay) {
     const ids = runsForOverlay.map(run => run.id)
@@ -46,10 +47,11 @@ export const request_for_images = (imagePropsObject: any) => {
     const joinedOverlaysImages = overlayPlots.join('')
     return `/plotfairy/overlay?ref=${overlay};obj=archive/${run}${dataset}${joined_directories}/${name}${joinedOverlaysImages};norm=${normalize};w=${sizeArray[0]};h=${sizeArray[1]}`
   }
-  if (removestats) {
-    return `/plotfairy/archive/${run}${dataset}${joined_directories}/${name}?showstats=0;w=${sizeArray[0]};h=${sizeArray[1]}`
+  if (stats) {
+    console.log('sirasssdfdssttats')
+    return `/plotfairy/archive/${run}${dataset}${joined_directories}/${name}?w=${sizeArray[0]};h=${sizeArray[1]}`
   }
-  return `/plotfairy/archive/${run}${dataset}${joined_directories}/${name}?w=${sizeArray[0]};h=${sizeArray[1]}`
+  return `/plotfairy/archive/${run}${dataset}${joined_directories}/${name}?showstats=0;w=${sizeArray[0]};h=${sizeArray[1]}`
 }
 
 // http://localhost:8081/dqm/offline/plotfairy/overlay?ref=overlay;obj=archive/run/dataset/folders/plotoPavadinimas;reflabel=312553;w=266;h=200

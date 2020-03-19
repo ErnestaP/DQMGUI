@@ -11,6 +11,8 @@ import { getRun, getDataset, set_subdirectory, getPath, get_subdirectories } fro
 import { connect } from 'react-redux'
 import { setLoader } from '../ducks/loader/loaderActions'
 import { getSize } from '../ducks/plots/sizeChanger';
+import { setAllNames, getNames } from '../ducks/plots/setNames'
+import { setDirectories, getDirectoriesNames } from '../ducks/folders/getDirectories'
 import Plots from './plots';
 import NoRecords from '../common/noRecords';
 
@@ -56,22 +58,6 @@ const styles = (theme: any) => ({
 })
 
 class Directories extends React.Component<DirectoriesProps>{
-  state = ({
-    directories: [],
-    images_names: [],
-  })
-
-  set_directories = (dirs: any) => {
-    this.setState({
-      directories: dirs
-    })
-  }
-
-  set_images_name = (images: any) => {
-    this.setState({
-      images_names: images
-    })
-  }
 
   fetch_directories() {
     this.props.setLoader(true)
@@ -83,12 +69,28 @@ class Directories extends React.Component<DirectoriesProps>{
           const directories = cleanDeep(pathOr([], ['data', 'contents'], response).map((dir_object: Object) =>
             pathOr('', ['subdir'], dir_object)))
 
-          const images_names_from_api = cleanDeep(pathOr([], ['data', 'contents'], response).map((images_object: Object) =>
-            pathOr('', ['obj'], images_object)))
+          const images_names_from_api = cleanDeep(pathOr([], ['data', 'contents'], response).map((images_object: Object) => {
+            const name = pathOr('', ['obj'], images_object)
+            const imageObject = {
+              name: name,
+              run: this.props.run,
+              dataset: this.props.dataset,
+              directories: this.props.selected_directory,
+              stats: true,
+              normalization: false,
+              selected: false
+            }
+            if (name) {
+              return imageObject
+            }
+            else {
+              return undefined
+            }
+          }))
 
-          this.set_directories(directories)
+          this.props.setDirectories(directories)
 
-          this.set_images_name(images_names_from_api)
+          this.props.setAllNames(images_names_from_api)
         },
         error => {
           this.props.setLoader(false)
@@ -108,6 +110,8 @@ class Directories extends React.Component<DirectoriesProps>{
       run,
       selected_directory,
       size,
+      directories,
+      plots,
     } = this.props
 
     return (
@@ -115,7 +119,7 @@ class Directories extends React.Component<DirectoriesProps>{
         <Paper className={classes.papper}>
           <Grid item container className={classes.wrapper}>
             <Grid container item id="directoriesGrid">
-              {this.state.directories && this.state.directories.map((directory: string) =>
+              {directories && directories.map((directory: string) =>
                 <Grid item xs={3} key={directory} className={classes.folder_wrapper}>
                   <IconButton className={classes.button}
                     onClick={() => {
@@ -135,9 +139,9 @@ class Directories extends React.Component<DirectoriesProps>{
               }
             </Grid>
             <Grid container direction="row" spacing={0} className={classes.plots}>
-              {!isEmpty(this.state.images_names) &&
+              {!isEmpty(plots) &&
                 <Plots
-                  names={this.state.images_names}
+                  plots={plots}
                   dataset={dataset}
                   run={run}
                   selected_directory={selected_directory}
@@ -146,7 +150,7 @@ class Directories extends React.Component<DirectoriesProps>{
               }
             </Grid >
           </Grid >
-          {isEmpty(this.state.directories) && isEmpty(this.state.images_names) &&
+          {isEmpty(directories) && isEmpty(plots) &&
             <NoRecords />
           }
         </Paper>
@@ -162,9 +166,11 @@ export default compose<any, any, any>(
       run: getRun(state),
       path: getPath(state),
       size: getSize(state),
-      selected_directory: get_subdirectories(state)
+      selected_directory: get_subdirectories(state),
+      directories: getDirectoriesNames(state),
+      plots: getNames(state)
     }),
-    { setLoader, set_subdirectory }
+    { setLoader, set_subdirectory, setAllNames, setDirectories }
   ),
   withStyles(styles)
 )(Directories)

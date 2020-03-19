@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 import { pathOr } from 'ramda';
 import { createSelector } from 'reselect'
 import cleanDeep from 'clean-deep';
+import { plotInterface } from './interfaces';
 
 interface DefaultState {
   service: string
@@ -9,7 +10,8 @@ interface DefaultState {
   run: string
   dataset: string
   path: string
-  subdirectories: string[]
+  subdirectories: string[],
+  plots: plotInterface[]
 }
 
 const defaultState: DefaultState = {
@@ -19,6 +21,7 @@ const defaultState: DefaultState = {
   dataset: '',
   path: '',
   subdirectories: [],
+  plots: []
 }
 
 const SET_SERVICE = "SET_SERVICE"
@@ -28,6 +31,8 @@ const SET_DATA_SET = "SET_DATA_SET"
 const SET_PATH = "SET_PATH"
 const SET_SUBDIRECTORY = "SET_SUBDIRECTORY"
 const CLEAN_SUBDIRECTORIES = "CLEAN_SUBDIRECTORIES"
+const SET_SELECTED_PLOTS = "SET_SELECTED_PLOTS"
+
 
 export default function serviceSetReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
@@ -45,6 +50,8 @@ export default function serviceSetReducer(state = defaultState, { type, payload 
       return { ...state, subdirectories: payload };
     case CLEAN_SUBDIRECTORIES:
       return { ...state, subdirectories: payload }
+    case SET_SELECTED_PLOTS:
+      return { ...state, plots: payload }
     default:
       return state;
   }
@@ -84,6 +91,77 @@ export const set_subdirectory = (data: any) => (dispatch, getState) => {
   })
 }
 
+export const setSelectedPlot = (name: any) => (dispatch, getState) => {
+  console.log('settettet', name)
+  const selectedPlots: string[] = [...getSelectedPlots(getState())]
+  const select = selectedPlots.map(plot => {
+    if (plot.name === name) {
+      return plot.selected = true
+    }
+    return plot
+  })
+
+  dispatch({
+    type: SET_SELECTED_PLOTS,
+    payload: select,
+  })
+}
+
+export const removeSelectedPlot = (name: any) => (dispatch, getState) => {
+  const selectedPlots: string[] = [...getSelectedPlots(getState())]
+  const deselect = selectedPlots.map(plot => {
+    if (plot.name === name) {
+      return plot.selected = false
+    }
+    return plot
+  })
+
+  dispatch({
+    type: SET_SELECTED_PLOTS,
+    payload: deselect,
+  })
+}
+
+export const addStats = (name: any) => (dispatch, getState) => {
+  const selectedPlots: string[] = [...getSelectedPlots(getState())]
+  const addedStats = selectedPlots.map(plot => {
+    if (plot.name === name) {
+      return plot.stats = true
+    }
+    return plot
+  })
+
+  dispatch({
+    type: SET_SELECTED_PLOTS,
+    payload: addedStats,
+  })
+}
+
+export const removeStats = (name: any) => (dispatch, getState) => {
+  const selectedPlots: string[] = [...getSelectedPlots(getState())]
+  const removedStats = selectedPlots.map(plot => {
+    if (plot.name === name) {
+      return plot.stats = false
+    }
+    return plot
+  })
+
+  dispatch({
+    type: SET_SELECTED_PLOTS,
+    payload: removedStats,
+  })
+}
+
+export const setOneSelectedPlot = (data: any) => (dispatch, getState) => {
+  const selectedPlot: string[] = [data]
+
+  dispatch({
+    type: SET_SELECTED_PLOTS,
+    payload: selectedPlot,
+  })
+}
+
+
 export const back_subdirectory = (data: any) => (dispatch, getState) => {
   const setted_subdirectories: string[] = get_subdirectories(getState())
   const backTo = setted_subdirectories.indexOf(data)
@@ -93,7 +171,7 @@ export const back_subdirectory = (data: any) => (dispatch, getState) => {
     }
   }))
 
-  dispatch ({
+  dispatch({
     type: SET_SUBDIRECTORY,
     payload: restDirectories,
   })
@@ -114,15 +192,16 @@ export const setPath = (data: any) => {
 export const set_path_for_folders = (data: any) => (dispatch, getState) => {
   const setted_path = getPath(getState())
   const new_path = [setted_path, data].join('/')
-  dispatch ({
+  dispatch({
     type: SET_PATH,
     payload: new_path,
   })
 }
 
-export const getService = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'service'], state);
-export const getWorkspace = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'workspace'], state);
-export const getRun = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'run'], state);
-export const getDataset = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'dataset'], state);
-export const getPath = (state: any): string => pathOr('', ['DATA', 'FILTER', 'ACTIVE_TABS', 'path'], state);
-export const get_subdirectories = (state: any): string[] => pathOr([], ['DATA', 'FILTER', 'ACTIVE_TABS', 'subdirectories'], state);
+export const getService = (state: any): string => pathOr('', ['DATA', 'FILTER', 'SELECTED', 'service'], state);
+export const getWorkspace = (state: any): string => pathOr('', ['DATA', 'FILTER', 'SELECTED', 'workspace'], state);
+export const getRun = (state: any): string => pathOr('', ['DATA', 'FILTER', 'SELECTED', 'run'], state);
+export const getDataset = (state: any): string => pathOr('', ['DATA', 'FILTER', 'SELECTED', 'dataset'], state);
+export const getPath = (state: any): string => pathOr('', ['DATA', 'FILTER', 'SELECTED', 'path'], state);
+export const get_subdirectories = (state: any): string[] => pathOr([], ['DATA', 'FILTER', 'SELECTED', 'subdirectories'], state);
+export const getSelectedPlots = (state: any): string[] => pathOr([], ['DATA', 'FILTER', 'SELECTED', 'plots'], state);

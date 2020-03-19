@@ -7,21 +7,18 @@ import { connect } from 'react-redux';
 import {
   getNormalization,
   setNormalization,
-  getNames,
   toggleAllCheckboxes,
 } from '../../../ducks/plots/reference';
 import { compose } from 'ramda';
 
 interface AdditionalMenuProps {
   setNormalization(checked: boolean): void,
-  checkedAllReference: boolean,
   checkedNormalization: boolean,
-  setShowReferenceForAll(value: boolean): void,
   classes: {
     viewDetailsMenu: string,
     separator: string;
-  }
-  allPlotsNames: string[],
+  },
+  toggleAllCheckboxes(value: boolean): any
 }
 
 const styles = (theme: any) => ({
@@ -34,99 +31,60 @@ const styles = (theme: any) => ({
   },
 })
 
-class AdditionalMenu extends React.Component<AdditionalMenuProps>{
-  state = ({
-    normalize: false,
-    showReferenceForAllState: false,
-    names: [],
-    selectAll: false,
-  })
+const AdditionalMenu = ({ setNormalization,
+  checkedNormalization,
+  classes,
+  toggleAllCheckboxes }: AdditionalMenuProps) => {
 
-  setNormalize = (state: boolean) => {
-    this.setState({
-      normalize: state
-    })
-  }
-
-  setSelected = (state: boolean) => {
-    this.setState({
-      selected: state
-    })
-  }
-
-  setShowingReferenceForAllState = (show: boolean) => {
-    this.setState({
-      showReferenceForAllState: show
-    })
-  }
-
-  componentDidMount() {
-    this.setState({
-      names: this.props.allPlotsNames
-    })
-  }
-
-  render() {
-    const { setNormalization,
-      checkedAllReference,
-      checkedNormalization,
-      classes,
-      toggleAllCheckboxes
-    } = this.props
-
-    return (
-      <Grid container item xs={12} className={classes.viewDetailsMenu}>
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Reference</FormLabel>
-          <FormGroup row>
-            <Grid item className={classes.separator}>
-              <PositionsSelectField />
-            </Grid>
-            <Grid item className={classes.separator}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    // onChange={(e) => {
-                    //   toggleAllCheckboxes(e.target.checked)
-                    // }}
-                  />
-                }
-                label="Show reference for all"
-              />
-            </Grid>
-            <Grid item className={classes.separator}>
-              <FormControlLabel
-                control={
-                  <Checkbox checked={checkedNormalization}
-                    onChange={(e) => {
-                      setNormalization(e.target.checked)
-                    }}
-                  />
-                }
-                label="Normalize"
-              />
-            </Grid>
-          </FormGroup>
-        </FormControl>
-        <Grid container item xs={12} >
-          <ReferenceTable selectAll={this.state.selectAll} />
-        </Grid>
+  return (
+    <Grid container item xs={12} className={classes.viewDetailsMenu}>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">Reference</FormLabel>
+        <FormGroup row>
+          <Grid item className={classes.separator}>
+            <PositionsSelectField />
+          </Grid>
+          <Grid item className={classes.separator}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                // onChange={(e) => {
+                //   toggleAllCheckboxes(e.target.checked)
+                // }}
+                />
+              }
+              label="Show reference for all"
+            />
+          </Grid>
+          <Grid item className={classes.separator}>
+            <FormControlLabel
+              control={
+                <Checkbox checked={checkedNormalization}
+                  onChange={(e) => {
+                    setNormalization(e.target.checked)
+                  }}
+                />
+              }
+              label="Normalize"
+            />
+          </Grid>
+        </FormGroup>
+      </FormControl>
+      <Grid container item xs={12} >
+        <ReferenceTable />
       </Grid>
-    )
-  }
+    </Grid>
+  )
 }
+
 export default compose<any, any, any>(
   connect(
     (state: any) => ({
       checkedNormalization: getNormalization(state),
-      allPlotsNames: getNames(state),
     }),
     (dispatch: any) => ({
       setNormalization(value: boolean) {
         dispatch(setNormalization(value))
-      },
-      setShowReferenceForAll(data) {
-        dispatch(setShowReferenceForAll(data))
       },
       toggleAllCheckboxes(value: boolean) {
         dispatch(toggleAllCheckboxes(value))
