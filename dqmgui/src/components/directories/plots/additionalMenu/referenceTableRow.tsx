@@ -114,8 +114,8 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
         }
         <IconButton onClick={() => {
           const generatedId = generateId()
-          const emptyObject = { id: generatedId, run: '', dataset: '', label: '', selected: false }
-          setDataForOverlay(emptyObject)
+          const emptyObject = { run: '', dataset: '', label: '', selected: false }
+          setDataForOverlay(emptyObject, generatedId),
           this.addRow(generatedId)
         }}>
           <Icon>
@@ -139,8 +139,8 @@ export default compose(
       toggleCheckbox(id: string, value: boolean) {
         dispatch(toggleCheckbox(id, value))
       },
-      setDataForOverlay(data: any) {
-        dispatch(setDataForOverlay(data))
+      setDataForOverlay(data: any, id: string) {
+        dispatch(setDataForOverlay(data, id))
       }
     })
   ),

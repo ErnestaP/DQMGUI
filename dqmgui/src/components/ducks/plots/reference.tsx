@@ -1,6 +1,5 @@
 import { AnyAction } from 'redux';
-import { pathOr, find, propEq, assoc, isEmpty } from 'ramda';
-import { createSelector } from 'reselect'
+import { pathOr, assoc, clone } from 'ramda';
 
 interface DefaultState {
   position: string,
@@ -83,7 +82,7 @@ export const deleteDataForOverlay = (id: any) => (dispatch, getState) => {
 export const toggleCheckbox = (id: string, checkboxValue: boolean) => (dispatch: any, getState: any) => {
   const dataForOverlay = [...getDataForOverlay(getState())]
   const index = dataForOverlay.findIndex(data => pathOr(undefined, ['id'], data) === id)
-console.log(index)
+  console.log(index)
   if (index >= 0) {
     dataForOverlay[index].selected = checkboxValue
     dispatch({
@@ -107,5 +106,5 @@ export const toggleAllCheckboxes = (checkboxValue: boolean) => (dispatch: any, g
 }
 
 export const getPosition = (state: any): string => pathOr('', ['DATA', 'PLOTS', 'REFERENCE', 'position'], state);
-export const getNormalization = (state: any): string => pathOr('', ['DATA','PLOTS', 'REFERENCE', 'normalize'], state);
+export const getNormalization = (state: any): string => pathOr('', ['DATA', 'PLOTS', 'REFERENCE', 'normalize'], state);
 export const getDataForOverlay = (state: any): any[] => pathOr([], ['DATA', 'PLOTS', 'REFERENCE', 'dataForOverlay'], state);

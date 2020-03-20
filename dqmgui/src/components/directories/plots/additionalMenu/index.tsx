@@ -8,6 +8,7 @@ import {
   getNormalization,
   setNormalization,
   toggleAllCheckboxes,
+  setPosition,
 } from '../../../ducks/plots/reference';
 import { compose } from 'ramda';
 
@@ -19,6 +20,7 @@ interface AdditionalMenuProps {
     separator: string;
   },
   toggleAllCheckboxes(value: boolean): any
+  setPosition(position: string): void;
 }
 
 const styles = (theme: any) => ({
@@ -31,52 +33,63 @@ const styles = (theme: any) => ({
   },
 })
 
-const AdditionalMenu = ({ setNormalization,
-  checkedNormalization,
-  classes,
-  toggleAllCheckboxes }: AdditionalMenuProps) => {
+class AdditionalMenu extends React.Component<AdditionalMenuProps> {
+  componentDidMount() {
+    this.props.setPosition('overlay')
+  }
 
-  return (
-    <Grid container item xs={12} className={classes.viewDetailsMenu}>
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Reference</FormLabel>
-        <FormGroup row>
-          <Grid item className={classes.separator}>
-            <PositionsSelectField />
-          </Grid>
-          <Grid item className={classes.separator}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                // onChange={(e) => {
-                //   toggleAllCheckboxes(e.target.checked)
-                // }}
-                />
-              }
-              label="Show reference for all"
-            />
-          </Grid>
-          <Grid item className={classes.separator}>
-            <FormControlLabel
-              control={
-                <Checkbox checked={checkedNormalization}
-                  onChange={(e) => {
-                    setNormalization(e.target.checked)
-                  }}
-                />
-              }
-              label="Normalize"
-            />
-          </Grid>
-        </FormGroup>
-      </FormControl>
-      <Grid container item xs={12} >
-        <ReferenceTable />
+  componentWillUnmount() {
+    this.props.setPosition('')
+  }
+
+  render() {
+    const { setNormalization,
+      checkedNormalization,
+      classes,
+      toggleAllCheckboxes,
+    } = this.props
+
+    return (
+      <Grid container item xs={12} className={classes.viewDetailsMenu}>
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Reference</FormLabel>
+          <FormGroup row>
+            <Grid item className={classes.separator}>
+              <PositionsSelectField />
+            </Grid>
+            <Grid item className={classes.separator}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                  // onChange={(e) => {
+                  //   toggleAllCheckboxes(e.target.checked)
+                  // }}
+                  />
+                }
+                label="Show reference for all"
+              />
+            </Grid>
+            <Grid item className={classes.separator}>
+              <FormControlLabel
+                control={
+                  <Checkbox checked={checkedNormalization}
+                    onChange={(e) => {
+                      setNormalization(e.target.checked)
+                    }}
+                  />
+                }
+                label="Normalize"
+              />
+            </Grid>
+          </FormGroup>
+        </FormControl>
+        <Grid container item xs={12} >
+          <ReferenceTable />
+        </Grid>
       </Grid>
-    </Grid>
-  )
+    )
+  }
 }
-
 export default compose<any, any, any>(
   connect(
     (state: any) => ({
@@ -88,6 +101,9 @@ export default compose<any, any, any>(
       },
       toggleAllCheckboxes(value: boolean) {
         dispatch(toggleAllCheckboxes(value))
+      },
+      setPosition(position: string) {
+        dispatch(setPosition(position))
       }
     })
   ),

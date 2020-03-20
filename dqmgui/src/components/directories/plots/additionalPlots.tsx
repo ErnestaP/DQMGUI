@@ -51,7 +51,7 @@ class AdditionalPlots extends React.Component<AdditionalPlotsProps>{
 
   render() {
     const { removeImage, selectedImages, classes, size, overlay, runsForOverlay } = this.props
-    const imageWithSize = selectedImages.map((selectedImage: any) => assoc('size', size, selectedImage))
+    const selectedNames = Object.keys(selectedImages)
 
     return (
       <Grid item container className={classes.biggerPlots}>
@@ -59,15 +59,15 @@ class AdditionalPlots extends React.Component<AdditionalPlotsProps>{
           <SizeChangerOnAdditionalPlots />
         </Grid>
         <Grid item container justify="center">
-          {imageWithSize.map(image => {
+          {selectedNames.map(name => {
             return (
               <Grid
                 className={classes.onePlot}
                 item
-                key={image.name}
-                onClick={() => removeSelectedPlot(image.name)}>
+                key={selectedImages[name].name}
+                onClick={() => removeSelectedPlot(selectedImages[name].name)}>
                 <img src={request_for_images({
-                  plot: image,
+                  plot: selectedImages[name],
                   size: size,
                   runsForOverlay: runsForOverlay,
                   overlay: overlay

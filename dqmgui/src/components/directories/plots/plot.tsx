@@ -35,7 +35,7 @@ const Plot = ({
   overlay,
   size,
 }: PlotProps) => {
-console.log('rerender')
+console.log(plot)
   return (
     <Grid container direction="column"
       item
@@ -63,9 +63,7 @@ console.log('rerender')
         </Grid>
       </Grid>
       <Grid item
-        onClick={(e) => {
-          setSelectedPlot(pathOr('', ['name'], plot))
-        }}
+        onClick={(e) => setSelectedPlot(pathOr('', ['name'], plot))}
         style={{
           width: `${Object.values(size)[0] + 32}px`,
           height: `${Object.values(size)[1] + 32}px`,

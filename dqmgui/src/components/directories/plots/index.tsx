@@ -122,12 +122,21 @@ class Plots extends React.Component<PlotsProps> {
 
     const selectedPlot = this.state.name && plots[this.state.name]
     const names = Object.keys(plots)
-    // const anySelectedPlots = names.map()
-    // // plots.filter(plot => plot.selected === true)
+    const anySelectedPlotsNames = names.filter(name => {
+      if (plots[name].selected === true) {
+        return name
+      }
+    })
+    const anySelectedPlots = Object.keys(plots)
+      .filter(key => anySelectedPlotsNames.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = plots[key];
+        return obj;
+      }, {});
 
     return (
       <Grid item container direction="row">
-        <Grid item container direction="row" className={`${!isEmpty(''/*anySelectedPlots*/) && classes.biggerPlot}`} >
+        <Grid item container direction="row" className={`${!isEmpty(anySelectedPlots) && classes.biggerPlot}`} >
           <Grid item xs={12} className={classes.sizeChanger} container spacing={4}>
             <Grid item>
               <IconButton onClick={() => {
@@ -175,14 +184,14 @@ class Plots extends React.Component<PlotsProps> {
 
           </Grid>
         </Grid>
-        {/* {
+        {
           !isEmpty(anySelectedPlots) &&
           <AdditionalPlots
             selectedImages={anySelectedPlots}
             overlay={overlay}
             runsForOverlay={runsForOverlay}
           />
-        } */}
+        }
       </Grid >
     )
   }

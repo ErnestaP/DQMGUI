@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { pathOr, assoc } from 'ramda';
+import { pathOr, assoc, clone } from 'ramda';
 
 interface DefaultState {
   names: any;
@@ -14,7 +14,7 @@ const SET_ALL_NAMES = "SET_ALL_NAMES"
 export default function plotsNamesReducer(state = defaultState, { type, payload }: AnyAction = {} as any): DefaultState {
   switch (type) {
     case SET_ALL_NAMES:
-      const names = JSON.parse(JSON.stringify(payload));
+      const names = clone(payload)
       return { ...state, names }
     default:
       return state;
@@ -36,6 +36,8 @@ export const setSelectedPlot = (name: any) => (dispatch, getState) => {
   names.map(nameOfPlot =>
     plots[nameOfPlot].selected = false
   )
+  plots[name].selected = true
+
 
   dispatch({
     type: SET_ALL_NAMES,
