@@ -1,23 +1,22 @@
 import * as React from 'react'
-import { Input, TableRow, TableCell, Icon, IconButton, Grid, withStyles, LinearProgress } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import { TableRow, TableCell, Grid, withStyles } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 import { Field } from 'react-final-form';
+import { FormControl, Input, FormHelperText } from "@material-ui/core";
 
 import TextField from '../../../common/textField'
 import CheckBox from '../../../common/checkBox'
 import { connect } from 'react-redux';
-import { compose, path, pathOr } from 'ramda';
+import { compose } from 'ramda';
 import { deleteDataForOverlay, getDataForOverlay, toggleCheckbox, setDataForOverlay } from '../../../ducks/plots/reference';
 
 const isItChecked = (rowId, dataForOverlay) => {
-  const findSelectedRow = dataForOverlay.find(data => data.id === rowId)
+  const findSelectedRow = dataForOverlay[rowId]['selected']
 
   if (findSelectedRow) {
-    return findSelectedRow.selected
+    return findSelectedRow
   }
-  return null
+  return false
 }
 
 interface ReferenceTableRowProps {
@@ -34,33 +33,15 @@ const styles = (theme: any) => ({
   },
 })
 
-const generateId = () => uuidv4()
-
 class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
 
   state = ({
-    rows: ['1'],
+    rows: [1, 2, 3, 4],
     checked: [],
   })
 
-  addRow = (id) => {
-    let copy = [...this.state.rows]
-    copy.push(id)
-    this.setState({
-      rows: copy
-    })
-  }
-
-  removeRow = (id: string) => {
-    let copy = [...this.state.rows]
-    const filtered = copy.filter(rowID => rowID !== id)
-    this.setState({
-      rows: filtered
-    })
-  }
-
   render() {
-    const { classes, deleteDataForOverlay, dataForOverlay, toggleCheckbox, setDataForOverlay } = this.props;
+    const { classes, dataForOverlay, toggleCheckbox } = this.props;
 
     return (
       <React.Fragment>
@@ -84,44 +65,54 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
               <TableCell className={classes.noPadding}>
                 <Field
                   name={`run_${row}`}
-                  component={TextField}
-                />
+                >
+                  {props =>
+                    <div>
+                      <TextField
+                        name={props.input.name}
+                        {...props.input}
+                        {...props.onChange}
+                        {...props.meta}
+                      />
+                    </div>
+                  }
+                </Field>
               </TableCell>
               <TableCell className={classes.noPadding}>
                 <Field
                   name={`dataset_${row}`}
-                  component={TextField}
-                />
+                >
+                  {props =>
+                    <div>
+                      <TextField
+                        name={props.input.name}
+                        {...props.input}
+                        {...props.onChange}
+                        {...props.meta}
+                      />
+                    </div>
+                  }
+                </Field>
               </TableCell>
               <TableCell className={classes.noPadding}>
                 <Field
                   name={`label_${row}`}
-                  component={TextField}
-                />
-              </TableCell>
-              <TableCell className={classes.noPadding}>
-                <IconButton onClick={() => {
-                  this.removeRow(row)
-                  deleteDataForOverlay(row)
-                }}>
-                  <Icon>
-                    <RemoveIcon />
-                  </Icon>
-                </IconButton>
+                >
+                  {props =>
+                    <div>
+                      <TextField
+                        name={props.input.name}
+                        {...props.input}
+                        {...props.onChange}
+                        {...props.meta}
+                      />
+                    </div>
+                  }
+                </Field>
               </TableCell>
             </TableRow>)
         })
         }
-        <IconButton onClick={() => {
-          const generatedId = generateId()
-          const emptyObject = { run: '', dataset: '', label: '', selected: false }
-          setDataForOverlay(emptyObject, generatedId),
-          this.addRow(generatedId)
-        }}>
-          <Icon>
-            <AddIcon />
-          </Icon>
-        </IconButton>
       </React.Fragment >
     )
   }

@@ -92,7 +92,6 @@ export const set_subdirectory = (data: any) => (dispatch, getState) => {
 }
 
 export const setSelectedPlot = (name: any) => (dispatch, getState) => {
-  console.log('settettet', name)
   const selectedPlots: string[] = [...getSelectedPlots(getState())]
   const select = selectedPlots.map(plot => {
     if (plot.name === name) {

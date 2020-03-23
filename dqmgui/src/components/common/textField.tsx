@@ -4,21 +4,23 @@ import { pathOr, path } from 'ramda';
 
 const chooseOnChange = (onChange: any, input: any) => onChange ? onChange : input.onChange
 
-const TexField = ({ input, meta, onChange, ...props }: any) => {
-  const onChangeMethod = chooseOnChange(onChange, input)
+const TexField = ({ ...props }: any) => {
+  const onChangeMethod = chooseOnChange(props.onChange, props.input)
 
   return (
-    <FormControl >
+    <FormControl>
       <Input
+        {...props}
+        name={props.name}
         fullWidth={true}
-        {...input}
         placeholder={pathOr('', ['placeholder'], props)}
-        onChange={(e) => onChangeMethod(e.target.value)}
-        value={path(['input', 'value'], props)} />
+        onChange={(e) => {
+          return (onChangeMethod(e.target.value))
+        }}
+      />
       {path(['error', 'meta'], props) && path(['error', 'visited'], props) &&
         <FormHelperText error>{path(['error', 'meta'], props)}</FormHelperText>
       }
-    </FormControl>
-  )
+    </FormControl>)
 }
 export default TexField

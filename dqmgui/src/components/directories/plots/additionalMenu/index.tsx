@@ -66,7 +66,7 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps> {
                   // }}
                   />
                 }
-                label="Show reference for all"
+                label="Check all"
               />
             </Grid>
             <Grid item className={classes.separator}>

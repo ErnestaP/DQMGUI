@@ -10,9 +10,14 @@ interface DefaultState {
 const defaultState: DefaultState = {
   position: '',
   normalize: false,
-  dataForOverlay: [{ id: '1', run: '', dataset: '', label: '', selected: false }]
+  dataForOverlay:
+  {
+    1: { run: '', dataset: '', label: '', selected: false },
+    2: { run: '', dataset: '', label: '', selected: false },
+    3: { run: '', dataset: '', label: '', selected: false },
+    4: { run: '', dataset: '', label: '', selected: false },
+  }
 }
-
 const SET_POSITION = "SET_POSITION"
 const SET_NORMALIZATION = "SET_NORMALIZATION"
 const SET_DATA_FOR_OVERLAY = "SET_DATA_FOR_OVERLAY"
@@ -24,7 +29,8 @@ export default function positionReducer(state = defaultState, { type, payload }:
     case SET_NORMALIZATION:
       return { ...state, normalize: payload }
     case SET_DATA_FOR_OVERLAY:
-      return { ...state, dataForOverlay: payload }
+      const dataForOverlay = clone(payload)
+      return { ...state, dataForOverlay }
     default:
       return state;
   }
@@ -43,21 +49,15 @@ export const setNormalization = (data: any) => ({
 export const setDataForOverlay = (data: any) => (dispatch, getState) => {
   const propsNames = Object.keys(data)
   const propsValues = Object.values(data)
-  const dataForOverlay = [...getDataForOverlay(getState())]
+  const dataForOverlay = getDataForOverlay(getState())
 
   propsNames.map((propName, index) => {
     const splittedName = propName.split('_')
     const id = splittedName[1]
-    const currentRun = dataForOverlay.find(obj => obj.id === id)
+    const currentRun = dataForOverlay[id]
 
-    if (!currentRun) {
-      dataForOverlay.push({ id: id, run: '', dataset: '', label: '', selected: false })
-    }
-    else {
-      assoc(splittedName[0], propsValues[index], currentRun)
-      const indexOfPlot = dataForOverlay.findIndex(obj => obj.id === id)
-      dataForOverlay[indexOfPlot] = assoc(splittedName[0], propsValues[index], currentRun)
-    }
+    assoc(splittedName[0], propsValues[index], currentRun)
+    dataForOverlay[id] = assoc(splittedName[0], propsValues[index], currentRun)
 
     return dataForOverlay
   })
@@ -68,10 +68,9 @@ export const setDataForOverlay = (data: any) => (dispatch, getState) => {
   })
 }
 export const deleteDataForOverlay = (id: any) => (dispatch, getState) => {
-  const dataForOverlay = [...getDataForOverlay(getState())]
+  const dataForOverlay = getDataForOverlay(getState())
 
-  const indexOfPlot = dataForOverlay.findIndex(obj => obj.id === id)
-  dataForOverlay.splice(indexOfPlot, 1)
+  delete dataForOverlay[id]
 
   dispatch({
     type: SET_DATA_FOR_OVERLAY,
@@ -80,22 +79,20 @@ export const deleteDataForOverlay = (id: any) => (dispatch, getState) => {
 }
 
 export const toggleCheckbox = (id: string, checkboxValue: boolean) => (dispatch: any, getState: any) => {
-  const dataForOverlay = [...getDataForOverlay(getState())]
-  const index = dataForOverlay.findIndex(data => pathOr(undefined, ['id'], data) === id)
-  console.log(index)
-  if (index >= 0) {
-    dataForOverlay[index].selected = checkboxValue
-    dispatch({
-      type: SET_DATA_FOR_OVERLAY,
-      payload: dataForOverlay,
-    })
-  }
+  const dataForOverlay = getDataForOverlay(getState())
+
+  dataForOverlay[id]['selected'] = checkboxValue
+  dispatch({
+    type: SET_DATA_FOR_OVERLAY,
+    payload: dataForOverlay,
+  })
 }
 
 export const toggleAllCheckboxes = (checkboxValue: boolean) => (dispatch: any, getState: any) => {
-  const dataForOverlay = [...getDataForOverlay(getState())]
-  const dataForOverlayWithChangedCheckboxes = dataForOverlay.map(data => {
-    data['selected'] = checkboxValue
+  const dataForOverlay = getDataForOverlay(getState())
+  const ids = Object.keys(dataForOverlay)
+  const dataForOverlayWithChangedCheckboxes = ids.map(data => {
+    data[ids]['selected'] = checkboxValue
     return data
   })
 
@@ -107,4 +104,4 @@ export const toggleAllCheckboxes = (checkboxValue: boolean) => (dispatch: any, g
 
 export const getPosition = (state: any): string => pathOr('', ['DATA', 'PLOTS', 'REFERENCE', 'position'], state);
 export const getNormalization = (state: any): string => pathOr('', ['DATA', 'PLOTS', 'REFERENCE', 'normalize'], state);
-export const getDataForOverlay = (state: any): any[] => pathOr([], ['DATA', 'PLOTS', 'REFERENCE', 'dataForOverlay'], state);
+export const getDataForOverlay = (state: any): any => pathOr({}, ['DATA', 'PLOTS', 'REFERENCE', 'dataForOverlay'], state);

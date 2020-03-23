@@ -35,7 +35,7 @@ const Plot = ({
   overlay,
   size,
 }: PlotProps) => {
-console.log(plot)
+
   return (
     <Grid container direction="column"
       item

@@ -30,10 +30,10 @@ export const request_for_images = (imagePropsObject: any) => {
   const normalize = path(['plot', 'normalize'], imagePropsObject) ? 'True' : 'False'
 
   if (overlay && overlay !== 'onSide' && runsForOverlay) {
-    const ids = runsForOverlay.map(run => run.id)
+    const ids = Object.keys(runsForOverlay)
 
     const overlayPlots = ids.map(id => {
-      const currentRunObject = runsForOverlay.find(obj => obj.id === id)
+      const currentRunObject = runsForOverlay[id]
       const run = currentRunObject.run
       const selected = currentRunObject.selected
       const datasetO = isEmpty(currentRunObject.dataset) ? dataset : currentRunObject.dataset

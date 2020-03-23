@@ -15,7 +15,7 @@ import NotFound from "../../../src/components/directories/notFound";
 
 const AppRouter = (props) => {
   const { path } = props.match;
-console.log(props.pathOfDirectories)
+
   return (
     <Switch>
       <Route
