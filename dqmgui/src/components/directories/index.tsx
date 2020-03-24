@@ -78,7 +78,7 @@ class Directories extends React.Component<DirectoriesProps>{
               directories: this.props.selected_directory,
               stats: true,
               normalize: true,
-              selected: false
+              selected: false,
             }
             if (name) {
               return empty[name] = imageObject

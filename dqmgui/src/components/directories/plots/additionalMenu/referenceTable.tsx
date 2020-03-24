@@ -15,9 +15,15 @@ interface ReferenceTableProps {
 
 class ReferenceTable extends React.Component<ReferenceTableProps> {
   state = {
-    initialValues: {}
+    initialValues: {},
+    errors: {},
   }
 
+  setErrors = (errorsObject: any) => {
+    this.setState({
+      errors: errorsObject
+    })
+  }
 
   componentDidMount() {
     this.setState({
@@ -32,22 +38,18 @@ class ReferenceTable extends React.Component<ReferenceTableProps> {
       <Form
         onSubmit={() => { }}
         initialValues={formInitialValues(this.state.initialValues)}
-        // validate={values => {
-        //   const errors = {}
-        //   const runsObject = formatDataForValidate(values)
-        //   const ids = Object.keys(runsObject)
-        //   ids.filter(id => {
-        //     // console.log(runsObject[id]['run'], runsObject)
-        //     if (runsObject[id].selected === true && isEmpty(runsObject[id].run)) {
-        //       const nameOfField = ['run', id].join('_')
-        //       console.log(assoc(nameOfField, 'Required', errors), runsObject[id].run)
-
-        //       return assoc(nameOfField, 'Required', errors)
-        //     }
-        //   })
-        //   console.log(errors)
-        //   return errors
-        // }}
+        validate={values => {
+          let errors = {}
+          const runsObject = formatDataForValidate(values)
+          const ids = Object.keys(runsObject)
+          ids.filter(id => {
+            if (runsObject[id].selected === true && isEmpty(runsObject[id].run)) {
+              const nameOfField = ['run', id].join('_')
+              errors = assoc(nameOfField, 'Required', errors)
+            }
+          })
+          return errors
+        }}
         render={({ handleSubmit }) => (
           <form onSubmit={handleSubmit}
             id='viewDetailsMenu'
@@ -55,6 +57,7 @@ class ReferenceTable extends React.Component<ReferenceTableProps> {
           >
             <FormSpy subscription={{ values: true }}
               onChange={(e) => {
+                console.log(this.state.errors)
                 setDataForOverlay(e.values)
               }} />
             <Grid item xs={12} container>

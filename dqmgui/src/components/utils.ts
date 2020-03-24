@@ -14,11 +14,8 @@ export const formatDataForValidate = (data) => {
     const splittedName = name.split('_')
     const id = splittedName[1]
     const propName = splittedName[0]
-    object[id] = { run: '', dataset: '', selected: '' }
-    object[id][`${propName}`] = data[name]
-  }
-  )
-  console.log(object, data)
+    object[id] = assoc(propName, data[name], object[id])
+  })
   return object
 
 }

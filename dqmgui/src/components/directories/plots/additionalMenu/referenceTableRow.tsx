@@ -47,7 +47,7 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
   }
 
   render() {
-    const { classes, dataForOverlay } = this.props;
+    const { classes } = this.props;
 
     return (
       <TableBody>
@@ -67,6 +67,7 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
               <TableCell className={classes.noPadding}>
                 <Field
                   name={`run_${row}`}
+                  required
                 >
                   {props =>
                     <div>

@@ -55,6 +55,16 @@ export const setSelectedPlots = (name: any) => (dispatch, getState) => {
   })
 }
 
+export const setError = (name: any, error: boolean) => (dispatch, getState) => {
+  const plots = getNames(getState())
+  plots[name].error = error
+
+  dispatch({
+    type: SET_ALL_NAMES,
+    payload: plots,
+  })
+}
+
 export const removeSelectedPlot = (name: any) => (dispatch, getState) => {
   const plots = getNames(getState())
   plots[name].selected = false

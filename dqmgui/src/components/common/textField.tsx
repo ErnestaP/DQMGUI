@@ -15,11 +15,11 @@ const TexField = ({ ...props }: any) => {
         fullWidth={true}
         placeholder={pathOr('', ['placeholder'], props)}
         onChange={(e) => {
-          return (onChangeMethod(e.target.value))
+        return (onChangeMethod(e.target.value))
         }}
       />
-      {path(['error', 'meta'], props) && path(['error', 'visited'], props) &&
-        <FormHelperText error>{path(['error', 'meta'], props)}</FormHelperText>
+      {path(['error'], props) &&
+        <FormHelperText error>{path(['error'], props)}</FormHelperText>
       }
     </FormControl>)
 }

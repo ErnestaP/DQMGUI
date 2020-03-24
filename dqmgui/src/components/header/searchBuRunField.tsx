@@ -25,7 +25,7 @@ const SearchByRun = ({ classes }: SearchByRunProps) => {
           <TextField
             fullWidth
             name={props.input.name}
-            placeholder="Search by Dataset"
+            placeholder="Search by Run"
             {...props.input}
             {...props.onChange}
             {...props.meta}
