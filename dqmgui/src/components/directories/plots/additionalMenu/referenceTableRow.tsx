@@ -1,14 +1,12 @@
 import * as React from 'react'
-import { TableRow, TableCell, Grid, withStyles } from '@material-ui/core';
-import { v4 as uuidv4 } from 'uuid';
+import { TableRow, TableCell, Grid, withStyles, TableBody, Checkbox } from '@material-ui/core';
 import { Field } from 'react-final-form';
-import { FormControl, Input, FormHelperText } from "@material-ui/core";
 
 import TextField from '../../../common/textField'
 import CheckBox from '../../../common/checkBox'
 import { connect } from 'react-redux';
 import { compose } from 'ramda';
-import { deleteDataForOverlay, getDataForOverlay, toggleCheckbox, setDataForOverlay } from '../../../ducks/plots/reference';
+import { deleteDataForOverlay, getDataForOverlay, setDataForOverlay } from '../../../ducks/plots/reference';
 
 const isItChecked = (rowId, dataForOverlay) => {
   const findSelectedRow = dataForOverlay[rowId]['selected']
@@ -40,11 +38,19 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
     checked: [],
   })
 
+  setChecked = (checked: string) => {
+    const copy = [...this.state.checked]
+    copy.push(checked)
+    this.setState({
+      checked: copy
+    })
+  }
+
   render() {
-    const { classes, dataForOverlay, toggleCheckbox } = this.props;
+    const { classes, dataForOverlay } = this.props;
 
     return (
-      <React.Fragment>
+      <TableBody>
         {this.state.rows.map((row, index) => {
 
           return (
@@ -55,10 +61,6 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
                     name={`selected_${row}`}
                     component={CheckBox}
                     type="checkbox"
-                    onChange={(e) => toggleCheckbox(row, e.target.checked)}
-                    checkboxProps={{
-                      checked: isItChecked(row, dataForOverlay)
-                    }}
                   />
                 </Grid>
               </TableCell>
@@ -113,7 +115,7 @@ class ReferenceTableRow extends React.Component<ReferenceTableRowProps> {
             </TableRow>)
         })
         }
-      </React.Fragment >
+      </TableBody>
     )
   }
 }
@@ -126,9 +128,6 @@ export default compose(
     (dispatch: any) => ({
       deleteDataForOverlay(id) {
         dispatch(deleteDataForOverlay(id))
-      },
-      toggleCheckbox(id: string, value: boolean) {
-        dispatch(toggleCheckbox(id, value))
       },
       setDataForOverlay(data: any, id: string) {
         dispatch(setDataForOverlay(data, id))

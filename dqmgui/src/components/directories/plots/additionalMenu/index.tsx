@@ -4,22 +4,18 @@ import { Grid, FormGroup, Checkbox, FormControlLabel, FormControl, FormLabel, wi
 import ReferenceTable from './referenceTable'
 import PositionsSelectField from './position'
 import { connect } from 'react-redux';
-import {
-  getNormalization,
-  setNormalization,
-  toggleAllCheckboxes,
-  setPosition,
-} from '../../../ducks/plots/reference';
+import { setPosition } from '../../../ducks/plots/reference';
+import { normalizePlots, toggleStatsForAllPlots } from '../../../ducks/plots/setNames';
 import { compose } from 'ramda';
 
 interface AdditionalMenuProps {
-  setNormalization(checked: boolean): void,
+  normalizePlots(checked: boolean): void,
   checkedNormalization: boolean,
   classes: {
     viewDetailsMenu: string,
     separator: string;
   },
-  toggleAllCheckboxes(value: boolean): any
+  toggleStatsForAllPlots(value: boolean): any
   setPosition(position: string): void;
 }
 
@@ -34,6 +30,16 @@ const styles = (theme: any) => ({
 })
 
 class AdditionalMenu extends React.Component<AdditionalMenuProps> {
+  state = {
+    checked: true
+  }
+
+  toggleNormalizeCheckbox = () => {
+    this.setState({
+      checked: !this.state.checked
+    })
+  }
+
   componentDidMount() {
     this.props.setPosition('overlay')
   }
@@ -42,17 +48,17 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps> {
     this.props.setPosition('')
   }
 
+
   render() {
-    const { setNormalization,
-      checkedNormalization,
+    const { normalizePlots,
+      toggleStatsForAllPlots,
       classes,
-      toggleAllCheckboxes,
     } = this.props
 
     return (
       <Grid container item xs={12} className={classes.viewDetailsMenu}>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Reference</FormLabel>
+          <FormLabel component="legend">View Details</FormLabel>
           <FormGroup row>
             <Grid item className={classes.separator}>
               <PositionsSelectField />
@@ -61,24 +67,26 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps> {
               <FormControlLabel
                 control={
                   <Checkbox
-                  // onChange={(e) => {
-                  //   toggleAllCheckboxes(e.target.checked)
-                  // }}
+                    // checked={this.state.checked}
+                    onChange={(e) => {
+                      // this.toggleNormalizeCheckbox()
+                      normalizePlots(e.target.checked)
+                    }}
                   />
                 }
-                label="Check all"
+                label="Normalize"
               />
             </Grid>
             <Grid item className={classes.separator}>
               <FormControlLabel
                 control={
-                  <Checkbox checked={checkedNormalization}
+                  <Checkbox
                     onChange={(e) => {
-                      setNormalization(e.target.checked)
+                      toggleStatsForAllPlots(!e.target.checked)
                     }}
                   />
                 }
-                label="Normalize"
+                label="Remove stats"
               />
             </Grid>
           </FormGroup>
@@ -92,18 +100,16 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps> {
 }
 export default compose<any, any, any>(
   connect(
-    (state: any) => ({
-      checkedNormalization: getNormalization(state),
-    }),
+    undefined,
     (dispatch: any) => ({
-      setNormalization(value: boolean) {
-        dispatch(setNormalization(value))
-      },
-      toggleAllCheckboxes(value: boolean) {
-        dispatch(toggleAllCheckboxes(value))
-      },
       setPosition(position: string) {
         dispatch(setPosition(position))
+      },
+      normalizePlots(value: boolean) {
+        dispatch(normalizePlots(value))
+      },
+      toggleStatsForAllPlots(value: boolean) {
+        dispatch(toggleStatsForAllPlots(value))
       }
     })
   ),

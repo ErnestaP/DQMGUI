@@ -8,16 +8,18 @@ export const format_header_path = (dataset = "", run = "", directories = []) =>
 
 export const formatDataForValidate = (data) => {
   const fieldsNames = Object.keys(data)
-  const object: any = { run: '', dataset: '', selected: false }
-  const formatedData = fieldsNames.filter(name => {
+  const object: any = {}
+
+  fieldsNames.map(name => {
     const splittedName = name.split('_')
     const id = splittedName[1]
     const propName = splittedName[0]
-    object[id] = assoc(propName, data[name], object)
-    return object
+    object[id] = { run: '', dataset: '', selected: '' }
+    object[id][`${propName}`] = data[name]
   }
   )
-  return formatedData
+  console.log(object, data)
+  return object
 
 }
 

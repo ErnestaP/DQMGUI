@@ -85,4 +85,42 @@ export const removeStats = (name: any) => (dispatch, getState) => {
   })
 }
 
+export const toggleStatsForAllPlots = (checkboxValue: any) => (dispatch, getState) => {
+  const plots = getNames(getState())
+  const ids = Object.keys(plots)
+  ids.map(id => {
+    plots[id]['stats'] = checkboxValue
+    return plots
+  })
+
+  dispatch({
+    type: SET_ALL_NAMES,
+    payload: plots,
+  })
+}
+
+export const normalizePlots = (checkboxValue: boolean) => (dispatch: any, getState: any) => {
+  const plots = getNames(getState())
+  const ids = Object.keys(plots)
+  ids.map(id => {
+    plots[id]['normalize'] = checkboxValue
+    return plots
+  })
+
+  dispatch({
+    type: SET_ALL_NAMES,
+    payload: plots,
+  })
+}
+
+export const normalizePlot = (id: boolean) => (dispatch: any, getState: any) => {
+  const data = getNames(getState())
+  data[id]['normalize'] = !data[id]['normalize']
+
+  dispatch({
+    type: SET_ALL_NAMES,
+    payload: data,
+  })
+}
+
 export const getNames = (state: any): any => pathOr([], ['DATA', 'PLOTS', 'PLOTS_INFO', 'PLOTS', 'names'], state);

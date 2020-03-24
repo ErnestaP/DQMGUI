@@ -5,10 +5,12 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import InsertChartIcon from '@material-ui/icons/InsertChart';
 import { pathOr } from 'ramda';
 import { connect } from 'react-redux';
 
-import { setSelectedPlots, removeSelectedPlot, removeStats, addStats } from '../../ducks/plots/setNames'
+import { setSelectedPlots, removeSelectedPlot, removeStats, addStats, normalizePlot } from '../../ducks/plots/setNames'
 
 interface PlotPopoverProps {
   open: boolean;
@@ -30,7 +32,8 @@ const PlotMenu = ({
   removeSelectedPlot,
   addStats,
   plot,
-  removeStats }: PlotPopoverProps) => {
+  removeStats,
+   normalizePlot }: PlotPopoverProps) => {
 
   return (
     <Popover
@@ -91,6 +94,28 @@ const PlotMenu = ({
               <ListItemText primary="Remove stats" />
             </ListItem>
         }
+        {
+          !pathOr('', ['normalize'], plot) ?
+            <ListItem button onClick={() => {
+              normalizePlot(plot.name)
+              handleClose()
+            }}>
+              <ListItemIcon>
+                <EqualizerIcon />
+              </ListItemIcon>
+              <ListItemText primary="Normalize" />
+            </ListItem>
+            :
+            <ListItem button onClick={() => {
+              normalizePlot(plot.name)
+              handleClose()
+            }}>
+              <ListItemIcon>
+                <InsertChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Denormalize" />
+            </ListItem>
+        }
       </List>
     </Popover>)
 }
@@ -109,6 +134,9 @@ export default connect(
     },
     addStats(name: string) {
       dispatch(addStats(name))
+    },
+    normalizePlot(name: string) {
+      dispatch(normalizePlot(name))
     },
   })
 )(PlotMenu) 

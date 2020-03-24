@@ -77,7 +77,7 @@ class Directories extends React.Component<DirectoriesProps>{
               dataset: this.props.dataset,
               directories: this.props.selected_directory,
               stats: true,
-              normalization: false,
+              normalize: true,
               selected: false
             }
             if (name) {

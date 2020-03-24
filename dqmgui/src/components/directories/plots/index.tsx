@@ -11,7 +11,7 @@ import SizeChanger from './sizeChanger';
 import PlotMenu from './menu'
 import AdditionalMenu from './additionalMenu';
 import { connect } from 'react-redux';
-import { getDataForOverlay, getPosition, getNormalization } from '../../ducks/plots/reference';
+import { getDataForOverlay, getPosition } from '../../ducks/plots/reference';
 import Plot from './plot'
 import { getSize } from '../../ducks/plots/sizeChanger';
 
@@ -32,8 +32,8 @@ interface PlotsProps {
 }
 
 const styles = (theme) => {
-  const headerHeight = document.getElementById('searchForm').clientHeight
-  const directoriesHeight = document.getElementById('directoriesGrid').clientHeight
+  const headerHeight = document.getElementById('searchForm') && document.getElementById('searchForm').clientHeight
+  const directoriesHeight = document.getElementById('directoriesGrid') && document.getElementById('directoriesGrid').clientHeight
 
   return ({
     biggerPlot: {
@@ -203,7 +203,6 @@ export default compose(
       runsForOverlay: getDataForOverlay(state),
       overlay: getPosition(state),
       size: getSize(state),
-      normalization: getNormalization(state),
     }),
     undefined,
   ), withStyles(styles))
