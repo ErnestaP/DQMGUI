@@ -38,7 +38,7 @@ export const requestForDirectories = (searchFieldByRun: string,
   const joined_directories = selected_directories ? '/' + selected_directories.join('/') : ''
   return (axios({
     method: 'GET',
-    url: `/data/json/archive/${searchFieldByRun}${searchFieldByDataset}${joined_directories}`,
+    url: `/api/data/json/archive/${searchFieldByRun}${searchFieldByDataset}${joined_directories}`,
     headers: []
   })
   )

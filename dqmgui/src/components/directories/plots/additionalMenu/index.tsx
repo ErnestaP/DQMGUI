@@ -67,9 +67,9 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps> {
               <FormControlLabel
                 control={
                   <Checkbox
-                    // checked={this.state.checked}
+                    checked={this.state.checked}
                     onChange={(e) => {
-                      // this.toggleNormalizeCheckbox()
+                      this.toggleNormalizeCheckbox()
                       normalizePlots(e.target.checked)
                     }}
                   />
