@@ -4,24 +4,19 @@ import { Grid, FormGroup, Checkbox, FormControlLabel, FormControl, FormLabel, wi
 import ReferenceTable from './referenceTable'
 import PositionsSelectField from './position'
 import { connect } from 'react-redux';
-import {
-  getNormalization,
-  setNormalization,
-  getNames,
-  toggleAllCheckboxes,
-} from '../../../ducks/plots/reference';
+import { setPosition } from '../../../ducks/plots/reference';
+import { normalizePlots, toggleStatsForAllPlots } from '../../../ducks/plots/setNames';
 import { compose } from 'ramda';
 
 interface AdditionalMenuProps {
-  setNormalization(checked: boolean): void,
-  checkedAllReference: boolean,
+  normalizePlots(checked: boolean): void,
   checkedNormalization: boolean,
-  setShowReferenceForAll(value: boolean): void,
   classes: {
     viewDetailsMenu: string,
     separator: string;
-  }
-  allPlotsNames: string[],
+  },
+  toggleStatsForAllPlots(value: boolean): any
+  setPosition(position: string): void;
 }
 
 const styles = (theme: any) => ({
@@ -34,50 +29,36 @@ const styles = (theme: any) => ({
   },
 })
 
-class AdditionalMenu extends React.Component<AdditionalMenuProps>{
-  state = ({
-    normalize: false,
-    showReferenceForAllState: false,
-    names: [],
-    selectAll: false,
-  })
-
-  setNormalize = (state: boolean) => {
-    this.setState({
-      normalize: state
-    })
+class AdditionalMenu extends React.Component<AdditionalMenuProps> {
+  state = {
+    checked: true
   }
 
-  setSelected = (state: boolean) => {
+  toggleNormalizeCheckbox = () => {
     this.setState({
-      selected: state
-    })
-  }
-
-  setShowingReferenceForAllState = (show: boolean) => {
-    this.setState({
-      showReferenceForAllState: show
+      checked: !this.state.checked
     })
   }
 
   componentDidMount() {
-    this.setState({
-      names: this.props.allPlotsNames
-    })
+    this.props.setPosition('overlay')
   }
 
+  componentWillUnmount() {
+    this.props.setPosition('')
+  }
+
+
   render() {
-    const { setNormalization,
-      checkedAllReference,
-      checkedNormalization,
+    const { normalizePlots,
+      toggleStatsForAllPlots,
       classes,
-      toggleAllCheckboxes
     } = this.props
 
     return (
       <Grid container item xs={12} className={classes.viewDetailsMenu}>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Reference</FormLabel>
+          <FormLabel component="legend">View Details</FormLabel>
           <FormGroup row>
             <Grid item className={classes.separator}>
               <PositionsSelectField />
@@ -86,30 +67,32 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
               <FormControlLabel
                 control={
                   <Checkbox
-                    // onChange={(e) => {
-                    //   toggleAllCheckboxes(e.target.checked)
-                    // }}
-                  />
-                }
-                label="Show reference for all"
-              />
-            </Grid>
-            <Grid item className={classes.separator}>
-              <FormControlLabel
-                control={
-                  <Checkbox checked={checkedNormalization}
+                    checked={this.state.checked}
                     onChange={(e) => {
-                      setNormalization(e.target.checked)
+                      this.toggleNormalizeCheckbox()
+                      normalizePlots(e.target.checked)
                     }}
                   />
                 }
                 label="Normalize"
               />
             </Grid>
+            <Grid item className={classes.separator}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={(e) => {
+                      toggleStatsForAllPlots(!e.target.checked)
+                    }}
+                  />
+                }
+                label="Remove stats"
+              />
+            </Grid>
           </FormGroup>
         </FormControl>
         <Grid container item xs={12} >
-          <ReferenceTable selectAll={this.state.selectAll} />
+          <ReferenceTable />
         </Grid>
       </Grid>
     )
@@ -117,19 +100,16 @@ class AdditionalMenu extends React.Component<AdditionalMenuProps>{
 }
 export default compose<any, any, any>(
   connect(
-    (state: any) => ({
-      checkedNormalization: getNormalization(state),
-      allPlotsNames: getNames(state),
-    }),
+    undefined,
     (dispatch: any) => ({
-      setNormalization(value: boolean) {
-        dispatch(setNormalization(value))
+      setPosition(position: string) {
+        dispatch(setPosition(position))
       },
-      setShowReferenceForAll(data) {
-        dispatch(setShowReferenceForAll(data))
+      normalizePlots(value: boolean) {
+        dispatch(normalizePlots(value))
       },
-      toggleAllCheckboxes(value: boolean) {
-        dispatch(toggleAllCheckboxes(value))
+      toggleStatsForAllPlots(value: boolean) {
+        dispatch(toggleStatsForAllPlots(value))
       }
     })
   ),

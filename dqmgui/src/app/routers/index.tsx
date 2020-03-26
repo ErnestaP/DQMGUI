@@ -27,7 +27,8 @@ const AppRouter = (props) => {
       <Route
         key="directories"
         exact={true}
-        path={`${props.pathOfDirectories}`}
+        // path={`${props.pathOfDirectories}`}
+        path=""
         component={Directories} />
       <Route
         key="notFound"

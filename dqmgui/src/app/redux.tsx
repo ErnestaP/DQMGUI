@@ -2,26 +2,34 @@ import { combineReducers } from 'redux';
 
 import SideMenuReducer from '../components/ducks/sideNav/setMenuStatus'
 import ServicesReducer from '../components/ducks/header/setPaths'
-import FormReducer from '../components/ducks/table/form'
+import SearchReducer from '../components/ducks/table/form'
 import LoaderReducer from '../components/ducks/loader/loaderActions';
-import SelectedDataReducer from '../components/ducks/table/selectedData';
+import PlotsNamesReducer from '../components/ducks/plots/setNames';
 import DisplayReducer from '../components/ducks/plots/sizeChanger';
 import ReferenceReducer from '../components/ducks/plots/reference';
+import DirectoriesReducer from '../components/ducks/folders/getDirectories';
 
 const appReducer = combineReducers({
-    'MENU': SideMenuReducer,
-    'ACTIVE_TABS': ServicesReducer,
-    'FORM': FormReducer,
-    'LOADER': LoaderReducer,
-    'TABLE': combineReducers({
-        'SELECTED_DATA': SelectedDataReducer,
+  'DATA': combineReducers({
+    'FILTER': combineReducers({
+      'SEARH_FIELDS': SearchReducer,
+      'SELECTED': ServicesReducer,
     }),
     'PLOTS': combineReducers({
-        'REFERENCE': ReferenceReducer,
+      'REFERENCE': ReferenceReducer,
+      'PLOTS_INFO': combineReducers({
         'SIZES': DisplayReducer,
+        'PLOTS': PlotsNamesReducer,
+      }),
     }),
+    'DIRECTORIES': DirectoriesReducer,
+  }),
+  'UI': combineReducers({
+    'LOADER': LoaderReducer,
+    'SIDE_MENU': SideMenuReducer
+  })
 })
 
 export default function createReducer() {
-    return appReducer
+  return appReducer
 }

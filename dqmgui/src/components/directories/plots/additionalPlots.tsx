@@ -5,6 +5,7 @@ import SizeChangerOnAdditionalPlots from './sizeChangerOnAdditionalPlots';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { getAdditionalPlotsSize, setSizeOnAdditionalPlots } from '../../ducks/plots/sizeChanger';
+import { removeSelectedPlot } from '../../ducks/plots/setNames';
 import { request_for_images } from '../api'
 import { assoc } from 'ramda';
 
@@ -15,6 +16,8 @@ interface AdditionalPlotsProps {
   selectedImages: string[];
   removeImage(image: string): void
   setSizeOnAdditionalPlots(size: Size): void;
+  overlay: string;
+  runsForOverlay: any[];
 }
 
 const styles = (theme: any) => {
@@ -47,8 +50,8 @@ class AdditionalPlots extends React.Component<AdditionalPlotsProps>{
   }
 
   render() {
-    const { removeImage, selectedImages, classes, size } = this.props
-    const imageWithSize = selectedImages.map((selectedImage: any) => assoc('size', size, selectedImage))
+    const { removeImage, selectedImages, classes, size, overlay, runsForOverlay } = this.props
+    const selectedNames = Object.keys(selectedImages)
 
     return (
       <Grid item container className={classes.biggerPlots}>
@@ -56,14 +59,19 @@ class AdditionalPlots extends React.Component<AdditionalPlotsProps>{
           <SizeChangerOnAdditionalPlots />
         </Grid>
         <Grid item container justify="center">
-          {imageWithSize.map(image => {
+          {selectedNames.map(name => {
             return (
               <Grid
                 className={classes.onePlot}
                 item
-                key={image.name}
-                onClick={() => removeImage(image.name)}>
-                <img src={request_for_images(image)} />
+                key={selectedImages[name].name}
+                onClick={() => removeSelectedPlot(selectedImages[name].name)}>
+                <img src={request_for_images({
+                  plot: selectedImages[name],
+                  size: size,
+                  runsForOverlay: runsForOverlay,
+                  overlay: overlay
+                })} />
               </Grid>)
           }
           )}
@@ -78,7 +86,14 @@ export default compose<any, any, any>(
     (state: any) => ({
       size: getAdditionalPlotsSize(state)
     }),
-    { setSizeOnAdditionalPlots },
+    (dispatch: any) => ({
+      setSizeOnAdditionalPlots(size: SizeProps) {
+        dispatch(setSizeOnAdditionalPlots(size))
+      },
+      removeSelectedPlot(name: string) {
+        dispatch(removeSelectedPlot(name))
+      }
+    })
   ),
   withStyles(styles),
 )(AdditionalPlots)

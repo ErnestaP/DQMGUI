@@ -5,44 +5,39 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import InsertChartIcon from '@material-ui/icons/InsertChart';
 import { pathOr } from 'ramda';
+import { connect } from 'react-redux';
+
+import { setSelectedPlots, removeSelectedPlot, removeStats, addStats, normalizePlot } from '../../ducks/plots/setNames'
 
 interface PlotPopoverProps {
   open: boolean;
   handleClose: any;
   anchor: any;
-  addImage(image: any): string;
-  removeImage(name: string): void;
+  setSelectedPlots(image: any): string;
+  removeSelectedPlot(name: string): void;
   removeStats(name: string): void;
   removedStats: string[];
   addStats(name: string): void;
-  selectedImagesNames: string[];
-  imageUrlPropsObject: any;
+  plot: any;
 }
 
-const getName = (imageUrlPropsObject: any) => pathOr('', ['name'], imageUrlPropsObject)
-const isStatsRemoved = (removedStats: any, name: string) => removedStats.indexOf(name) > -1 ? true : false
-const isPlotAddedToList = (selectedImagesNames: any, name: string) => selectedImagesNames.indexOf(name) > -1 ? true : false
-
-export const PlotMenu = ({
+const PlotMenu = ({
   open,
   handleClose,
   anchor,
-  addImage,
-  removeImage,
+  setSelectedPlots,
+  removeSelectedPlot,
+  addStats,
+  plot,
   removeStats,
-  removedStats,
-  selectedImagesNames,
-  imageUrlPropsObject,
-  addStats }: PlotPopoverProps) => {
-
-  const name: string = getName(imageUrlPropsObject)
-  const isItRemoved = isStatsRemoved(removedStats, name)
-  const isItAddedToList = isPlotAddedToList(selectedImagesNames, name)
+   normalizePlot }: PlotPopoverProps) => {
 
   return (
     <Popover
-      id={name}
+      id={pathOr('', ['name'], plot)}
       open={open}
       anchorEl={anchor}
       onClose={handleClose}
@@ -56,9 +51,9 @@ export const PlotMenu = ({
       }}
     >
       <List>
-        {isItAddedToList ?
+        {pathOr('', ['selected'], plot) ?
           <ListItem button onClick={() => {
-            removeImage(name)
+            removeSelectedPlot(plot.name)
             handleClose()
           }}>
             <ListItemIcon>
@@ -68,7 +63,7 @@ export const PlotMenu = ({
           </ListItem>
           :
           <ListItem button onClick={() => {
-            addImage(imageUrlPropsObject)
+            setSelectedPlots(plot.name)
             handleClose()
           }}>
             <ListItemIcon>
@@ -78,9 +73,9 @@ export const PlotMenu = ({
           </ListItem>
         }
         {
-          isItRemoved ?
+          !pathOr('', ['stats'], plot) ?
             <ListItem button onClick={() => {
-              addStats(name)
+              addStats(plot.name)
               handleClose()
             }}>
               <ListItemIcon>
@@ -90,7 +85,7 @@ export const PlotMenu = ({
             </ListItem>
             :
             <ListItem button onClick={() => {
-              removeStats(name)
+              removeStats(plot.name)
               handleClose()
             }}>
               <ListItemIcon>
@@ -99,6 +94,49 @@ export const PlotMenu = ({
               <ListItemText primary="Remove stats" />
             </ListItem>
         }
+        {
+          !pathOr('', ['normalize'], plot) ?
+            <ListItem button onClick={() => {
+              normalizePlot(plot.name)
+              handleClose()
+            }}>
+              <ListItemIcon>
+                <EqualizerIcon />
+              </ListItemIcon>
+              <ListItemText primary="Normalize" />
+            </ListItem>
+            :
+            <ListItem button onClick={() => {
+              normalizePlot(plot.name)
+              handleClose()
+            }}>
+              <ListItemIcon>
+                <InsertChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Denormalize" />
+            </ListItem>
+        }
       </List>
     </Popover>)
 }
+
+export default connect(
+  undefined,
+  (dispatch: any) => ({
+    setSelectedPlots(name: string) {
+      dispatch(setSelectedPlots(name))
+    },
+    removeSelectedPlot(name: string) {
+      dispatch(removeSelectedPlot(name))
+    },
+    removeStats(name: string) {
+      dispatch(removeStats(name))
+    },
+    addStats(name: string) {
+      dispatch(addStats(name))
+    },
+    normalizePlot(name: string) {
+      dispatch(normalizePlot(name))
+    },
+  })
+)(PlotMenu) 

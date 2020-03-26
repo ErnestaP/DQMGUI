@@ -18,12 +18,20 @@ interface SearchByDatasetProps {
 const SearchByDataset = ({ classes }: SearchByDatasetProps) => {
   return (
     <Field
-      name="searchField"
-      // subscription={{ data: true }}
-      placeholder="Search by Dataset"
-      fullWidth
-      component={TextField}
-    />
+      name="searchField"                >
+      {props =>
+        <div>
+          <TextField
+            fullWidth
+            name={props.input.name}
+            placeholder="Search by Dataset"
+            {...props.input}
+            {...props.onChange}
+            {...props.meta}
+          />
+        </div>
+      }
+    </Field>
   )
 }
 

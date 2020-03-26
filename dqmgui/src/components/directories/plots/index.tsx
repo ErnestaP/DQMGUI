@@ -8,23 +8,32 @@ import { request_for_images } from '../api'
 import { isEmpty, assoc } from 'ramda'
 import AdditionalPlots from './additionalPlots';
 import SizeChanger from './sizeChanger';
-import { PlotMenu } from './menu'
+import PlotMenu from './menu'
 import AdditionalMenu from './additionalMenu';
 import { connect } from 'react-redux';
-import { getDataForOverlay, getPosition, getNormalization } from '../../ducks/plots/reference';
-import { Plot } from './plot'
+import { getDataForOverlay, getPosition } from '../../ducks/plots/reference';
+import Plot from './plot'
+import { getSize } from '../../ducks/plots/sizeChanger';
 
 interface PlotsProps {
-  dataset: string;
-  run: string;
-  selected_directory: string[],
-  names: string[],
-  size: SizeProps
+  plots: any[];
+  size: SizeProps,
+  classes: {
+    biggerPlot: string,
+    add: string;
+    name: string;
+    sizeChanger: string,
+    plotWrapper: string;
+    selectedPlot: string;
+    image: string;
+  },
+  overlay: string;
+  runsForOverlay: any[]
 }
 
 const styles = (theme) => {
-  const headerHeight = document.getElementById('searchForm').clientHeight
-  const directoriesHeight = document.getElementById('directoriesGrid').clientHeight
+  const headerHeight = document.getElementById('searchForm') && document.getElementById('searchForm').clientHeight
+  const directoriesHeight = document.getElementById('directoriesGrid') && document.getElementById('directoriesGrid').clientHeight
 
   return ({
     biggerPlot: {
@@ -61,37 +70,6 @@ const styles = (theme) => {
   })
 }
 
-const isSelectedPlot = (plotsList, plotName) => {
-  const names = plotsList.map(plot => plot.name)
-  if (names.indexOf(plotName) > -1) {
-    return true
-  }
-  return false
-}
-
-const formUrlPropsObject = (run: string,
-  dataset: string,
-  selected_directory: string[],
-  name: string,
-  size: SizeProps,
-  removestats = false,
-  overlay = undefined,
-  runsForOverlay = {},
-  normalization = false,
-) => (
-    {
-      run: run,
-      dataset: dataset,
-      selected_directory: selected_directory,
-      name: name,
-      size: size,
-      removestats: removestats,
-      overlay: overlay,
-      runsForOverlay: runsForOverlay,
-      normalization: normalization
-    }
-  )
-
 class Plots extends React.Component<PlotsProps> {
   state = ({
     selectedImages: [],
@@ -127,69 +105,38 @@ class Plots extends React.Component<PlotsProps> {
     })
   }
 
-  addImage = (imageProps: any) => {
-    const copy: any[] = [...this.state.selectedImages]
-    const copyOfNames = [...this.state.selectedImagesNames]
-    copyOfNames.push(imageProps.name)
-    copy.push(imageProps)
-    this.setState({
-      selectedImages: copy,
-      selectedImagesNames: copyOfNames,
-    })
-  }
-
-  showOneImage = (imageProps: any) => {
-    this.setState({
-      selectedImages: [imageProps],
-      selectedImagesNames: [imageProps.name]
-    })
-  }
-
-  removeImage = (imageUrl: string) => {
-    let copy: string[] = [...this.state.selectedImages]
-    copy = copy.filter(item => item.name !== imageUrl)
-    this.setState({
-      selectedImages: copy
-    })
-  }
-
   setName = (name: string) => {
     this.setState({
       name: name
     })
   }
 
-  removeStats = (nameOfPlot: string) => {
-    const copy: string[] = [...this.state.imagesWithRemovedStats]
-    copy.push(nameOfPlot)
-    this.setState({
-      imagesWithRemovedStats: copy
-    })
-  }
-
-  addStats = (nameOfPlot: string) => {
-    let copy: string[] = [...this.state.imagesWithRemovedStats]
-    copy = copy.filter(item => item !== nameOfPlot)
-    this.setState({
-      imagesWithRemovedStats: copy
-    })
-  }
-
   render() {
     const {
-      dataset,
-      run,
-      selected_directory,
-      names,
+      plots,
       size,
       classes,
-      runsForOverlay,
       overlay,
-      normalization, } = this.props
+      runsForOverlay,
+    } = this.props
+
+    const selectedPlot = this.state.name && plots[this.state.name]
+    const names = Object.keys(plots)
+    const anySelectedPlotsNames = names.filter(name => {
+      if (plots[name].selected === true) {
+        return name
+      }
+    })
+    const anySelectedPlots = Object.keys(plots)
+      .filter(key => anySelectedPlotsNames.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = plots[key];
+        return obj;
+      }, {});
 
     return (
       <Grid item container direction="row">
-        <Grid item container direction="row" className={`${!isEmpty(this.state.selectedImages) && classes.biggerPlot}`} >
+        <Grid item container direction="row" className={`${!isEmpty(anySelectedPlots) && classes.biggerPlot}`} >
           <Grid item xs={12} className={classes.sizeChanger} container spacing={4}>
             <Grid item>
               <IconButton onClick={() => {
@@ -209,54 +156,27 @@ class Plots extends React.Component<PlotsProps> {
           </Grid>
           <Grid item container justify="space-evenly">
             <PlotMenu
-              imageUrlPropsObject={
-                formUrlPropsObject(
-                  run,
-                  dataset,
-                  selected_directory,
-                  this.state.name,
-                  null,
-                  this.removeStats)}
               open={this.state.openMenu}
               handleClose={this.closeMenu}
               anchor={this.state.anchorElMenu}
-              addImage={this.addImage}
-              removeImage={this.removeImage}
-              removeStats={this.removeStats}
-              removedStats={this.state.imagesWithRemovedStats}
-              addStats={this.addStats}
-              selectedImagesNames={this.state.selectedImagesNames}
+              plot={selectedPlot}
             />
-            {names.map((name) => {
-              const removeStats = this.state.imagesWithRemovedStats.indexOf(name) > -1 ? true : false
-              const imageUrlPropsObject =
-                formUrlPropsObject(run,
-                  dataset,
-                  selected_directory,
-                  name,
-                  size,
-                  removeStats,
-                  overlay,
-                  runsForOverlay,
-                  normalization)
-
+            {names.map((name: any) => {
               return <Grid container direction="column"
                 item
-                key={name}
-                id={name}
+                key={plots[name].name}
+                id={plots[name].name}
                 className={`${classes.plotWrapper} `}
               >
                 <Plot
                   openMenu={this.openMenu}
                   setAnchorEl={this.setAnchorEl}
                   setName={this.setName}
-                  showOneImage={this.showOneImage}
-                  isSelectedPlot={isSelectedPlot}
                   classes={classes}
                   size={size}
-                  name={name}
-                  imageUrlPropsObject={imageUrlPropsObject}
-                  selectedImages={this.state.selectedImages}
+                  plot={plots[name]}
+                  overlay={overlay}
+                  runsForOverlay={runsForOverlay}
                 />
               </Grid>
             }
@@ -265,10 +185,11 @@ class Plots extends React.Component<PlotsProps> {
           </Grid>
         </Grid>
         {
-          !isEmpty(this.state.selectedImages) &&
+          !isEmpty(anySelectedPlots) &&
           <AdditionalPlots
-            selectedImages={this.state.selectedImages}
-            removeImage={this.removeImage}
+            selectedImages={anySelectedPlots}
+            overlay={overlay}
+            runsForOverlay={runsForOverlay}
           />
         }
       </Grid >
@@ -281,7 +202,7 @@ export default compose(
     (state: any) => ({
       runsForOverlay: getDataForOverlay(state),
       overlay: getPosition(state),
-      normalization: getNormalization(state),
+      size: getSize(state),
     }),
     undefined,
   ), withStyles(styles))

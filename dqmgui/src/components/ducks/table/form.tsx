@@ -35,6 +35,6 @@ export const setSearachFieldByRun = (data: any) => ({
   payload: data,
 })
 
-export const getSearchFieldByDataset = (state: any): string => pathOr('', ['FORM', 'searchByDataset'], state);
-export const getSearchFieldByRun = (state: any): string => pathOr('', ['FORM', 'searchByRun'], state);
+export const getSearchFieldByDataset = (state: any): string => pathOr('', ['DATA', 'FILTER', 'SEARH_FIELDS', 'searchByDataset'], state);
+export const getSearchFieldByRun = (state: any): string => pathOr('', ['DATA', 'FILTER', 'SEARH_FIELDS', 'searchByRun'], state);
 
