@@ -53,7 +53,7 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build": "webpack --config webpack.build.js",
+    "build": "webpack --process.env.NODE_ENV=production --config webpack.build.js",
     "dev": "webpack-dev-server --hot --inline --history-api-fallback --host 0.0.0.0 --config webpack.dev.js --env.BABEL_ENV=development "
   },
   "eslintConfig": {
@@ -86,6 +86,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-transform-imports": "^2.0.0",
     "css-loader": "^3.4.2",
+    "dotenv": "^8.2.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "file-loader": "^5.0.2",
