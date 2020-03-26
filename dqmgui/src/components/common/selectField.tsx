@@ -1,4 +1,4 @@
-import * as React from 'React';
+import * as React from 'react';
 import { InputLabel, FormControl, FormHelperText, Select } from '@material-ui/core';
 import { path, pathOr } from 'ramda';
 
